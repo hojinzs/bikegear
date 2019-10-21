@@ -18,11 +18,11 @@
                 </div>
             </div>
             <div id="wheel_type">
-                <h3>3. Sporocket</h3>
+                <h3>3. sprocket</h3>
                 <div
-                v-for="(cog, index) in sporocket"
+                v-for="(cog, index) in sprocket"
                 v-bind:key="index">
-                    <input v-model.number="sporocket[index]" name="cog" placeholder="cog">
+                    <input v-model.number="sprocket[index]" name="cog" placeholder="cog">
                 </div>
             </div>
         </div>
@@ -31,29 +31,31 @@
 
             <h3>1. Gear Ratio</h3>
 
-            <table>
-                <tr>
-                    <td>
-                        <th>
-                        Crank / Sporocket
-                        </th>
-                    </td>
-                    <td v-for="(cog, index) in sporocket"
-                        v-bind:key="index">
-                        <th> {{ cog }} </th>
-                    </td>
-                </tr>
-                <tr v-for="(chainring, index) in crank"
-                v-bind:key="index">
-                    <td>
-                        {{ chainring }}
-                    </td>
-                    <td v-for="(cog, index) in sporocket"
-                        v-bind:key="index">
-                        {{ calRatio(chainring,cog) }}
-                    </td>
-                </tr>
-            </table>
+            <div id="gear ratio">
+                <table>
+                    <tr>
+                        <td>
+                            <th>
+                            sprocket / Crank
+                            </th>
+                        </td>
+                        <td v-for="(cog, index) in sprocket"
+                            v-bind:key="index">
+                            <th> {{ cog }}t </th>
+                        </td>
+                    </tr>
+                    <tr v-for="(chainring, index) in crank"
+                    v-bind:key="index">
+                        <td>
+                            <th>{{ chainring }}t </th>
+                        </td>
+                        <td v-for="(cog, index) in sprocket"
+                            v-bind:key="index">
+                            {{ calRatio(chainring,cog) }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
             <h3>2. Speed</h3>
         </div>
@@ -71,7 +73,7 @@ export default {
     data: function(){
         return {
             crank: [50,34],
-            sporocket: [11,12,13,14,15,17,19,21,24,27,30],
+            sprocket: [11,12,13,14,15,17,19,21,24,27,30],
             crank_preset: [
                 {
                     name: 'mid-compact chainring',
