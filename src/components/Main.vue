@@ -14,16 +14,18 @@
                 <div
                 v-for="(chainring, index) in crank"
                 v-bind:key="index">
-                    <input v-model.number="crank[index]" name="chainring" placeholder="chainring">
+                    <input v-model.number="crank[index]" name="chainring" placeholder="chainring"><button v-on:click="delChainring(index)"> - </button>
                 </div>
+                <button v-on:click="addChainring()"> + </button>
             </div>
             <div id="wheel_type">
                 <h3>3. sprocket</h3>
                 <div
                 v-for="(cog, index) in sprocket"
                 v-bind:key="index">
-                    <input v-model.number="sprocket[index]" name="cog" placeholder="cog">
+                    <input v-model.number="sprocket[index]" name="cog" placeholder="cog"><button v-on:click="delCog(index)"> - </button>
                 </div>
+                <button v-on:click="addCog()"> + </button>
             </div>
         </div>
         <div>
@@ -66,8 +68,29 @@
 export default {
     methods: {
         calRatio(chainring, cog){
-            var ratio = chainring / cog
+            let ratio = chainring / cog
             return ratio.toFixed(2);
+        },
+        addChainring(_teeth = null){
+            this.crank.push(_teeth);
+        },
+        delChainring(_index){
+            this.crank.splice(_index,1);
+        },
+        setChainring(_array = Array){
+            // 향후 validation 규칙 넣을 것
+            this.crank = _array;
+        },
+        addCog(_teeth = null){
+            this.sprocket.push(_teeth);
+        },
+        delCog(_index){
+            this.sprocket.splice(_index,1);
+        },
+        setCog(_array = Array){
+            // 나중에 validation 규칙 넣을 것
+            this.crank = _array;
+
         },
     },
     data: function(){
