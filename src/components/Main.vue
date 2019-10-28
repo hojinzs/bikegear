@@ -5,31 +5,42 @@
         <div id="input">
             <h2>CHART</h2>
             <div>
-                chart here!!
+                <RatioChart
+                    :Gears="GearSettings">
+                </RatioChart>
             </div>
+
             <h2>DATA INPUT</h2>
             <div id="wheel_type">
                 <h3>Set Wheel Type</h3>
-                <input name="wheel" placeholder="wheel size">
-                <input name="tire" placeholder="tire size">
+                <div>
+                    <input
+                        name="wheel"
+                        placeholder="wheel size"
+                        v-model.number="wheel">
+                    <input
+                        name="tire"
+                        placeholder="tire size"
+                        v-model.number="tire">
+                </div>
+                <div>
+                    {{ calc.calRound(this.wheel,this.tire).toFixed(2) }}
+                </div>
             </div>
 
             <button v-on:click="newGearSetting()">New Setting</button>
-            <div 
-            v-for="(Setting, index) in GearSettings"
-            :key='index'>
-                <SetGear
-                    :setting_number="index"
-                    :settings="Setting"
-                    :crank_preset="preset.crank"
-                    :sprocket_preset="preset.sprocket"
-                    @setName="Setting.setName"
-                    @setColor="Setting.setColor"
-                    @setCrank="Setting.setCrank"
-                    @setSprocket="Setting.setSprocket"
-                    @remove="delGearSetting(index)"
-                    >
-                </SetGear>
+            <div class="gear_settings">
+                <div class="set_gear"
+                v-for="(Setting, index) in GearSettings"
+                :key='index'>
+                    <SetGear
+                        :setting_number="index"
+                        :settings="Setting"
+                        :preset="Preset"
+                        @remove="delGearSetting(index)"
+                        >
+                    </SetGear>
+                </div>
             </div>
         </div>
     </div>
@@ -39,45 +50,48 @@
 
 // import Components
 import Gear from './Gear'
+import Chart from './Chart'
+
+// import Classes
+import Calc from '../calc'
+
+class GearSetting extends Calc {
+    constructor(newColor,newName){
+        super(newName,newColor);
+        this.name = newName;
+        this.color = newColor;
+    }
+}
 
 export default {
     components: {
-        'SetGear' : Gear
+        'SetGear' : Gear,
+        'RatioChart' : Chart
     },
     methods: {
         newGearSetting(){
-            this.GearSettings.push(new this.initSetting);
+            this.GearSettings.push(this.initSetting());
         },
         delGearSetting(index){
             this.GearSettings.splice(index,1);
-        }
+        },
+        initSetting : function(){
+            let newSetting = new GearSetting();
+            newSetting.color = "red";
+            newSetting.name = "newSetting";
+            newSetting.crank = [50,34];
+            newSetting.sprocket = [11,12,13,14,15,17,19,21,24,27,30];
+
+            return newSetting;
+        },
     },
     data: function(){
         return {
-            initSetting : function(){
-                return {
-                    color: "red",
-                    name: "newSetting",
-                    crank: [50,34],
-                    sprocket: [11,12,13,14,15,17,19,21,24,27,30],
-                    setName(value){
-                        console.log(value);
-                    },
-                    setColor(value){
-                        console.log(value);
-                    },
-                    setCrank(value){
-                        console.log(value);
-                        self.crank = value;
-                    },
-                    setSprocket(value){
-                        console.log(value);
-                        self.sprocket = value;
-                    },
-                }
-            },
+            calc : new Calc,
             GearSettings : [],
-            preset: {
+            wheel : 0,
+            tire : 0,
+            Preset: {
                 crank: [
                     {
                         name: 'mid-compact chainring',
@@ -94,11 +108,29 @@ export default {
         }
     },
     mounted: function(){
-        this.GearSettings.push(new this.initSetting);
+        this.newGearSetting();
     }
 }
 </script>
 
 <style scoped>
+#id{
+    width: 100%;
+}
+
+.gear_settings{
+    width: 100%;
+    display: flex;
+    overflow-x: scroll
+}
+
+.gear_settings .set_gear{
+    flex: none;
+    max-width: 180px;
+    overflow: hidden;
+    border: 1px black solid;
+    margin: 10px;
+
+}
 
 </style>

@@ -5,7 +5,7 @@
         <div id="crank">
             <h3>1. Crank</h3>
             <div
-            v-for="(chainring, index) in crank"
+            v-for="(chainring, index) in settings.crank"
             v-bind:key="index">
                 <input v-model.number="crank[index]" name="chainring" placeholder="chainring"><button v-on:click="delChainring(index)"> - </button>
             </div>
@@ -14,14 +14,17 @@
         <div id="sprocket">
             <h3>2. sprocket</h3>
             <div
-            v-for="(cog, index) in sprocket"
+            v-for="(cog, index) in settings.sprocket"
             v-bind:key="index">
-                <input v-model.number="sprocket[index]" name="cog" placeholder="cog"><button v-on:click="delCog(index)"> - </button>
+                <input v-model.number="sprocket[index]" name="cog" placeholder="cog">
+                <button v-on:click="delCog(index)"> - </button>
             </div>
             <button v-on:click="addCog()"> + </button>
         </div>
+        <hr>
         <div id="gear ratio">
-            <h3>2. Gear Ratio</h3>
+            <h3>Gear Ratio</h3>
+            <hr>
             <table>
                 <tr>
                     <td>
@@ -42,7 +45,7 @@
                     </td>
                     <td v-for="(chainring, index) in crank"
                         v-bind:key="index">
-                        {{ calRatio(chainring,cog) }}
+                        {{ calc.calGearRatio(chainring,cog).toFixed(2) }}
                     </td>
                 </tr>
             </table>
@@ -51,18 +54,15 @@
     </div>
 </template>
 <script>
+import Calc from '../calc'
+
 export default {
     props: [
         'setting_number',
         'settings',
-        'crank_preset',
-        'sprocket_preset',
+        'preset',
     ],
     methods: {
-        calRatio(chainring, cog){
-            let ratio = chainring / cog
-            return ratio.toFixed(2);
-        },
         addChainring(_teeth = null){
             this.crank.push(_teeth);
         },
@@ -90,21 +90,15 @@ export default {
     },
     data: function(){
         return {
-            // crank: [50,34],
-            // sprocket: [11,12,13,14,15,17,19,21,24,27,30],
+            calc: new Calc,
             crank: this.settings.crank,
             sprocket: this.settings.sprocket,
             presets: {
-                crank: this.settings.crank_preset,
-                sprocket: this.settings.sprocket_preset,
+                crank: this.preset.crank,
+                sprocket: this.preset.sprocket,
             },
         }
     },
-    watch: {
-        crank: function(){
-            this.$emit('setCrank',this.crank);
-        }
-    }
 }
 </script>
 
