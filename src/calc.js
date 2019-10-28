@@ -1,9 +1,18 @@
 // calculating Functions
 export default class Calculator{
 
-    constructor(){
-        this.crank = Array;
-        this.sprocket = Array;
+    constructor(_props = {
+        crank: Array,
+        sprocket: Array,
+        cadence: Number,
+        wheel: Number,
+        tire: Number,
+    }){
+        this.crank = _props.crank;
+        this.sprocket = _props.sprocket;
+        this.cadence = _props.cadence;
+        this.wheel = _props.wheel;
+        this.tire = _props.tire;
     }
 
     get RatioTable(){
@@ -34,5 +43,11 @@ export default class Calculator{
         let round = diameter * Math.PI + Number(wheel)*0.04;
 
         return round;
+    }
+
+    calSpeed(cadence,round,ratio){
+        let speed = ( cadence * ratio * round * 60 ) / 100000
+
+        return speed;
     }
 }

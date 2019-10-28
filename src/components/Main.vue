@@ -56,10 +56,13 @@ import Chart from './Chart'
 import Calc from '../calc'
 
 class GearSetting extends Calc {
-    constructor(newColor,newName){
-        super(newName,newColor);
-        this.name = newName;
-        this.color = newColor;
+    constructor(_props = {
+        color: String,
+        name: String,
+    }){
+        super(_props);
+        this.name = _props.name;
+        this.color = _props.color;
     }
 }
 
@@ -76,11 +79,12 @@ export default {
             this.GearSettings.splice(index,1);
         },
         initSetting : function(){
-            let newSetting = new GearSetting();
-            newSetting.color = "red";
-            newSetting.name = "newSetting";
-            newSetting.crank = [50,34];
-            newSetting.sprocket = [11,12,13,14,15,17,19,21,24,27,30];
+            let newSetting = new GearSetting({
+                color: "red",
+                name: "newSetting",
+                crank: [50,34],
+                sprocket: [11,12,13,14,15,17,19,21,24,27,30],
+            });
 
             return newSetting;
         },
