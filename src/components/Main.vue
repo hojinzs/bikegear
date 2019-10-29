@@ -17,14 +17,14 @@
                     <input
                         name="wheel"
                         placeholder="wheel size"
-                        v-model.number="wheel">
+                        v-model.lazy.number="wheelset.wheel">
                     <input
                         name="tire"
                         placeholder="tire size"
-                        v-model.number="tire">
+                        v-model.lazy.number="wheelset.tire">
                 </div>
                 <div>
-                    {{ calc.calRound(this.wheel,this.tire).toFixed(2) }}
+                    {{ calc.calRound(this.wheelset.wheel,this.wheelset.tire).toFixed(2) }}
                 </div>
             </div>
 
@@ -73,28 +73,29 @@ export default {
     },
     methods: {
         newGearSetting(){
-            this.GearSettings.push(this.initSetting());
-        },
-        delGearSetting(index){
-            this.GearSettings.splice(index,1);
-        },
-        initSetting : function(){
+            // 향후 복사기능 추가(lodash)
             let newSetting = new GearSetting({
                 color: "red",
                 name: "newSetting",
                 crank: [50,34],
                 sprocket: [11,12,13,14,15,17,19,21,24,27,30],
+                wheelset: this.wheelset,
             });
 
-            return newSetting;
+            this.GearSettings.push(newSetting);
+        },
+        delGearSetting(index){
+            this.GearSettings.splice(index,1);
         },
     },
     data: function(){
         return {
             calc : new Calc,
             GearSettings : [],
-            wheel : 0,
-            tire : 0,
+            wheelset : {
+                wheel : 622,
+                tire : 30,
+            },
             Preset: {
                 crank: [
                     {
@@ -113,7 +114,7 @@ export default {
     },
     mounted: function(){
         this.newGearSetting();
-    }
+    },
 }
 </script>
 
