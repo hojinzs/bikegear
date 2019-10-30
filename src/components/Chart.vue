@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <!-- <canvas id="speed-chart"></canvas> -->
+            <canvas id="speed-chart"></canvas>
 
         </div>
         max-speed :: {{ maxSpeed.toFixed(2) }} Km/h<br>
@@ -37,12 +37,16 @@
 
 
 <script>
+
+import Chart from '../chart'
+
 export default {
     props:[
         'Gears'
     ],
     data: function(){
         return {
+            SpeedChart : Chart,
             maxSpeed : 0,
             minSpeed : 0,
         }
@@ -59,6 +63,14 @@ export default {
                 if(this.minSpeed > gear.SpeedTable.minSpeed || this.minSpeed == 0) this.minSpeed = gear.SpeedTable.minSpeed;
             });
 
+            let canvas = new this.SpeedChart({
+                id : 'speed-chart',
+                width : 800,
+                height : 80,
+            })
+
+            canvas.setSpeed(this.maxSpeed,this.minSpeed);
+
             this.Gears.forEach(gear => {
 
                 let SpeedTable = gear.SpeedTable;
@@ -69,11 +81,10 @@ export default {
                 }
             });
 
-            // let canvas = document.getElementById('speed-chart');
-
-            // let bar = canvas.getContext('2d');
-            // bar.fillRect(20,25,100,100)
-
+            canvas.drawBar(12.23,20.12,"#FF0000",'11T')
+            canvas.drawBar(25.23,32.12,"#FF0000",'13T')
+            canvas.drawBar(36.23,50.12,"#FF0000",'15T')
+            canvas.drawBar(70.23,90.12,"#FF0000",'30T')
         }
     },
     watch: {
