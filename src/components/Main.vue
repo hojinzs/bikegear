@@ -2,13 +2,13 @@
     <div id="main">
         <h1>Bike Gear Ratio Calculator</h1>
         <hr>
+        <h2>CHART</h2>
+        
+        <RatioChart
+            :Gears="GearSettings">
+        </RatioChart>
+
         <div id="input">
-            <h2>CHART</h2>
-            <div>
-                <RatioChart
-                    :Gears="GearSettings">
-                </RatioChart>
-            </div>
 
             <h2>DATA INPUT</h2>
             <div id="wheel_type">
@@ -119,6 +119,14 @@ export default {
 </script>
 
 <style scoped>
+html body {
+    width: 100%;
+}
+
+#main {
+    width: 100%;
+}
+
 #id{
     width: 100%;
 }
