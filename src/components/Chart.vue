@@ -16,20 +16,13 @@
                     <span class="line-index"> {{ index }} </span>
 
                     <chartCanvas
+                        ref="chartcanvas"
+                        :color='gear.color'
                         :chartName='index'
-                        :sprockets='sprockets'
-                        :maxSpeed='maxSpeed'
-                        :minSpeed='minSpeed'
-                    ></chartCanvas>
-
-                    <!-- <div
-                    class="chart_bar"
-                    v-for="(speeds,index) in sprockets"
-                    :key="index"
-                    :min_speed="speeds.minSpeed.toFixed(2)"
-                    :max_speed="speeds.maxSpeed.toFixed(2)">
-                        <b>{{ index }}t</b>
-                    </div> -->
+                        :speedData='sprockets'
+                        :maxValue='maxSpeed'
+                        :minValue='minSpeed'>
+                    </chartCanvas>
 
                 </div>
             </div>
@@ -109,13 +102,5 @@ export default {
     position: absolute;
     left: -20px;
     flex: content;
-}
-
-.chart_bar{
-    flex: content;
-    left: 10px;
-    border: 1px solid black;
-    display: inline;
-    position: absolute;
 }
 </style>

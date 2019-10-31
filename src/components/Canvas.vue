@@ -1,45 +1,69 @@
 <template>
-    <div>
-        <canvas></canvas>
+    <div class="canvas-wrapper">
+        <canvas class="this-canvas" ref="this-canvas"></canvas>
     </div>
 </template>
 
 <script>
+import SpeedChart from '../chart'
+
 export default {
     props: [
+        'color',
         'chartName',
-        'dementions',
+        'speedData',
         'maxValue',
         'minValue',
     ],
+    data: function(){
+        return{
+            canvas : Object
+        }
+    },
     methods:{
-        drawChart(_id){
-            let canvas = new this.SpeedChart({
-                id : _id,
-                height : 80,
+        drawChart(){
+            this.canvas.setAxisX(this.minValue,this.maxValue);
+
+            let loop = this.speedData;
+            let Keys = Object.keys(loop)
+
+            Keys.forEach(element=>{
+
+                let max = loop[element].maxSpeed.toFixed(2)
+                let min = loop[element].minSpeed.toFixed(2)
+
+                this.canvas.drawBar(min,max,this.color,element)
+                // this.canvas.drawBar(10,20,'blue',element)
             })
+        }
+    },
+    mounted(){
+        this.canvas = new SpeedChart({
+            canvas : this.$refs['this-canvas'],
+            height : this.$refs['this-canvas'].offsetHeight,
+        });
 
-            canvas.setAxisX(this.maxValue,this.minValue);
-
-            this.Gears.forEach(gear => {
-
-                let SpeedTable = gear.SpeedTable;
-                console.log('Get SpeedTable!!>>', SpeedTable);
-
-                for (let i = 0; i < SpeedTable.Crank; i++) {
-                    console.log(this.SpeedTable[i]);
-                }
-            });
-
-            canvas.drawBar(12.23,20.12,"#FF0000",'11T')
-            canvas.drawBar(25.23,32.12,"#FF0000",'13T')
-            canvas.drawBar(36.23,50.12,"#FF0000",'15T')
-            canvas.drawBar(70.23,90.12,"#FF0000",'30T')
+        this.drawChart();
+    },
+    watch:{
+        speedData: function(){
+            this.drawChart();
         }
     }
 }
 </script>
 
 <style scoped>
+.canvas-wrapper{
+    width: 100%;
+    height: 100%;
+}
+
+.this-canvas{
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
 
 </style>

@@ -7,7 +7,7 @@
             <div
             v-for="(chainring, index) in settings.crank"
             v-bind:key="index">
-                <input v-model.number="crank[index]" name="chainring" placeholder="chainring"><button v-on:click="delChainring(index)"> - </button>
+                <input v-model.lazy.number="crank[index]" name="chainring" placeholder="chainring"><button v-on:click="delChainring(index)"> - </button>
             </div>
             <button v-on:click="addChainring()"> + </button>
         </div>
@@ -16,7 +16,7 @@
             <div
             v-for="(cog, index) in settings.sprocket"
             v-bind:key="index">
-                <input v-model.number="sprocket[index]" name="cog" placeholder="cog">
+                <input v-model.lazy.number="sprocket[index]" name="cog" placeholder="cog">
                 <button v-on:click="delCog(index)"> - </button>
             </div>
             <button v-on:click="addCog()"> + </button>

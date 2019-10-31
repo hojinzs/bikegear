@@ -37,8 +37,8 @@ export default class Calculator{
     }
 
     get SpeedTable(){
-        let maxCad = 120;
-        let minCad = 60;
+        let maxCad = 95;
+        let minCad = 85;
 
         let Table = {
             Cranks: {},
