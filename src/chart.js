@@ -6,10 +6,13 @@ export default class SpeedChart{
         height : Number,
     }){
         this.canvas = document.getElementById(_prop.id);
+
+
+        if(_prop.width == undefined) _prop.width = this.canvas.offsetWidth;
+        if(_prop.height == undefined) _prop.height = 80;
+
         this.Width = _prop.width;
         this.Height = _prop.height;
-
-        console.log(this.canvas.width+' x '+this.canvas.height);
     }
 
     set Width(_width){
@@ -23,7 +26,7 @@ export default class SpeedChart{
         this.topMargin = this.canvas.height / 4
     }
 
-    setSpeed(_max,_min){
+    setAxisX(_max,_min){
         if(_min < 1) _min = 0;
         if(_max > 150) _max = 150;
 

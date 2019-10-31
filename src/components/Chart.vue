@@ -15,19 +15,24 @@
 
                     <span class="line-index"> {{ index }} </span>
 
-                    <div
+                    <chartCanvas
+                        :chartName='index'
+                        :sprockets='sprockets'
+                        :maxSpeed='maxSpeed'
+                        :minSpeed='minSpeed'
+                    ></chartCanvas>
+
+                    <!-- <div
                     class="chart_bar"
                     v-for="(speeds,index) in sprockets"
                     :key="index"
                     :min_speed="speeds.minSpeed.toFixed(2)"
                     :max_speed="speeds.maxSpeed.toFixed(2)">
                         <b>{{ index }}t</b>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
-
-            <canvas id="speed-chart"></canvas>
 
         </div>
         max-speed :: {{ maxSpeed.toFixed(2) }} Km/h<br>
@@ -38,59 +43,35 @@
 
 <script>
 
-import Chart from '../chart'
+import Canvas from './Canvas.vue';
 
 export default {
+    components:{
+        chartCanvas: Canvas
+    },
     props:[
         'Gears'
     ],
     data: function(){
         return {
-            SpeedChart : Chart,
             maxSpeed : 0,
             minSpeed : 0,
         }
     },
     methods: {
-        drawSpeedChart: function(){
-            // intial speed data
-            this.maxSpeed = 0;
-            this.minSpeed = 0;
-
-            // get Min & Max table
-            this.Gears.forEach(gear => {
-                if(this.maxSpeed < gear.SpeedTable.maxSpeed || this.maxSpeed == 0) this.maxSpeed = gear.SpeedTable.maxSpeed;
-                if(this.minSpeed > gear.SpeedTable.minSpeed || this.minSpeed == 0) this.minSpeed = gear.SpeedTable.minSpeed;
-            });
-
-            let canvas = new this.SpeedChart({
-                id : 'speed-chart',
-                width : 800,
-                height : 80,
-            })
-
-            canvas.setSpeed(this.maxSpeed,this.minSpeed);
-
-            this.Gears.forEach(gear => {
-
-                let SpeedTable = gear.SpeedTable;
-                console.log('Get SpeedTable!!>>', SpeedTable);
-
-                for (let i = 0; i < SpeedTable.Crank; i++) {
-                    console.log(this.SpeedTable[i]);
-                }
-            });
-
-            canvas.drawBar(12.23,20.12,"#FF0000",'11T')
-            canvas.drawBar(25.23,32.12,"#FF0000",'13T')
-            canvas.drawBar(36.23,50.12,"#FF0000",'15T')
-            canvas.drawBar(70.23,90.12,"#FF0000",'30T')
-        }
     },
     watch: {
         Gears: {
             handler: function(){
-                this.drawSpeedChart();
+                // intial speed data
+                this.maxSpeed = 0;
+                this.minSpeed = 0;
+
+                // get Min & Max table
+                this.Gears.forEach(gear => {
+                    if(this.maxSpeed < gear.SpeedTable.maxSpeed || this.maxSpeed == 0) this.maxSpeed = gear.SpeedTable.maxSpeed;
+                    if(this.minSpeed > gear.SpeedTable.minSpeed || this.minSpeed == 0) this.minSpeed = gear.SpeedTable.minSpeed;
+                });
             },
             deep: true,
         }
