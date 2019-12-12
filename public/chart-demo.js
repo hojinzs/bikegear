@@ -35,47 +35,62 @@ class SpeedChart{
         this.topMargin = this.canvas.height / 4
     }
 
+    // 데이터 세팅 및 검증
+    setData(_data){
 
-    // 최소 속도, 최대 속도를 받아 축 크기를 계산함
+    }
+
+    // 데이터의 크랭크 수를 비교해 Y 축 그리드를 구함
+    setAxisY(){
+        
+    }
+
+    // 최소 속도, 최대 속도를 받아 X 축 그리드 기준을 구함
     setAxisX(_min,_max){
 
         // 최대 / 최소 축 크기 세팅이 없을 경우 기본값 세팅. 최대 속도는 140을 넘어갈 수 없음
         if(_min < 1) _min = 0;
         if(_max > 150) _max = 140;
     
-        // 여유를 두도록 세팅
+        // 5km씩 여유를 두도록 세팅
         this.MinSpeed = Math.ceil(_min)-5;
         this.MaxSpeed = Math.round(_max)+5;
 
         // 캔버스의 차트 영역에서 1km/h 당 픽셀 크기를 계산
-        this.CanvasPixcel = this.canvas.width - this.SettingNameWidth / ( this.MaxSpeed - this.MinSpeed );
+        this.CanvasPixcel = (this.canvas.width - this.SettingNameWidth) / ( this.MaxSpeed - this.MinSpeed );
     
         console.log(this.MinSpeed,this.MaxSpeed,this.CanvasPixcel);
 
         // 계산된 축 크기로 그리드를 그림
         this.setRuller();
     }
-    
+
+    // KM 그리드 그리기
     setRuller(){
         let ScaleSize;
-        let ruller = this.canvas.getContext('2d');
-    
+
+        // 기존 그리드 초기화
+        let ruller = this.canvas.getContext('2d');    
         ruller.clearRect(0,0,this.canvas.width,this.canvas.height);
-    
-        ruller.beginPath();
+
+        // 최소 스피드 1부터 반복하며 그리드를 그림
         for (let i = this.MinSpeed; i < this.MaxSpeed; i++) {
             let pointer = i - this.MinSpeed;
     
-            if(i%10 == 0){
-                ScaleSize = this.topMargin / 3
-                ruller.fillStyle = 'black';
-            } else {
-                ScaleSize = this.topMargin / 4
-                ruller.fillStyle = 'E9E9E9';
-            }
-    
-            ruller.fillRect(this.CanvasPixcel * pointer,0,1,ScaleSize);
-            ruller.fillRect(this.CanvasPixcel * pointer,this.canvas.height - ScaleSize,1,ScaleSize);
+            // 10단위로 검은색 강조
+            let rullerColor = '#e6e6e6';
+            if(i%10 == 0) rullerColor = '#666666';
+
+            // X 좌표 확정
+            let x = this.SettingNameWidth + this.CanvasPixcel * pointer;
+
+            // 그리드 그리기
+            ruller.beginPath();
+            ruller.moveTo(x,0);
+            ruller.lineTo(x,this.canvas.height);
+            ruller.lineWidth = 1;
+            ruller.strokeStyle = rullerColor;
+            ruller.stroke();
         
         }
     
@@ -109,4 +124,4 @@ class SpeedChart{
         return ctx;
     }
     
-    }
+}

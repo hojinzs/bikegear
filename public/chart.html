@@ -16,6 +16,23 @@
                     {
                         chainring: 50,
                         max_speed: 72.234,
+                        min_speed: 22.542,
+                        sprocket: [
+                            {
+                                cog: 11,
+                                max_speed: 72.234,
+                                min_speed: 35.121,
+                            },
+                            {
+                                cog: 13,
+                                max_speed: 72.234,
+                                min_speed: 22.121,
+                            },
+                        ]
+                    },
+                    {
+                        chainring: 36,
+                        max_speed: 43.912,
                         min_speed: 12.542,
                         sprocket: [
                             {
@@ -24,12 +41,12 @@
                                 min_speed: 70.121,
                             },
                             {
-                                cog: 11,
+                                cog: 13,
                                 max_speed: 72.234,
                                 min_speed: 70.121,
                             },
                         ]
-                    }
+                    },
                 ]
             }
         ]
@@ -51,7 +68,7 @@
             canvas : document.getElementById('chart')
         });
 
-        canvas.setAxisX(data.min_speed,data.max_speed);
+        canvas.setAxisX(data[0].min_speed,data[0].max_speed);
 
         // let loop = this.speedData;
         // let Keys = Object.keys(loop)
