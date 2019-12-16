@@ -47,6 +47,23 @@
                             },
                         ]
                     },
+                    {
+                        chainring: 24,
+                        max_speed: 43.912,
+                        min_speed: 12.542,
+                        sprocket: [
+                            {
+                                cog: 11,
+                                max_speed: 72.234,
+                                min_speed: 70.121,
+                            },
+                            {
+                                cog: 13,
+                                max_speed: 72.234,
+                                min_speed: 70.121,
+                            },
+                        ]
+                    },
                 ]
             }
         ]
@@ -60,15 +77,16 @@
       <strong>We're sorry but bikegear doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app">
-        <canvas id="chart" style="width: 100%;"></canvas>
+        <canvas id="chart" style="width: 100%; height: 170px;"></canvas>
     </div>
     <script>
 
         let canvas = new SpeedChart({
             canvas : document.getElementById('chart')
         });
-
+        canvas.setData(data[0]);
         canvas.setAxisX(data[0].min_speed,data[0].max_speed);
+        canvas.drawAll();
 
         // let loop = this.speedData;
         // let Keys = Object.keys(loop)
