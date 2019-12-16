@@ -27,12 +27,13 @@ export default class SpeedChart{
 
     // 캔버스 너비 설정
     set Width(_width){
+        this.canvas.style.width = _width;
         this.canvas.width = _width;
     }
 
-
     // 캔버스 높이 설정
     set Height(_height){
+        this.canvas.style.height = _height;
         this.canvas.height = _height;
     }
 
