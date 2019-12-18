@@ -14,7 +14,7 @@
         <div id="sprocket">
             <h3>2. sprocket</h3>
             <div
-            v-for="(cog, index) in settings.sprocket"
+            v-for="(cog, index) in sprocket"
             v-bind:key="index">
                 <input v-model.lazy.number="sprocket[index]" name="cog" placeholder="cog">
                 <button v-on:click="delCog(index)"> - </button>
@@ -32,18 +32,18 @@
                         Crank / Sprocket
                         </th>
                     </td>
-                    <td v-for="(chainring, index) in crank"
+                    <td v-for="(chainring, index) in settings.crank"
                         v-bind:key="index">
                         <th> {{ chainring }}t </th>
                     </td>
                 </tr>
                 <tr 
-                v-for="(cog, index) in sprocket"
+                v-for="(cog, index) in settings.sprocket"
                 v-bind:key="index">
                     <td>
                         <th>{{ cog }}t </th>
                     </td>
-                    <td v-for="(chainring, index) in crank"
+                    <td v-for="(chainring, index) in settings.crank"
                         v-bind:key="index">
                         {{ calc.calGearRatio(chainring,cog).toFixed(2) }}
                     </td>
@@ -81,24 +81,36 @@ export default {
         },
         setCog(_array = Array){
             // 나중에 validation 규칙 넣을 것
-            this.crank = _array;
-
+            this.sprocket = _array;
         },
         remove(){
             this.$emit('remove');
         }
     },
+    mounted(){
+        this.setChainring(this.settings.crank);
+        this.setCog(this.settings.sprocket);
+    },
     data: function(){
         return {
             calc: new Calc,
-            crank: this.settings.crank,
-            sprocket: this.settings.sprocket,
+            crank: Array,
+            sprocket: Array,
             presets: {
                 crank: this.preset.crank,
                 sprocket: this.preset.sprocket,
             },
         }
     },
+    watch:{
+        crank: function(newCrank){
+            console.log(newCrank);
+
+        },
+        sprocket : function(newSprocket){
+            console.log(newSprocket);
+        },
+    }
 }
 </script>
 

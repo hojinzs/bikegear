@@ -5,10 +5,12 @@ export default class Calculator{
         crank: Array,
         sprocket: Array,
         wheelset: Object,
+        cadence: Object,
     }){
         this.crank = _props.crank;
         this.sprocket = _props.sprocket;
         this.wheelset = _props.wheelset;
+        this.cadence = _props.cadence;
     }
 
     get RatioTable(){
@@ -37,8 +39,8 @@ export default class Calculator{
     }
 
     get SpeedTable(){
-        let maxCad = 95;
-        let minCad = 85;
+        let maxCad = this.cadence.max;
+        let minCad = this.cadence.min;
 
         let Table = {
             Cranks: {},

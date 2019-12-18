@@ -27,6 +27,19 @@
                     {{ calc.calRound(this.wheelset.wheel,this.wheelset.tire).toFixed(2) }}
                 </div>
             </div>
+            <div id="cadence">
+                <h3>Cadence</h3>
+                <div>
+                    <input
+                        name="min_cadence"
+                        placeholder="minimum_cadence"
+                        v-model.lazy.number="cadence.min">
+                    <input
+                        name="max_cadence"
+                        placeholder="maximum_cadence"
+                        v-model.lazy.number="cadence.max">
+                </div>
+            </div>
 
             <button v-on:click="newGearSetting()">New Setting</button>
             <div class="gear_settings">
@@ -35,7 +48,7 @@
                 :key='index'>
                     <SetGear
                         :setting_number="index"
-                        :settings="Setting"
+                        :settings.sync="Setting"
                         :preset="Preset"
                         @remove="delGearSetting(index)"
                         >
@@ -80,6 +93,7 @@ export default {
                 crank: [50,34],
                 sprocket: [11,12,13,14,15,17,19,21,24,27,30],
                 wheelset: this.wheelset,
+                cadence: this.cadence,
             });
 
             this.GearSettings.push(newSetting);
@@ -95,6 +109,10 @@ export default {
             wheelset : {
                 wheel : 622,
                 tire : 30,
+            },
+            cadence : {
+                min: 80,
+                max: 90,
             },
             Preset: {
                 crank: [
