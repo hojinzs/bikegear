@@ -14,15 +14,18 @@ export default class SpeedChart{
         if(_prop.width == undefined) _prop.width = this.canvas.offsetWidth;
         if(_prop.height == undefined) _prop.height = this.canvas.offsetHeight;
     
-        // 캔버스 크기 세팅
+        // 캔버스 크기 & 비율 세팅
+        this.Scale = window.devicePixelRatio || 1 // 기기 픽셀 비율 세팅
         this.Width = _prop.width; // 캔버스 너비
         this.Height = _prop.height; // 캔버스 높이
 
         // 캔버스 내부 옵션
-        this.LabelWidth = 100; // 세팅 이름이 들어갈 영역 크기
-        this.SpeedLabelHeight = 20; // 속도 라벨이 들어갈 가로 하단 영역 크기
-        this.BarColor = "#00E679"; // 차트 기본 색상
+        this.LabelWidth = 100 * this.Scale; // 세팅 이름이 들어갈 영역 크기
+        this.SpeedLabelHeight = 20 * this.Scale; // 속도 라벨이 들어갈 가로 하단 영역 크기
         this.rullerColor = '#e6e6e6'
+        this.BarStyle = {
+            color : '#00E679',
+        }
 
         // 기본 세팅
         this.setAxisX(0,140);
@@ -31,13 +34,13 @@ export default class SpeedChart{
     // 캔버스 너비 설정
     set Width(_width){
         this.canvas.style.width = _width;
-        this.canvas.width = _width;
+        this.canvas.width = _width * this.Scale;
     }
 
     // 캔버스 높이 설정
     set Height(_height){
         this.canvas.style.height = _height;
-        this.canvas.height = _height;
+        this.canvas.height = _height * this.Scale;
     }
 
     // 데이터 세팅 및 검증
@@ -56,7 +59,7 @@ export default class SpeedChart{
 
         // 기본 속성 세팅. 추가로 재설정 가능
         this.setAxisX(this.SpeedChart.min_speed,this.SpeedChart.max_speed) // 최대, 최소 속도
-        this.setBarHeight(); // 속도바 높이
+        this.setSpeedBar(); // 속도바를 세팅한다.
 
     }
 
@@ -77,17 +80,22 @@ export default class SpeedChart{
     }
 
     /**
-     * 속도 바의 세로 크기를 설정
-     * @param {Number} _height 
+     * 속도 영역대 바에 대한 옵션 설정
+     * @param {Object} _prop 옵션 설정
      */
-    setBarHeight(_height = Number){
-        
-        if(_height < this.CrankAreaHeight){
-            // 넘어온 높이 값이 있다면 해당 값으로 세팅.
-            this.barHeight = _height;
-        } else {
-            // 없다면, 비율에 맞춰 기본 세팅
-            this.barHeight = Math.ceil(this.CrankAreaHeight * 0.60);
+    setSpeedBar(_prop = {
+        height : null,
+        color : null,
+        font_size : null,
+    }){
+        let height = _prop.height || Math.ceil(this.CrankAreaHeight * 0.60);
+        let color = _prop.color || '#00E679'
+        let font_size = _prop.font_size || Math.ceil(height * 0.60);
+
+        this.BarStyle = {
+            height : height,
+            color : color,
+            font_size : font_size,
         }
     }
 
@@ -149,7 +157,7 @@ export default class SpeedChart{
             // 10단위로 검은색 강조, 텍스트 쓰기
             if(i%10 == 0) {
                 let text = this.canvas.getContext('2d');
-                text.font = (this.SpeedLabelHeight/1.4)+'px sanserif';
+                text.font = (this.SpeedLabelHeight * 0.75)+'px sanserif';
                 text.strokeStyle = 'black';
                 text.textBaseline = 'middle';
                 text.textAlign = 'center';
@@ -215,25 +223,25 @@ export default class SpeedChart{
         if(!_prop.hasOwnProperty('max_speed')) throw new Error("property max_speed was undefined!");
 
         // 선택 값 할당
-        if(!_prop.hasOwnProperty('color')) _prop.color = this.BarColor;
+        if(!_prop.hasOwnProperty('color')) _prop.color = this.BarStyle.color;
     
         // 좌표 계산
         let x_start = this.getXbySpeed(_prop.min_speed);
         let x_end = this.getXbySpeed(_prop.max_speed);
         let bar_width = x_end - x_start;
-        let y_start = this.getYbyCrankIndex(_prop.crank_index) - ( this.barHeight / 2 )
+        let y_start = this.getYbyCrankIndex(_prop.crank_index) - ( this.BarStyle.height / 2 )
     
         // 속도 영역 막대를 그림
         let ctx = this.canvas.getContext('2d');
         ctx.beginPath();
-        ctx.rect(x_start, y_start, bar_width, this.barHeight);
+        ctx.rect(x_start, y_start, bar_width, this.BarStyle.height);
         ctx.fillStyle = _prop.color;
         ctx.fill();
         ctx.closePath();
     
         // 텍스트가 있다면 텍스트를 표시
         if(_prop.hasOwnProperty('text')){
-            ctx.font = '12px serif';
+            ctx.font = this.BarStyle.font_size+'px serif';
             ctx.fillStyle = 'black';
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';

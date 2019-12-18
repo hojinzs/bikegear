@@ -2,50 +2,56 @@
     <div id="main">
         <h1>Bike Gear Ratio Calculator</h1>
         <hr>
-        <h2>CHART</h2>
-        
-        <RatioChart
-            :Gears="GearSettings">
-        </RatioChart>
+        <div id="chart" class="boxing">
+            <RatioChart
+                :Gears="GearSettings">
+            </RatioChart>
+        </div>
 
         <div id="input">
 
             <h2>DATA INPUT</h2>
-            <div id="wheel_type">
-                <h3>Set Wheel Type</h3>
-                <div>
-                    <input
-                        name="wheel"
-                        placeholder="wheel size"
-                        v-model.lazy.number="wheelset.wheel">
-                    <input
-                        name="tire"
-                        placeholder="tire size"
-                        v-model.lazy.number="wheelset.tire">
+            <div class="inputs boxing">
+                <div id="wheel_type" class="input-boxs">
+                    <h3>Set Wheel Type</h3>
+                    <div>
+                        <input
+                            name="wheel"
+                            placeholder="wheel size"
+                            v-model.lazy.number="wheelset.wheel">
+                        <input
+                            name="tire"
+                            placeholder="tire size"
+                            v-model.lazy.number="wheelset.tire">
+                    </div>
+                    <div>
+                        {{ calc.calRound(this.wheelset.wheel,this.wheelset.tire).toFixed(2) }}
+                    </div>
                 </div>
-                <div>
-                    {{ calc.calRound(this.wheelset.wheel,this.wheelset.tire).toFixed(2) }}
-                </div>
-            </div>
-            <div id="cadence">
-                <h3>Cadence</h3>
-                <div>
-                    <input
-                        name="min_cadence"
-                        placeholder="minimum_cadence"
-                        v-model.lazy.number="cadence.min">
-                    <input
-                        name="max_cadence"
-                        placeholder="maximum_cadence"
-                        v-model.lazy.number="cadence.max">
+                <div id="cadence">
+                    <h3>Cadence</h3>
+                    <div>
+                        <input
+                            name="min_cadence"
+                            placeholder="minimum_cadence"
+                            v-model.lazy.number="cadence.min">
+                        <input
+                            name="max_cadence"
+                            placeholder="maximum_cadence"
+                            v-model.lazy.number="cadence.max">
+                    </div>
                 </div>
             </div>
 
-            <button
+            <div>
+                <button
                 :disabled="!settingAddStatus"
-                v-on:click="newGearSetting()">New Setting</button>
+                v-on:click="newGearSetting()">New Setting</button><br>
+                {{5 - GearSettings.length}} settings remain
+            </div>
+
             <div class="gear_settings">
-                <div class="set_gear"
+                <div class="set_gear boxing"
                 v-for="(Setting, index) in GearSettings"
                 :key='index'>
                     <SetGear
@@ -94,18 +100,20 @@ export default {
     methods: {
         newGearSetting(){
             // 리미트 확인
+            if(this.settingAddStatus){
 
-            // 향후 복사기능 추가(lodash)
-            let newSetting = new GearSetting({
-                color: "red",
-                name: "newSetting",
-                crank: [50,34],
-                sprocket: [11,12,13,14,15,17,19,21,24,27,30],
-                wheelset: this.wheelset,
-                cadence: this.cadence,
-            });
+                // 향후 deep copy 추가(lodash)
+                let newSetting = new GearSetting({
+                    color: "red",
+                    name: "newSetting",
+                    crank: [50,34],
+                    sprocket: [11,12,13,14,15,17,19,21,24,27,30],
+                    wheelset: this.wheelset,
+                    cadence: this.cadence,
+                });
 
-            this.GearSettings.push(newSetting);
+                this.GearSettings.push(newSetting);   
+            }
         },
         delGearSetting(index){
             this.GearSettings.splice(index,1);
@@ -158,9 +166,22 @@ html body {
     width: 100%;
 }
 
+.inputs{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.inputs .input-boxs{
+    flex: none;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 .gear_settings{
     width: 100%;
     display: flex;
+    justify-content: center;
     overflow-x: scroll
 }
 
@@ -168,9 +189,12 @@ html body {
     flex: none;
     max-width: 180px;
     overflow: hidden;
-    border: 1px black solid;
     margin: 10px;
 
 }
 
+.boxing{
+    border: 1px black solid;
+    border-radius: 5px;
+}
 </style>

@@ -1,5 +1,6 @@
 <template>
     <div id="chart">
+        <h2>CHART</h2>
         <div class="chart-wrapper">
             <div
                 v-for="(gear,index) in Gears"
@@ -7,14 +8,12 @@
                 <ChartCanvas
                     :setting = gear
                     :max_speed.sync = maxSpeed
-                    :min_speed.sync = minSpeed
-                ></ChartCanvas>
+                    :min_speed.sync = minSpeed>
+                </ChartCanvas>
             </div>
 
         </div>
-
-        max-speed :: {{ maxSpeed.toFixed(2) }} Km/h<br>
-        min-speed :: {{ minSpeed.toFixed(2) }} Km/h<br>
+        max-speed :: <b>{{ maxSpeed.toFixed(2) }}</b> Km/h ~ min-speed :: <b>{{ minSpeed.toFixed(2) }}</b> Km/h
     </div>
 </template>
 
@@ -60,8 +59,6 @@ export default {
 #chart{
     width: 100%;
     right: 0px;
-    background-color: gray;
-    border-radius: 5px;
 }
 
 .chart-wrapper{

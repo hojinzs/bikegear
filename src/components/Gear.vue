@@ -3,9 +3,11 @@
         <h3><b>#{{setting_number + 1}}</b></h3>
         <input
             v-model.lazy="settings.name">
-        <button
-            :disabled="!settingDelStatus" 
-            @click="remove">remove</button>
+        <div>
+            <button
+                :disabled="!settingDelStatus" 
+                @click="remove">remove</button>
+        </div>
         <hr>
         <div id="crank">
             <h3>1. Crank</h3>
@@ -151,18 +153,8 @@ export default {
         }
     },
     watch:{
-        crank: function(newCrank){
-            console.log('crank watch!!', newCrank);
-
-            // this.crank = this.reorderList(newCrank);
-            this.settings.crank = newCrank;
-        },
-        sprocket : function(newSprocket){
-            console.log('sprocket watch!!', newSprocket);
-
-            // this.sprocket = this.reorderList(newSprocket)
-            this.settings.sprocket = newSprocket;
-        },
+        crank: function(newCrank){ this.settings.crank = newCrank; },
+        sprocket : function(newSprocket){ this.settings.sprocket = newSprocket; },
     }
 }
 </script>
