@@ -1,15 +1,26 @@
 <template>
     <div id="gears">
-        <h3><b>#{{setting_number + 1}}</b> {{settings.name}}</h3>
+        <h3><b>#{{setting_number + 1}}</b></h3>
+        <input
+            v-model.lazy="settings.name">
+        <button
+            :disabled="!settingDelStatus" 
+            @click="remove">remove</button>
         <hr>
         <div id="crank">
             <h3>1. Crank</h3>
             <div
-            v-for="(chainring, index) in settings.crank"
+            v-for="(chainring, index) in crank"
             v-bind:key="index">
-                <input v-model.lazy.number="crank[index]" name="chainring" placeholder="chainring"><button v-on:click="delChainring(index)"> - </button>
+                <input v-model.lazy.number="crank[index]" name="chainring" placeholder="chainring">
+                <button
+                    :disabled="!ChainringDelStatus" 
+                    v-on:click="delChainring(index)"> - </button>
             </div>
-            <button v-on:click="addChainring()"> + </button>
+            <button
+                :disabled="!ChainringAddStatus"
+                v-on:click="addChainring()"> + </button>
+            <button v-on:click="sortList(crank)"> sort </button>
         </div>
         <div id="sprocket">
             <h3>2. sprocket</h3>
@@ -17,9 +28,14 @@
             v-for="(cog, index) in sprocket"
             v-bind:key="index">
                 <input v-model.lazy.number="sprocket[index]" name="cog" placeholder="cog">
-                <button v-on:click="delCog(index)"> - </button>
+                <button
+                    :disabled="!CogDelStatus" 
+                    v-on:click="delCog(index)"> - </button>
             </div>
-            <button v-on:click="addCog()"> + </button>
+            <button
+                :disabled="!CogAddStatus"
+                v-on:click="addCog()"> + </button>
+            <button v-on:click="sortList(sprocket)"> sort </button>
         </div>
         <hr>
         <div id="gear ratio">
@@ -50,7 +66,6 @@
                 </tr>
             </table>
         </div>
-        <button @click="remove">Remove</button>
     </div>
 </template>
 <script>
@@ -61,35 +76,68 @@ export default {
         'setting_number',
         'settings',
         'preset',
+        'settingDelStatus',
     ],
+    computed: {
+        ChainringDelStatus(){ return this.crank.length > 1 }, // 체인링 1개 이하라면 삭제 불가
+        ChainringAddStatus(){ return this.crank.length < 5 }, // 체인링 5개 이상 추가 불가
+        CogDelStatus(){ return this.sprocket.length > 1 }, // 코그 1개 이하 삭제 불가
+        CogAddStatus(){ return this.sprocket.length < 15 }, // 코그 15개 이상 추가 불가
+    },
     methods: {
         addChainring(_teeth = null){
-            this.crank.push(_teeth);
+            if(this.CogAddStatus){
+                this.crank.push(_teeth);
+            }
         },
         delChainring(_index){
-            this.crank.splice(_index,1);
+            if(this.ChainringDelStatus){
+                this.crank.splice(_index,1);
+            }
         },
         setChainring(_array = Array){
-            // 향후 validation 규칙 넣을 것
-            this.crank = _array;
+            this.crank = this.reorderList(_array);
         },
         addCog(_teeth = null){
-            this.sprocket.push(_teeth);
+            if(this.CogAddStatus){
+                this.sprocket.push(_teeth);
+            }
         },
         delCog(_index){
-            this.sprocket.splice(_index,1);
+            if(this.CogDelStatus){
+                this.sprocket.splice(_index,1);
+            }
         },
         setCog(_array = Array){
-            // 나중에 validation 규칙 넣을 것
-            this.sprocket = _array;
+            this.sprocket = this.reorderList(_array);                
         },
         remove(){
             this.$emit('remove');
+        },
+        /**
+         * 배열을 재정렬한 새로운 배열을 반환
+         */
+        reorderList(_array){
+            try {
+                let newList = [];
+                _array.forEach((element = Number) => {
+                    newList.push(element);
+                });
+                return newList;
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+        /**
+         * 배열을 재정렬만 함
+         */
+        sortList(_List){
+            _List.sort();
         }
     },
     mounted(){
-        this.setChainring(this.settings.crank);
-        this.setCog(this.settings.sprocket);
+        this.setChainring(this.settings.crank.filter((i)=> {return i}));
+        this.setCog(this.settings.sprocket.filter((i)=> {return i}));
     },
     data: function(){
         return {
@@ -104,11 +152,16 @@ export default {
     },
     watch:{
         crank: function(newCrank){
-            console.log(newCrank);
+            console.log('crank watch!!', newCrank);
 
+            // this.crank = this.reorderList(newCrank);
+            this.settings.crank = newCrank;
         },
         sprocket : function(newSprocket){
-            console.log(newSprocket);
+            console.log('sprocket watch!!', newSprocket);
+
+            // this.sprocket = this.reorderList(newSprocket)
+            this.settings.sprocket = newSprocket;
         },
     }
 }

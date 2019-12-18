@@ -22,6 +22,9 @@ export default class SpeedChart{
         this.LabelWidth = 100; // 세팅 이름이 들어갈 영역 크기
         this.SpeedLabelHeight = 20; // 속도 라벨이 들어갈 가로 하단 영역 크기
         this.BarColor = "#00E679"; // 차트 기본 색상
+        this.rullerColor = '#e6e6e6'
+
+        // 기본 세팅
         this.setAxisX(0,140);
     }
 
@@ -139,7 +142,8 @@ export default class SpeedChart{
         // 최소 스피드부터 최대 스피드까지 반복하며 그리드를 그림
         for (let i = this.MinSpeed; i < this.MaxSpeed; i++) {
             
-            let rullerColor = '#e6e6e6'; // 기본 그리드 색상
+            let rullerColor = this.rullerColor; // 그리드 색상 재설정
+
             let x = this.getXbySpeed(i); // 픽셀 위치를 가져옴
     
             // 10단위로 검은색 강조, 텍스트 쓰기
@@ -158,6 +162,30 @@ export default class SpeedChart{
             ruller.beginPath();
             ruller.moveTo(x,0);
             ruller.lineTo(x,this.canvas.height - this.SpeedLabelHeight);
+            ruller.lineWidth = 1;
+            ruller.strokeStyle = rullerColor;
+            ruller.stroke();
+        }
+    }
+
+    /**
+     * Y축 그리드 그리기
+     */
+    drawVerticalRuller(){
+        
+        let _length = this.SpeedChart.crank.length;
+
+        for (let index = 0; index < _length+1; index++) {
+
+            let rullerColor = this.rullerColor; // 그리드 색상 재설정
+
+            let y = this.CrankAreaHeight * index
+            //     let y = this.getYbyCrankIndex(index); // 중앙에 그리고 싶다면 해당 주석을 제거
+
+            let ruller = this.canvas.getContext('2d');
+            ruller.beginPath();
+            ruller.moveTo(0,y);
+            ruller.lineTo(this.canvas.width,y);
             ruller.lineWidth = 1;
             ruller.strokeStyle = rullerColor;
             ruller.stroke();
@@ -224,20 +252,12 @@ export default class SpeedChart{
         clear.clearRect(0,0,this.canvas.width,this.canvas.height);
 
         // 드로우 시작
+
+        // X 축 그리드 그리기
         this.drawRuller();
 
-        // 테스트 Y 그리드 그리기
-        let ruller = this.canvas.getContext('2d');
-        this.SpeedChart.crank.forEach((element,index) => {
-            let y = this.getYbyCrankIndex(index);
-
-            ruller.beginPath();
-            ruller.moveTo(0,y);
-            ruller.lineTo(this.canvas.width,y);
-            ruller.lineWidth = 1;
-            ruller.strokeStyle = "red";
-            ruller.stroke();    
-        });
+        // Y 축 그리드 그리기
+        this.drawVerticalRuller();
 
         // 세팅된 데이터를 가져와 차트를 그린다
         this.SpeedChart.crank.forEach((crank,crank_index) => {

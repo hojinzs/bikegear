@@ -41,7 +41,9 @@
                 </div>
             </div>
 
-            <button v-on:click="newGearSetting()">New Setting</button>
+            <button
+                :disabled="!settingAddStatus"
+                v-on:click="newGearSetting()">New Setting</button>
             <div class="gear_settings">
                 <div class="set_gear"
                 v-for="(Setting, index) in GearSettings"
@@ -50,6 +52,7 @@
                         :setting_number="index"
                         :settings.sync="Setting"
                         :preset="Preset"
+                        :settingDelStatus="settingdelStatus"
                         @remove="delGearSetting(index)"
                         >
                     </SetGear>
@@ -84,8 +87,14 @@ export default {
         'SetGear' : Gear,
         'RatioChart' : Chart
     },
+    computed: {
+        settingAddStatus(){ return this.GearSettings.length < 5}, // 5개 이상 세팅 추가 불가
+        settingdelStatus(){ return this.GearSettings.length > 1}, // 1개 이하 세팅 삭제 불가
+    },
     methods: {
         newGearSetting(){
+            // 리미트 확인
+
             // 향후 복사기능 추가(lodash)
             let newSetting = new GearSetting({
                 color: "red",
