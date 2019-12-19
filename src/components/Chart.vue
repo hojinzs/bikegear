@@ -13,7 +13,7 @@
             </div>
 
         </div>
-        max-speed :: <b>{{ maxSpeed.toFixed(2) }}</b> Km/h ~ min-speed :: <b>{{ minSpeed.toFixed(2) }}</b> Km/h
+        min-speed :: <b>{{ minSpeed.toFixed(2) }}</b> Km/h ~ max-speed :: <b>{{ maxSpeed.toFixed(2) }}</b> Km/h
     </div>
 </template>
 

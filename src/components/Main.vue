@@ -8,61 +8,36 @@
             </RatioChart>
         </div>
 
-        <div id="input">
+        <h2>DATA INPUT</h2>
+        <hr>
+        <div>
+            <SetBike
+                :wheelset="wheelset"
+                :cadence="cadence">
+            </SetBike>
+        </div>
 
-            <h2>DATA INPUT</h2>
-            <div class="inputs boxing">
-                <div id="wheel_type" class="input-boxs">
-                    <h3>Set Wheel Type</h3>
-                    <div>
-                        <input
-                            name="wheel"
-                            placeholder="wheel size"
-                            v-model.lazy.number="wheelset.wheel">
-                        <input
-                            name="tire"
-                            placeholder="tire size"
-                            v-model.lazy.number="wheelset.tire">
-                    </div>
-                    <div>
-                        {{ calc.calRound(this.wheelset.wheel,this.wheelset.tire).toFixed(2) }}
-                    </div>
-                </div>
-                <div id="cadence">
-                    <h3>Cadence</h3>
-                    <div>
-                        <input
-                            name="min_cadence"
-                            placeholder="minimum_cadence"
-                            v-model.lazy.number="cadence.min">
-                        <input
-                            name="max_cadence"
-                            placeholder="maximum_cadence"
-                            v-model.lazy.number="cadence.max">
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <button
+        <div>
+            <button
                 :disabled="!settingAddStatus"
-                v-on:click="newGearSetting()">New Setting</button><br>
-                {{5 - GearSettings.length}} settings remain
-            </div>
+                v-on:click="newGearSetting()">
+                New Setting
+            </button>
+            <br>
+            {{5 - GearSettings.length}} settings remain
+        </div>
 
-            <div class="gear_settings">
-                <div class="set_gear boxing"
-                v-for="(Setting, index) in GearSettings"
-                :key='index'>
-                    <SetGear
-                        :setting_number="index"
-                        :settings.sync="Setting"
-                        :preset="Preset"
-                        :settingDelStatus="settingdelStatus"
-                        @remove="delGearSetting(index)"
-                        >
-                    </SetGear>
-                </div>
+        <div class="gear_settings">
+            <div class="set_gear boxing"
+            v-for="(Setting, index) in GearSettings"
+            :key='index'>
+                <SetGear
+                    :setting_number="index"
+                    :settings.sync="Setting"
+                    :preset="Preset"
+                    :settingDelStatus="settingdelStatus"
+                    @remove="delGearSetting(index)">
+                </SetGear>
             </div>
         </div>
     </div>
@@ -73,9 +48,11 @@
 // import Components
 import Gear from './Gear'
 import Chart from './Chart'
+import Bike from './Bike'
 
 // import Classes
 import Calc from '../calc'
+import axios from 'axios'
 
 class GearSetting extends Calc {
     constructor(_props = {
@@ -91,7 +68,8 @@ class GearSetting extends Calc {
 export default {
     components: {
         'SetGear' : Gear,
-        'RatioChart' : Chart
+        'RatioChart' : Chart,
+        'SetBike' : Bike,
     },
     computed: {
         settingAddStatus(){ return this.GearSettings.length < 5}, // 5개 이상 세팅 추가 불가
@@ -148,6 +126,18 @@ export default {
         }
     },
     mounted: function(){
+        axios({
+            method: 'GET',
+            url: 'https://api.jsonbin.io/b/5dfb11a40bbce135bb5439e6/1',
+            headers: { 'secret-key': '$2b$10$f43n1zdglWI0iahcScqZpum658LKAA.sptdNd3DHABAoPFf.tY5ey' }
+        })
+            .then(function(res){
+                console.log('RESPONSE =>', res.data);
+            })
+            .catch(function(error){
+                console.log('ERROR => ',error);
+            })
+
         this.newGearSetting();
     },
 }
