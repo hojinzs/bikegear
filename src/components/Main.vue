@@ -75,6 +75,35 @@ export default {
         settingAddStatus(){ return this.GearSettings.length < 5}, // 5개 이상 세팅 추가 불가
         settingdelStatus(){ return this.GearSettings.length > 1}, // 1개 이하 세팅 삭제 불가
     },
+    data: function(){
+        return {
+            calc : new Calc,
+            GearSettings : [],
+            wheelset : {
+                wheel : 622,
+                tire : 30,
+            },
+            cadence : {
+                min: 80,
+                max: 90,
+            },
+            Preset: {
+                cranks: [
+                    {
+                        name: 'mid-compact chainring',
+                        chainring: [50,34],
+                    }
+                ],
+                sprockets: [
+                    {
+                        name: 'CR-R8000 Ultegra (11-30T)',
+                        cog: [11,12,13,14,15,17,19,21,24,27,30],
+                    }
+                ]
+            },
+            data_api_key : '$2b$10$f43n1zdglWI0iahcScqZpum658LKAA.sptdNd3DHABAoPFf.tY5ey',
+        }
+    },
     methods: {
         newGearSetting(){
             // 리미트 확인
@@ -97,45 +126,38 @@ export default {
             this.GearSettings.splice(index,1);
         },
     },
-    data: function(){
-        return {
-            calc : new Calc,
-            GearSettings : [],
-            wheelset : {
-                wheel : 622,
-                tire : 30,
-            },
-            cadence : {
-                min: 80,
-                max: 90,
-            },
-            Preset: {
-                crank: [
-                    {
-                        name: 'mid-compact chainring',
-                        chainring: [50,34],
-                    }
-                ],
-                sprocket: [
-                    {
-                        name: 'CR-R8000 Ultegra (11-30T)',
-                        cog: [11,12,13,14,15,17,19,21,24,27,30],
-                    }
-                ]
-            },
-        }
-    },
     mounted: function(){
+
+        let preset = this.Preset;
+
+        // sprocket preset update
         axios({
             method: 'GET',
             url: 'https://api.jsonbin.io/b/5dfb11a40bbce135bb5439e6/1',
-            headers: { 'secret-key': '$2b$10$f43n1zdglWI0iahcScqZpum658LKAA.sptdNd3DHABAoPFf.tY5ey' }
+            headers: { 'secret-key': this.data_api_key }
         })
             .then(function(res){
-                console.log('RESPONSE =>', res.data);
+                console.log('RESPONSE =>',res.data)
+                // update sprocket preset
+                preset.sprockets = res.data.sprockets;
             })
             .catch(function(error){
-                console.log('ERROR => ',error);
+                console.log('ERROR => ',error,'preset data');
+            })
+        
+        // crank preset update
+        axios({
+            method: 'GET',
+            url: 'https://api.jsonbin.io/b/5dfb4bf12c714135cda4046a',
+            headers: { 'secret-key': this.data_api_key }
+        })
+            .then(function(res){
+                console.log('RESPONSE =>',res.data)
+                // update sprocket preset
+                preset.cranks = res.data.cranks;
+            })
+            .catch(function(error){
+                console.log('ERROR => ',error,'preset data');
             })
 
         this.newGearSetting();
@@ -186,5 +208,9 @@ html body {
 .boxing{
     border: 1px black solid;
     border-radius: 5px;
+}
+
+select{
+    width: 100%;
 }
 </style>

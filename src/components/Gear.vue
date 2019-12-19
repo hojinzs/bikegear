@@ -11,6 +11,19 @@
         <hr>
         <div id="crank">
             <h3>1. Crank</h3>
+
+            <select name="crank_select"
+                v-model="crank_select">
+                <option
+                    v-for="(crank,index) in preset.cranks"
+                    v-bind:key="index"
+                    v-bind:value="crank.chainring">
+                    {{crank.name}}
+                </option>
+            </select>
+
+            {{crank_select}}
+
             <div
             v-for="(chainring, index) in crank"
             v-bind:key="index">
@@ -19,13 +32,26 @@
                     :disabled="!ChainringDelStatus" 
                     v-on:click="delChainring(index)"> - </button>
             </div>
+
             <button
                 :disabled="!ChainringAddStatus"
                 v-on:click="addChainring()"> + </button>
             <button v-on:click="sortList(crank)"> sort </button>
+
         </div>
         <div id="sprocket">
             <h3>2. sprocket</h3>
+
+            <select name="sprocket_select"
+                v-model="sprocket_select">
+                <option
+                    v-for="(sprocket,index) in preset.sprockets"
+                    :key="index"
+                    :value="sprocket.cog">
+                    {{sprocket.name}}
+                </option>
+            </select>
+
             <div
             v-for="(cog, index) in sprocket"
             v-bind:key="index">
@@ -34,10 +60,12 @@
                     :disabled="!CogDelStatus" 
                     v-on:click="delCog(index)"> - </button>
             </div>
+
             <button
                 :disabled="!CogAddStatus"
                 v-on:click="addCog()"> + </button>
             <button v-on:click="sortList(sprocket)"> sort </button>
+
         </div>
         <hr>
         <div id="gear ratio">
@@ -80,6 +108,19 @@ export default {
         'preset',
         'settingDelStatus',
     ],
+    data(){
+        return {
+            calc: new Calc,
+            crank: Array,
+            sprocket: Array,
+            crank_select : null,
+            sprocket_select : null,
+            presets: {
+                crank: this.preset.crank,
+                sprocket: this.preset.sprocket,
+            },
+        }
+    },
     computed: {
         ChainringDelStatus(){ return this.crank.length > 1 }, // 체인링 1개 이하라면 삭제 불가
         ChainringAddStatus(){ return this.crank.length < 5 }, // 체인링 5개 이상 추가 불가
@@ -113,8 +154,12 @@ export default {
         setCog(_array = Array){
             this.sprocket = this.reorderList(_array);                
         },
-        remove(){
-            this.$emit('remove');
+        /**
+         * Select Bind
+         */
+        setArray(_target,_data){
+            console.log("onChange!!")
+            _target = _data;
         },
         /**
          * 배열을 재정렬한 새로운 배열을 반환
@@ -135,27 +180,32 @@ export default {
          */
         sortList(_List){
             _List.sort();
-        }
+        },
+        /**
+         * 이 세팅을 파괴함 
+         */
+        remove(){
+            this.$emit('remove');
+        },
     },
     mounted(){
         this.setChainring(this.settings.crank.filter((i)=> {return i}));
         this.setCog(this.settings.sprocket.filter((i)=> {return i}));
     },
-    data: function(){
-        return {
-            calc: new Calc,
-            crank: Array,
-            sprocket: Array,
-            presets: {
-                crank: this.preset.crank,
-                sprocket: this.preset.sprocket,
-            },
+    watch:{
+        crank(newCrank){
+            this.settings.crank = newCrank;
+        },
+        sprocket(newSprocket){
+            this.settings.sprocket = newSprocket;
+        },
+        crank_select(_value){
+            this.crank = _value
+        },
+        sprocket_select(_value){
+            this.sprocket = _value
         }
     },
-    watch:{
-        crank: function(newCrank){ this.settings.crank = newCrank; },
-        sprocket : function(newSprocket){ this.settings.sprocket = newSprocket; },
-    }
 }
 </script>
 
