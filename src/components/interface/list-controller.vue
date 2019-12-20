@@ -36,8 +36,8 @@ export default {
         }
     },
     computed: {
-        DelStatus(){ return this.list.length > this.min }, // 체인링 1개 이하라면 삭제 불가
-        AddStatus(){ return this.list.length < this.max }, // 체인링 5개 이상 추가 불가
+        DelStatus(){ return this.list.length > this.min },
+        AddStatus(){ return this.list.length < this.max },
     },
     methods:{
         itemDelete(_index){ if(this.DelStatus) this.list.splice(_index,1) },

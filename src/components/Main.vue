@@ -193,7 +193,6 @@ html body {
 .gear_settings{
     width: 100%;
     display: flex;
-    justify-content: center;
     overflow-x: scroll
 }
 

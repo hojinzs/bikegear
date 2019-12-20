@@ -99,8 +99,8 @@ export default {
     data(){
         return {
             calc: new Calc,
-            crank: Array,
-            sprocket: Array,
+            crank: this.settings.crank.filter((i)=> {return i}),
+            sprocket: this.settings.sprocket.filter((i)=> {return i}),
             crank_select : null,
             sprocket_select : null,
         }
@@ -132,16 +132,6 @@ export default {
         remove(){
             this.$emit('remove');
         },
-    },
-    mounted(){
-
-        // 크랭크 세팅
-        if(this.settings.crank === Array){
-            this.setChainring(this.settings.crank.filter((i)=> {return i}));
-        } else {
-            this.setChainring([50,34]);
-        }
-        this.setCog(this.settings.sprocket.filter((i)=> {return i}));
     },
     watch:{
         crank(newCrank){
