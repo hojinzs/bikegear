@@ -24,19 +24,9 @@
 
             {{crank_select}}
 
-            <div
-            v-for="(chainring, index) in crank"
-            v-bind:key="index">
-                <input v-model.lazy.number="crank[index]" name="chainring" placeholder="chainring">
-                <button
-                    :disabled="!ChainringDelStatus" 
-                    v-on:click="delChainring(index)"> - </button>
-            </div>
-
-            <button
-                :disabled="!ChainringAddStatus"
-                v-on:click="addChainring()"> + </button>
-            <button v-on:click="sortList(crank)"> sort </button>
+            <ListController
+                v-model="crank">
+            </ListController>
 
         </div>
         <div id="sprocket">
@@ -45,26 +35,16 @@
             <select name="sprocket_select"
                 v-model="sprocket_select">
                 <option
-                    v-for="(sprocket,index) in preset.sprockets"
+                    v-for="(spr,index) in preset.sprockets"
                     :key="index"
-                    :value="sprocket.cog">
-                    {{sprocket.name}}
+                    :value="spr.cog">
+                    {{spr.name}}
                 </option>
             </select>
 
-            <div
-            v-for="(cog, index) in sprocket"
-            v-bind:key="index">
-                <input v-model.lazy.number="sprocket[index]" name="cog" placeholder="cog">
-                <button
-                    :disabled="!CogDelStatus" 
-                    v-on:click="delCog(index)"> - </button>
-            </div>
-
-            <button
-                :disabled="!CogAddStatus"
-                v-on:click="addCog()"> + </button>
-            <button v-on:click="sortList(sprocket)"> sort </button>
+            <ListController
+                v-model="sprocket">
+            </ListController>
 
         </div>
         <hr>
@@ -99,9 +79,17 @@
     </div>
 </template>
 <script>
+// import library
 import Calc from '../calc'
 
+
+// import components
+import list_controller from './interface/list-controller'
+
 export default {
+    components: {
+        'ListController' : list_controller,
+    },
     props: [
         'setting_number',
         'settings',
@@ -115,51 +103,14 @@ export default {
             sprocket: Array,
             crank_select : null,
             sprocket_select : null,
-            presets: {
-                crank: this.preset.crank,
-                sprocket: this.preset.sprocket,
-            },
         }
     },
-    computed: {
-        ChainringDelStatus(){ return this.crank.length > 1 }, // 체인링 1개 이하라면 삭제 불가
-        ChainringAddStatus(){ return this.crank.length < 5 }, // 체인링 5개 이상 추가 불가
-        CogDelStatus(){ return this.sprocket.length > 1 }, // 코그 1개 이하 삭제 불가
-        CogAddStatus(){ return this.sprocket.length < 15 }, // 코그 15개 이상 추가 불가
-    },
     methods: {
-        addChainring(_teeth = null){
-            if(this.CogAddStatus){
-                this.crank.push(_teeth);
-            }
-        },
-        delChainring(_index){
-            if(this.ChainringDelStatus){
-                this.crank.splice(_index,1);
-            }
-        },
         setChainring(_array = Array){
             this.crank = this.reorderList(_array);
         },
-        addCog(_teeth = null){
-            if(this.CogAddStatus){
-                this.sprocket.push(_teeth);
-            }
-        },
-        delCog(_index){
-            if(this.CogDelStatus){
-                this.sprocket.splice(_index,1);
-            }
-        },
         setCog(_array = Array){
             this.sprocket = this.reorderList(_array);                
-        },
-        /**
-         * Select Bind
-         */
-        setArray(_target,_data){
-            console.log("onChange!!")
-            _target = _data;
         },
         /**
          * 배열을 재정렬한 새로운 배열을 반환
@@ -176,12 +127,6 @@ export default {
             }
         },
         /**
-         * 배열을 재정렬만 함
-         */
-        sortList(_List){
-            _List.sort();
-        },
-        /**
          * 이 세팅을 파괴함 
          */
         remove(){
@@ -189,7 +134,13 @@ export default {
         },
     },
     mounted(){
-        this.setChainring(this.settings.crank.filter((i)=> {return i}));
+
+        // 크랭크 세팅
+        if(this.settings.crank === Array){
+            this.setChainring(this.settings.crank.filter((i)=> {return i}));
+        } else {
+            this.setChainring([50,34]);
+        }
         this.setCog(this.settings.sprocket.filter((i)=> {return i}));
     },
     watch:{
