@@ -31,7 +31,7 @@ export default {
     },
     data(){
         return {
-            min : this.minimum || 0,
+            min : this.minimum || 1,
             max : this.maximim || 100,
         }
     },

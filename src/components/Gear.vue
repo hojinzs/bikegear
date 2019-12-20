@@ -25,7 +25,8 @@
             {{crank_select}}
 
             <ListController
-                v-model="crank">
+                v-model="crank"
+                :max="3">
             </ListController>
 
         </div>
@@ -43,7 +44,8 @@
             </select>
 
             <ListController
-                v-model="sprocket">
+                v-model="sprocket"
+                :max="15">
             </ListController>
 
         </div>
