@@ -26,7 +26,7 @@
 
             <ListController
                 v-model="crank"
-                :max="3">
+                :maximim="3">
             </ListController>
 
         </div>
@@ -45,7 +45,7 @@
 
             <ListController
                 v-model="sprocket"
-                :max="15">
+                :maximim="15">
             </ListController>
 
         </div>
