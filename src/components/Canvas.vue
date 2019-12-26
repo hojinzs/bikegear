@@ -1,11 +1,16 @@
 <template>
     <div class="chart">
-    <span>{{setting.name}}</span>
-    <div class="canvas-wrapper" ref="canvas-wrapper">
-        <canvas
-            class="this-canvas" ref="this-canvas">
-        </canvas>
-    </div>
+        <div>
+            <span> <b> {{setting.name}} </b> </span>
+        </div>
+        <div>
+            <span> min-speed :: <b>{{ setting.SpeedTable.minSpeed.toFixed(2) }}</b> Km/h ~ max-speed :: <b>{{ setting.SpeedTable.maxSpeed.toFixed(2) }}</b> Km/h </span>
+        </div>
+        <div class="canvas-wrapper" ref="canvas-wrapper">
+            <canvas
+                class="this-canvas" ref="this-canvas">
+            </canvas>
+        </div>
     </div>
 </template>
 

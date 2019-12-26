@@ -3,7 +3,7 @@
         <div
         v-for="(item, index) in list"
         v-bind:key="index">
-            <input v-model="list[index]" name="item" :placeholder="placeholder">
+            <input v-model.lazy="list[index]" name="item" :placeholder="placeholder">
             <button
                 :disabled="!DelStatus" 
                 v-on:click="itemDelete(index)"> - </button>
