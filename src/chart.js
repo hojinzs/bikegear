@@ -47,7 +47,9 @@ export default class SpeedChart{
     setData(_data){
         // 데이터를 검증한다
         try {
-            console.log("Data Validation")
+            if(!_data.hasOwnProperty('max_speed')) Error('Property max_speed invaild');
+            if(!_data.hasOwnProperty('min_speed')) Error('Property min_speed invaild');
+            if(!_data.hasOwnProperty('crank')) Error('Property crank invaild');
             
         } catch (error) {
             console.log("Invalid data => ", _data);
@@ -271,6 +273,9 @@ export default class SpeedChart{
         this.SpeedChart.crank.forEach((crank,crank_index) => {
 
             crank.sprocket.forEach((sprocket) => {
+
+                // 속도 데이터가 없을 경우 무시
+                if(sprocket.min_speed == 0 && sprocket.max_speed == 0) return;
 
                 this.drawBar({
                     crank_index : crank_index,

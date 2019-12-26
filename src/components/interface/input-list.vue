@@ -3,7 +3,17 @@
         <div
         v-for="(item, index) in list"
         v-bind:key="index">
-            <input v-model.lazy="list[index]" name="item" :placeholder="placeholder">
+
+            <input 
+                v-if="type == 'number'"
+                v-model.lazy.number="list[index]"
+                :name="'item_'+index"
+                :placeholder="placeholder">
+            <input 
+                v-if="type != 'number'"
+                v-model.lazy="list[index]"
+                :name="'item_'+index"
+                :placeholder="placeholder">
             <button
                 :disabled="!DelStatus" 
                 v-on:click="itemDelete(index)"> - </button>
@@ -12,6 +22,7 @@
         <button
             :disabled="!AddStatus"
             v-on:click="itemInsert()"> + </button>
+
         <button
             v-on:click="sorting()"> sort </button>
     </div>
@@ -28,6 +39,7 @@ export default {
         minimum : Number,
         maximim : Number,
         placeholder : String,
+        type : String,
     },
     data(){
         return {
@@ -44,17 +56,15 @@ export default {
         itemInsert(_item = null){ if(this.AddStatus) this.list.push(_item) },
         sorting(){ this.list.sort() },
     },
-    mounted() {
-        console.log(this.list);
+    mounted(){
+
     },
     watch:{
-        list(newList){
-            console.log(newList)
-        }
+
     }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style scoped>
 
 </style>

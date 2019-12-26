@@ -13,23 +13,36 @@ export default class Calculator{
         this.cadence = _props.cadence;
     }
 
+    /**
+     * 입력된 크랭크, 스프라켓 정보로 기어비 테이블을 반환함
+     */
     get RatioTable(){
         let table = {}
 
         for(let crg in this.crank){
-            let arr = {};
 
-            for(let cog in this.sprocket){
-                arr[this.sprocket[cog]] = this.calGearRatio(this.crank[crg],this.sprocket[cog]);
-            }
+                let arr = {};
 
-            table[this.crank[crg]] = arr;
+                for(let cog in this.sprocket){
+
+                    if(this.sprocket[cog] != null){
+
+                        arr[this.sprocket[cog]] = this.calGearRatio(this.crank[crg],this.sprocket[cog]);
+
+                    }
+
+                }
+    
+                table[this.crank[crg]] = arr;
 
         }
 
         return table;
     }
 
+    /**
+     * 휠 직경 정보를 반환함
+     */
     get Round(){
 
         let wheel = this.wheelset.wheel;
