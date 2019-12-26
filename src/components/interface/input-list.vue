@@ -24,7 +24,7 @@
             v-on:click="itemInsert()"> + </button>
 
         <button
-            v-on:click="sorting()"> sort </button>
+            v-on:click="sorting(list)"> sort </button>
     </div>
 </template>
 
@@ -40,6 +40,10 @@ export default {
         maximim : Number,
         placeholder : String,
         type : String,
+        sort : {
+            type : String,
+            defalt : 'desc'
+        },
     },
     data(){
         return {
@@ -54,14 +58,34 @@ export default {
     methods:{
         itemDelete(_index){ if(this.DelStatus) this.list.splice(_index,1) },
         itemInsert(_item = null){ if(this.AddStatus) this.list.push(_item) },
-        sorting(){ this.list.sort() },
-    },
-    mounted(){
+        sorting(_data,_sort = this.sort){ 
 
-    },
-    watch:{
+            // _data를 복제한 새로운 배열을 만듬
+            let mapped = _data.filter(x => x);
 
-    }
+            switch (_sort) {
+                case 'desc':
+                    mapped.sort((a,b) => a - b);
+                    break;
+
+                case 'asc':
+                    mapped.sort((a,b) => b - a);
+                    break;
+
+                default:
+                    mapped.sort();
+                    break;
+            }
+
+            // _data 배열 초기화
+            _data.splice(0,_data.length);
+
+            // _data 배열에 데이터를 다시 집어넣음
+            mapped.forEach(element => {
+                _data.push(element);
+            });
+        },
+    },
 }
 </script>
 
