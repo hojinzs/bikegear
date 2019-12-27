@@ -230,8 +230,6 @@ export default class SpeedChart{
                 txt = this.SpeedChart.crank[index].chainring+"T"
             }
 
-            console.log("SPEED CHART =>",this.SpeedChart.crank);
-
             let ctx = this.canvas.getContext('2d');
             ctx.font = this.BarStyle.font_size+'px serif';
             ctx.fillStyle = 'black';
