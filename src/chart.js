@@ -101,7 +101,7 @@ export default class SpeedChart{
     }){
         let height = _prop.height || Math.ceil(this.CrankAreaHeight * 0.60);
         let color = _prop.color || '#00E679'
-        let font_size = _prop.font_size || Math.ceil(height * 0.60);
+        let font_size = _prop.font_size || Math.ceil(height * 0.50);
 
         this.BarStyle = {
             height : height,
@@ -168,7 +168,7 @@ export default class SpeedChart{
             // 10단위로 검은색 강조, 텍스트 쓰기
             if(i%10 == 0) {
                 let text = this.canvas.getContext('2d');
-                text.font = (this.SpeedLabelHeight * 0.75)+'px sanserif';
+                text.font = (this.SpeedLabelHeight * 0.65)+'px sanserif';
                 text.strokeStyle = 'black';
                 text.textBaseline = 'middle';
                 text.textAlign = 'center';
