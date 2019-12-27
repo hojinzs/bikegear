@@ -20,11 +20,13 @@ export default class SpeedChart{
         this.Height = _prop.height; // 캔버스 높이
 
         // 캔버스 내부 옵션
-        this.LabelWidth = 100 * this.Scale; // 세팅 이름이 들어갈 영역 크기
         this.SpeedLabelHeight = 20 * this.Scale; // 속도 라벨이 들어갈 가로 하단 영역 크기
         this.rullerColor = '#e6e6e6'
         this.BarStyle = {
             color : '#00E679',
+        }
+        this.VertivalLabel = {
+            width : 100,
         }
 
         // 기본 세팅
@@ -41,6 +43,13 @@ export default class SpeedChart{
     set Height(_height){
         this.canvas.style.height = _height;
         this.canvas.height = _height * this.Scale;
+    }
+
+    set LabelWidth(_val){
+        this.VertivalLabel.width = _val;
+    }
+    get LabelWidth(){
+        return this.VertivalLabel.width * this.Scale;
     }
 
     // 데이터 세팅 및 검증

@@ -27,6 +27,7 @@ export default {
         return{
             canvas : Object,
             bar_height : 50,
+            LabelWidth : 50,
         }
     },
     methods: {
@@ -73,6 +74,7 @@ export default {
             canvas : this.$refs['this-canvas'],
             height : this.chartHeight,
         });
+        this.canvas.LabelWidth = this.LabelWidth;
         this.drawChart();
     },
     watch: {
