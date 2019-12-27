@@ -176,6 +176,8 @@ export default class SpeedChart{
             ruller.strokeStyle = rullerColor;
             ruller.stroke();
         }
+
+        return this;
     }
 
     /**
@@ -200,6 +202,36 @@ export default class SpeedChart{
             ruller.strokeStyle = rullerColor;
             ruller.stroke();
         }
+
+        return this;
+    }
+
+    /**
+     * Y축 라벨 그리기
+     */
+    drawVertivalLabel(){
+
+        let _length = this.SpeedChart.crank.length;
+
+        for (let index = 0; index < _length; index++) {
+
+            let y = this.getYbyCrankIndex(index);
+            let txt = "";
+            if(this.SpeedChart.crank[index].chainring != 'null' || null){
+                txt = this.SpeedChart.crank[index].chainring+"T"
+            }
+
+            console.log("SPEED CHART =>",this.SpeedChart.crank);
+
+            let ctx = this.canvas.getContext('2d');
+            ctx.font = this.BarStyle.font_size+'px serif';
+            ctx.fillStyle = 'black';
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.fillText(txt,(this.LabelWidth / 2),y);
+        }
+
+        return this;
     }
 
     /**
@@ -210,7 +242,6 @@ export default class SpeedChart{
      * @param {String} _color 컬러 코드
      * @param {String} _text 바 중앙에 쓸 텍스트
      */
-    // drawBar(_index,_min,_max,_color,_text){    
     drawBar(_prop = {
         crank_index : Number,
         min_speed : Number,
@@ -268,6 +299,9 @@ export default class SpeedChart{
 
         // Y 축 그리드 그리기
         this.drawVerticalRuller();
+
+        // Y 축 라벨 그리기
+        this.drawVertivalLabel();
 
         // 세팅된 데이터를 가져와 차트를 그린다
         this.SpeedChart.crank.forEach((crank,crank_index) => {
