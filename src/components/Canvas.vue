@@ -1,16 +1,16 @@
 <template>
     <div class="chart">
-        <div>
-            <span> <b> {{setting.name}} </b> </span>
+
+        <div class="label">
+            <span :style="{color:setting.color}"> <b> ⚙ {{setting.name}} :: </b> </span> <span> <b>{{ setting.SpeedTable.minSpeed.toFixed(2) }}</b> Km/h ~ <b>{{ setting.SpeedTable.maxSpeed.toFixed(2) }}</b> Km/h </span>
         </div>
-        <div>
-            <span> min-speed :: <b>{{ setting.SpeedTable.minSpeed.toFixed(2) }}</b> Km/h ~ max-speed :: <b>{{ setting.SpeedTable.maxSpeed.toFixed(2) }}</b> Km/h </span>
-        </div>
+
         <div class="canvas-wrapper" ref="canvas-wrapper">
             <canvas
                 class="this-canvas" ref="this-canvas">
             </canvas>
         </div>
+
     </div>
 </template>
 
@@ -111,6 +111,11 @@ export default {
 </script>
 
 <style scoped>
+.chart .label{
+    text-align: left;
+    padding-left: 0.5em;
+}
+
 .canvas-wrapper{
     width: 100%;
 }

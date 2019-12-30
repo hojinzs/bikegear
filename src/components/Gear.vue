@@ -1,6 +1,9 @@
 <template>
     <div id="gears">
-        <h3><b>#{{setting_number + 1}}</b></h3>
+        <div class="header"
+            :style='{backgroundColor:settings.color}'>
+            <h3><b>#{{setting_number + 1}}</b></h3>
+        </div>
         <input
             v-model.lazy="settings.name">
         <div>
@@ -154,6 +157,18 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style scoped>
+.header{
+    margin-top:0px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px black solid;
+}
+
+.header h3{
+    margin: 0px;
+}
 
 </style>

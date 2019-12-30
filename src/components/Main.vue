@@ -26,7 +26,7 @@
             <br>
             {{colors.length - GearSettings.length}} settings remain
 
-            <div>
+            <!-- <div>
                 ~~color test~~
                 <span 
                     v-for="(color,index) in colorUnused"
@@ -36,7 +36,7 @@
                     }">
                     <b> [{{color.name}}] </b>
                 </span>
-            </div>
+            </div> -->
 
         </div>
 
