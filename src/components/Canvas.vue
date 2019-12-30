@@ -38,7 +38,7 @@ export default {
             this.canvas.setSpeedBar({
                 mode : this.bar_mode,
                 label_show : (this.bar_mode == 'full')? true : false,
-                color : 'red',
+                color : this.setting.color,
             })
             this.canvas.drawAll();
         },
