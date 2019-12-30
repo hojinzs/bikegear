@@ -2,16 +2,20 @@
     <div id="gears">
         <div class="header"
             :style='{backgroundColor:settings.color}'>
+
             <h3><b>#{{setting_number + 1}}</b></h3>
+
+            <div class="input-wrapper">
+                <input v-model.lazy="settings.name">
+            </div>
         </div>
-        <input
-            v-model.lazy="settings.name">
+        
         <div>
             <button
                 :disabled="!settingDelStatus" 
                 @click="remove">remove</button>
         </div>
-        <hr>
+
         <div id="crank">
             <h3>1. Crank</h3>
 
@@ -169,6 +173,19 @@ export default {
 
 .header h3{
     margin: 0px;
+}
+
+.header .input-wrapper{
+    width: 90%;
+    margin: auto;
+}
+
+.header .input-wrapper input{
+    width: 100%;
+    text-align: center;
+    font-size: 100%;
+    border-width: 0px;
+    padding: 2px;
 }
 
 </style>
