@@ -147,10 +147,10 @@ export default {
             this.settings.sprocket = newSprocket;
         },
         crank_select(_value){
-            this.crank = _value
+            this.crank = _value.filter(x => x);
         },
         sprocket_select(_value){
-            this.sprocket = _value
+            this.sprocket = _value.filter(x => x);
         }
     },
 }
