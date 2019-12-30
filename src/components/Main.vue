@@ -153,17 +153,18 @@ export default {
         },
     },
     methods: {
+        /**
+         * 컬러 지정
+         */
         asignColor(){
             let index = this.colorUnused[0].index
-
-            console.log(index);
-
-
             this.colors[index].used = true;
-
 
             return this.colors[index].code;
         },
+        /**
+         * 새 세팅 추가
+         */
         newGearSetting(){
             // 리미트 확인
             if(this.settingAddStatus){
@@ -188,17 +189,13 @@ export default {
             // delete color
             let color_code = this.GearSettings[index].color;
             let color_filtered = this.colors.filter(x=>x.code == color_code);
-
-            console.log(color_filtered[0].index);
-
             this.colors[color_filtered[0].index].used = false;
 
-            // 
+            // gear setting delete
             this.GearSettings.splice(index,1);
         },
     },
-    mounted: function(){
-
+    created(){
         let preset = this.Preset;
 
         // sprocket preset update
@@ -230,7 +227,8 @@ export default {
             .catch(function(error){
                 console.log('ERROR => ',error,'preset data');
             })
-
+    },
+    mounted(){
         this.newGearSetting();
     },
 }

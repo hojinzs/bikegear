@@ -79,8 +79,6 @@ export default {
 
         // set bar style from canvas size
         (this.$refs['this-canvas'].offsetWidth > 720)? this.bar_mode = 'full' : this.bar_mode = 'single';
-        console.log("canvas width =>>",this.$refs['this-canvas'].offsetWidth);
-        console.log("barMode =>>",this.bar_mode);
 
         //set Canvas Element
         this.canvas = new SpeedChart({
