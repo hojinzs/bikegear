@@ -28,12 +28,18 @@ export default {
             canvas : Object,
             bar_height : 50,
             LabelWidth : 50,
+            bar_mode : 'full',
         }
     },
     methods: {
         drawChart(){
             this.canvas.setData(this.convertData);
             this.canvas.setAxisX(this.min_speed,this.max_speed);
+            this.canvas.setSpeedBar({
+                mode : this.bar_mode,
+                label_show : (this.bar_mode == 'full')? true : false,
+                color : 'red',
+            })
             this.canvas.drawAll();
         },
     },
@@ -67,28 +73,37 @@ export default {
         },
         chartHeight(){
             return this.setting.crank.length * this.bar_height
-        }
+        },
     },
     mounted(){
+
+        // set bar style from canvas size
+        (this.$refs['this-canvas'].offsetWidth > 720)? this.bar_mode = 'full' : this.bar_mode = 'single';
+        console.log("canvas width =>>",this.$refs['this-canvas'].offsetWidth);
+        console.log("barMode =>>",this.bar_mode);
+
+        //set Canvas Element
         this.canvas = new SpeedChart({
             canvas : this.$refs['this-canvas'],
             height : this.chartHeight,
         });
         this.canvas.LabelWidth = this.LabelWidth;
+
+        // draw Chart
         this.drawChart();
     },
     watch: {
         setting: {
-            handler:function(){
+            handler: function(){
                 this.canvas.Height = this.chartHeight;
                 this.drawChart();
             },
             deep: true,
         },
-        max_speed : function(){
+        max_speed: function(){
             this.drawChart();
         },
-        min_speed : function(){
+        min_speed: function(){
             this.drawChart();
         }
     }

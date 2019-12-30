@@ -84,7 +84,7 @@ export default {
                 tire : 30,
             },
             cadence : {
-                min: 80,
+                min: 85,
                 max: 90,
             },
             Preset: {

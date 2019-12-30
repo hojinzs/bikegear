@@ -22,8 +22,6 @@
                 </option>
             </select>
 
-            {{crank_select}}
-
             <ListController
                 v-model="crank"
                 :type="'number'"

@@ -92,21 +92,41 @@ export default class SpeedChart{
 
     /**
      * 속도 영역대 바에 대한 옵션 설정
-     * @param {Object} _prop 옵션 설정
+     * @param {Object} _prop {mode, height, color, font_size} 옵션 설정
      */
     setSpeedBar(_prop = {
+        mode : 'full',
         height : null,
         color : null,
+        label_show : true,
         font_size : null,
     }){
         let height = _prop.height || Math.ceil(this.CrankAreaHeight * 0.60);
         let color = _prop.color || '#00E679'
         let font_size = _prop.font_size || Math.ceil(height * 0.50);
+        let label_show = _prop.label_show;
+        let bar_style;
+
+        switch (_prop.mode) {
+            case 'full':
+                bar_style = 'full';
+                break;
+
+            case 'single':
+                bar_style = 'single';
+                break;
+
+            default:
+                bar_style = 'full';
+                break;
+        }
 
         this.BarStyle = {
             height : height,
             color : color,
             font_size : font_size,
+            mode : bar_style,
+            label_show : label_show,
         }
     }
 
@@ -253,7 +273,6 @@ export default class SpeedChart{
         crank_index : Number,
         min_speed : Number,
         max_speed : Number,
-        color : String,
         text : String,
     }){
         
@@ -262,25 +281,43 @@ export default class SpeedChart{
         if(!_prop.hasOwnProperty('min_speed')) throw new Error("property min_speed was undefined!");
         if(!_prop.hasOwnProperty('max_speed')) throw new Error("property max_speed was undefined!");
 
-        // 선택 값 할당
-        if(!_prop.hasOwnProperty('color')) _prop.color = this.BarStyle.color;
-    
         // 좌표 계산
-        let x_start = this.getXbySpeed(_prop.min_speed);
-        let x_end = this.getXbySpeed(_prop.max_speed);
-        let bar_width = x_end - x_start;
+        let x_start;
+        let x_end;
+        let bar_width;
+
+        switch (this.BarStyle.mode) {
+            case 'full':
+                x_start = this.getXbySpeed(_prop.min_speed);
+                x_end = this.getXbySpeed(_prop.max_speed);
+                bar_width = x_end - x_start;
+                break;
+
+            case 'single':
+                x_start = this.getXbySpeed(_prop.max_speed) - 5 * this.Scale;
+                x_end = this.getXbySpeed(_prop.max_speed);
+                bar_width = x_end - x_start;
+                break;
+
+            default:
+                x_start = this.getXbySpeed(_prop.min_speed);
+                x_end = this.getXbySpeed(_prop.max_speed);
+                bar_width = x_end - x_start;
+                break;
+        }
+
         let y_start = this.getYbyCrankIndex(_prop.crank_index) - ( this.BarStyle.height / 2 )
     
         // 속도 영역 막대를 그림
         let ctx = this.canvas.getContext('2d');
         ctx.beginPath();
         ctx.rect(x_start, y_start, bar_width, this.BarStyle.height);
-        ctx.fillStyle = _prop.color;
+        ctx.fillStyle = this.BarStyle.color;
         ctx.fill();
         ctx.closePath();
     
-        // 텍스트가 있다면 텍스트를 표시
-        if(_prop.hasOwnProperty('text')){
+        // 텍스트가 있고, 라벨 표시 조건이라면 텍스트를 표시
+        if(_prop.hasOwnProperty('text') && this.BarStyle.label_show){
             ctx.font = this.BarStyle.font_size+'px serif';
             ctx.fillStyle = 'black';
             ctx.textBaseline = 'middle';
