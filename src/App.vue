@@ -10,7 +10,18 @@
 <script>
 export default {
     name: 'app',
-    methods:{}
+    computed:{
+        username(){
+            return this.$route.params.username
+        }
+    },
+    methods:{
+        goBack(){
+            window.history.length > 1
+                ? this.$route.go(-1)
+                : this.$route.push('/')
+        }
+    }
 }
 </script>
 

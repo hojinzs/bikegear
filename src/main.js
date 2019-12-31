@@ -20,18 +20,23 @@ Vue.config.productionTip = false
 /**
  * vue.js Router Settings
  */
+import home from './pages/home'
 import gear_calculator from './pages/gear_calculator'
 
-const routes = [
-  {
-    path: '/gears',
-    name: 'Gear Calculator',
-    component: gear_calculator,
-  },
-]
-
 const router = new VueRouter({
-  routes
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: home,
+    },
+    {
+      path: '/gears',
+      name: 'Gear Calculator',
+      component: gear_calculator,
+    },
+  ]
 })
 
 /**
