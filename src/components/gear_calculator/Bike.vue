@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Calc from '../calc'
+import Calc from '../../plugins/calc'
 
 export default {
     props: [

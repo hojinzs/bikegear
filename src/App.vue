@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Main from './components/Main.vue'
+import Main from './pages/gear_calculator'
 
 export default {
     name: 'app',

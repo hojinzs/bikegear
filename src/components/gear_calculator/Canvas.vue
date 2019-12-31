@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SpeedChart from '../chart'
+import SpeedChart from '../../plugins/chart'
 
 export default {
     props: [
