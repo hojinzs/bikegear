@@ -1,17 +1,15 @@
 <template>
     <div id="app">
-        <Main/>
+        <div>Hello Vue Router!!</div>
+        <router-link to="/gears">Go to Gear Calculator</router-link>
+        
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-import Main from './pages/gear_calculator'
-
 export default {
     name: 'app',
-    components: {
-        Main
-    },
     methods:{}
 }
 </script>

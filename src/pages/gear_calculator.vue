@@ -195,7 +195,8 @@ export default {
             this.GearSettings.splice(index,1);
         },
     },
-    created(){
+    mounted(){
+
         let preset = this.Preset;
 
         // sprocket preset update
@@ -227,8 +228,7 @@ export default {
             .catch(function(error){
                 console.log('ERROR => ',error,'preset data');
             })
-    },
-    mounted(){
+
         this.newGearSetting();
     },
 }
