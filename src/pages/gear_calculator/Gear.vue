@@ -95,7 +95,7 @@ import Calc from '../../plugins/calc'
 
 
 // import components
-import list_controller from '../interface/input-list'
+import list_controller from '../../components/interface/input-list'
 
 export default {
     components: {

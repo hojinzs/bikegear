@@ -1,7 +1,8 @@
 <template>
     <div id="app">
         <div>Hello Vue Router!!</div>
-        <router-link to="/gears">Go to Gear Calculator</router-link>
+        <router-link to="/">Go to Home</router-link>
+        <router-link to="/app/gears/">Go to Gear Calculator</router-link>
         
         <router-view></router-view>
     </div>
@@ -21,6 +22,9 @@ export default {
                 ? this.$route.go(-1)
                 : this.$route.push('/')
         }
+    },
+    mounted(){
+        console.log(this.$route)
     }
 }
 </script>

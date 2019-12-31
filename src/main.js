@@ -21,7 +21,8 @@ Vue.config.productionTip = false
  * vue.js Router Settings
  */
 import home from './pages/home'
-import gear_calculator from './pages/gear_calculator'
+import apps from './pages/apps'
+import gear_calculator from './pages/gear_calculator/index'
 
 const router = new VueRouter({
   mode: 'history',
@@ -32,7 +33,12 @@ const router = new VueRouter({
       component: home,
     },
     {
-      path: '/gears',
+      path: '/app',
+      name: 'Apps',
+      component: apps,
+    },
+    {
+      path: '/app/gears',
       name: 'Gear Calculator',
       component: gear_calculator,
     },

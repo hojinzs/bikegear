@@ -59,12 +59,12 @@
 <script>
 
 // import Components
-import Gear from '../components/gear_calculator/Gear'
-import Chart from '../components/gear_calculator/Chart'
-import Bike from '../components/gear_calculator/Bike'
+import Gear from './Gear'
+import Chart from './Chart'
+import Bike from './Bike'
 
 // import Classes
-import Calc from '../plugins/calc'
+import Calc from '../../plugins/calc'
 import axios from 'axios'
 
 class GearSetting extends Calc {
