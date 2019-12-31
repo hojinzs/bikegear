@@ -1,7 +1,5 @@
 <template>
     <div id="main">
-        <h1>Bike Gear Ratio Calculator</h1>
-        <hr>
         <div id="chart" class="boxing">
             <RatioChart
                 :Gears="GearSettings">

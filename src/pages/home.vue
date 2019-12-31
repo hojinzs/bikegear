@@ -6,7 +6,9 @@
 
 <script>
 export default {
-    
+    created(){
+        this.$store.commit('title_change',"Journey66")
+    }
 }
 </script>
 

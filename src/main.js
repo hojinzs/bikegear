@@ -7,10 +7,7 @@ import Vue from 'vue'
  * vue.js libralies
  */
 import VueRouter from 'vue-router'
-import Vuex from 'vuex'
-
 Vue.use(VueRouter)
-Vue.use(Vuex)
 
 /**
  * vue.js config
@@ -21,8 +18,8 @@ Vue.config.productionTip = false
  * vue.js Router Settings
  */
 import home from './pages/home'
-import apps from './pages/apps'
-import gear_calculator from './pages/gear_calculator/index'
+import apps from './pages/apps/index'
+import gear_calculator from './pages/apps/gears'
 
 const router = new VueRouter({
   mode: 'history',
@@ -49,8 +46,10 @@ const router = new VueRouter({
  * import app
  */
 import App from './App.vue'
+import { store } from './store'
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')
