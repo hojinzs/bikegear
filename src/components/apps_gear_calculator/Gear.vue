@@ -161,31 +161,31 @@ export default {
 }
 </script>
 
-<style scoped>
-.header{
-    margin-top:0px;
-    margin-bottom: 10px;
-    width: 100%;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    border-bottom: 1px black solid;
-}
+<style lang="stylus" scoped>
 
-.header h3{
-    margin: 0px;
-}
+#gears
+    text-align: center
 
-.header .input-wrapper{
-    width: 90%;
-    margin: auto;
-}
+    .header
+        margin-top: 0px
+        margin-bottom: 10px
+        width: 100%
+        padding-top: 0.5em
+        padding-bottom: 0.5em
+        border-bottom: 1px black solid
 
-.header .input-wrapper input{
-    width: 100%;
-    text-align: center;
-    font-size: 100%;
-    border-width: 0px;
-    padding: 2px;
-}
+        h3
+            margin: 0px
+
+        .input-wrapper
+            width: 90%
+            margin: auto
+
+            input
+                width: 100%
+                text-align: center
+                font-size: 100%
+                border-width: 0px
+                padding: 2px
 
 </style>

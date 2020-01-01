@@ -8,6 +8,7 @@
 export default {
     created(){
         this.$store.commit('title_change',"Journey66")
+        this.$store.commit('height_change',240)
     }
 }
 </script>
