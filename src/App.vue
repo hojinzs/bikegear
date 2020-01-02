@@ -1,10 +1,10 @@
 <template>
-    <div id="app" :style="Background">
+    <div id="app">
 
         <TopMenuBar></TopMenuBar>
 
-        <div id="cover" :style="CoverStyle">
-            <h1>{{ this.$store.state.title }}</h1>
+        <div id="cover" :style="[CoverStyle,Background]" >
+            <h2>{{ this.$store.state.title }}</h2>
         </div>
 
         <div class="container">
@@ -34,12 +34,11 @@ export default {
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                backgroundAttachment: 'fixed',
             }
         },
         CoverStyle(){
             return {
-                height: this.$store.state.height+'px',
+                // height: this.$store.state.height+'px',
             }
         },
     },
@@ -73,11 +72,12 @@ export default {
         width 100%
         overflow hidden
         z-index -100
+        padding-top 60px
 
-        h1
+        h2
             color white;
             text-shadow 1px 1px 5px black
-            top 50%
+            top 30%
             position relative
 
     .container

@@ -3,12 +3,14 @@
         id="Menu" ref="menu"
         @mouseover="doMouseOver"
         @mouseout="doMouseOut"
-        :class="{'menu_show': mobile_show_menu, 'menu_blocked': !isClear, 'menu_clear': isClear}">
+        :class="{'hover': menu_hover, 'menu_show': mobile_show_menu, 'menu_blocked': !isClear, 'menu_clear': isClear}">
 
         <div class="menu-wrapper">
             <div id="MenuLeft">
                 <ul>
-                    <router-link to="/">
+                    <router-link 
+                    to="/"
+                    @click.native="doCloseMenu()">
                         <div class="logo_item">
                             <span><b>{{TitleText}}</b></span>
                         </div>
@@ -49,7 +51,7 @@
                             <template v-if="First.use">
                                 <router-link 
                                     :to="First.url"
-                                    @click.native="mobile_show_menu = !mobile_show_menu">
+                                    @click.native="mobile_show_menu = false;">
 
                                     <span class="first_menu">{{First.name}}</span>
 
@@ -70,7 +72,7 @@
                                     <template v-if="Second.use">
                                         <router-link
                                             :to="First.url+Second.url"
-                                            @click.native="mobile_show_menu = !mobile_show_menu">
+                                            @click.native="doCloseMenu()">
 
                                             <span class="second_menu">{{Second.name}}</span>
 
@@ -157,6 +159,7 @@ export default {
                 width: 0,
                 height: 0,
             },
+            menu_hover: false,
             mobile_show_menu: false,
         }
     },
@@ -177,13 +180,21 @@ export default {
         },
         handleScroll(){
             this.scroll = window.pageYOffset
+            this.menu_hover = false;
+            this.MenuRight_expaneded = false;
         },
         doMouseOver(){
             this.MenuRight_expaneded = true;
+            this.menu_hover = true;
         },
         doMouseOut(){
             this.MenuRight_expaneded = false;
+            this.menu_hover = false;
         },
+        doCloseMenu(){
+            this.mobile_show_menu = false;
+            this.MenuRight_expaneded = false;
+        }
     },
     mounted(){
         this.scrollLimit = this.$refs['menu'].offsetHeight
@@ -200,7 +211,9 @@ export default {
 
 @import "../assets/variable.styl"
 
-$link_color = white
+$is_clear_link_color = white
+
+$link_color = black
 $link_color_disabled = #b3b3b3
 
 $shadow_color = #595959
@@ -210,11 +223,36 @@ $shadow_color = #595959
     width 100%
     z-index 100
     align-items center
+    a
+        color: $link_color
+        text-decoration: none
+        &:link
+        &:visited
+            color: $link_color
+        &:hover
+            font-weight bold
     &.menu_blocked
         background-color white
         border-bottom 1px solid black
     &.menu_clear
         text-shadow 1px 1px 2px $shadow_color
+        a
+            color: $is_clear_link_color
+            text-decoration: none
+            &:link
+            &:visited
+                color: $is_clear_link_color
+            &:hover
+                font-weight bold
+// #Menu
+//     a
+//         color: $link_color
+//         text-decoration: none
+//         &:link
+//         &:visited
+//             color: $link_color
+//         &:hover
+//             font-weight bold
 
     ul
         padding-inline-start 0px
@@ -223,16 +261,6 @@ $shadow_color = #595959
     .menu-wrapper
         max-width $container_width
         margin 0 auto
-
-        a
-            color: $link_color
-            text-decoration: none
-            text-shadow 1px 1px 5px $shadow_color
-            &:link
-            &:visited
-                color: $link_color
-            &:hover
-                font-weight bold
 
         span.unused
             color: $link_color_disabled
@@ -291,14 +319,14 @@ $shadow_color = #595959
                 hr
                     display none
 
-    #Menu:hover
+    #Menu.hover.menu_clear
         background-color rgba(0,0,0,0.5)
         text-shadow none
         
 
 @media (max-width: $container_width)
 
-    #Menu.menu_show
+    #Menu.menu_show.menu_clear
         background-color rgba(0,0,0,0.5)
 
     #Menu
