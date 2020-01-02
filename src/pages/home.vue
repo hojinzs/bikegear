@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>this is home</h1>
+        <h3>now constructing...</h3>
     </div>
 </template>
 
@@ -8,7 +8,6 @@
 export default {
     created(){
         this.$store.commit('title_change',"Journey66")
-        this.$store.commit('height_change',540)
     }
 }
 </script>

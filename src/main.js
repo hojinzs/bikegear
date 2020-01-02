@@ -18,6 +18,7 @@ Vue.config.productionTip = false
  * vue.js Router Settings
  */
 import home from './pages/home'
+import home_cover from './components/home/cover.vue'
 import apps from './pages/apps/index'
 import gear_calculator from './pages/apps/gears'
 
@@ -27,7 +28,10 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'Home',
-      component: home,
+      components: {
+        default: home,
+        cover: home_cover
+      },
     },
     {
       path: '/app',

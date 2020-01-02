@@ -3,8 +3,11 @@
 
         <TopMenuBar></TopMenuBar>
 
-        <div id="cover" :style="[CoverStyle,Background]" >
+        <div id="cover" :style="[Background]" >
             <h2>{{ this.$store.state.title }}</h2>
+            <div class="container_wrapper cover_contents">
+                <router-view name="cover"></router-view>
+            </div>
         </div>
 
         <div class="container">
@@ -12,17 +15,21 @@
                 <router-view></router-view>
             </div>
         </div>
+
+        <Footer></Footer>
         
     </div>
 </template>
 
 <script>
 import TopMenuBar from './components/menu'
+import Footer from './components/footer'
 
 export default {
     name: 'app',
     components: {
         TopMenuBar,
+        Footer,
     },
     computed:{
         username(){
@@ -34,11 +41,6 @@ export default {
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-            }
-        },
-        CoverStyle(){
-            return {
-                // height: this.$store.state.height+'px',
             }
         },
     },
@@ -79,6 +81,13 @@ export default {
             text-shadow 1px 1px 5px black
             top 30%
             position relative
+
+        .cover_contents
+            margin-top 1em
+            margin-bottom  1em
+
+    #cover:after
+        background rgba(0,0,0,1)
 
     .container
         background-color white
