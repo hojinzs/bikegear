@@ -29,7 +29,7 @@
                 </option>
             </select>
 
-            <ListController
+            <ListController class="input-list"
                 v-model="crank"
                 :type="'number'"
                 :sort="'asc'"
@@ -163,6 +163,12 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import "../../assets/luminus.styl"
+
+select
+    width 100%
+    font-size: 1.4em
+
 #gears
     text-align: center
 
@@ -187,5 +193,8 @@ export default {
                 font-size: 100%
                 border-width: 0px
                 padding: 2px
+
+// .lnput-list
+//     font-size: 1.4em
 
 </style>

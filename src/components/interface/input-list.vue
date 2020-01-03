@@ -1,30 +1,41 @@
 <template>
-    <div>
-        <div
-        v-for="(item, index) in list"
-        v-bind:key="index">
+    <div class="input-list">
 
-            <input 
+        <div class="input-list">
+
+            <div class="input-group"
+            v-for="(item, index) in list"
+            v-bind:key="index">
+
+                <input class="input-item"
                 v-if="type == 'number'"
                 v-model.lazy.number="list[index]"
                 :name="'item_'+index"
                 :placeholder="placeholder">
-            <input 
-                v-if="type != 'number'"
+                <input 
+                v-else
                 v-model.lazy="list[index]"
                 :name="'item_'+index"
                 :placeholder="placeholder">
-            <button
+
+                <button
                 :disabled="!DelStatus" 
                 v-on:click="itemDelete(index)"> - </button>
+
+            </div>
         </div>
 
-        <button
+        <div class="button-group">
+
+            <button
             :disabled="!AddStatus"
             v-on:click="itemInsert()"> + </button>
 
-        <button
+            <button
             v-on:click="sorting(list)"> sort </button>
+
+        </div>
+
     </div>
 </template>
 
@@ -89,6 +100,27 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
+
+.input-list
+    .input-group
+        width 100%
+        display flex
+        padding-top 0.5em
+        padding-bottom 0.5em
+        // &:first-child
+        //     padding-top 0px
+        // $:last-child
+        //     padding-bottom 0px
+
+        input
+            width 100%
+            left 0
+            text-align center
+            margin-right 0.5em
+
+        button
+            flex 1
+            right  0
 
 </style>

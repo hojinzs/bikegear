@@ -232,10 +232,7 @@ export default {
 }
 </script>
 
-<style scoped>
-html body {
-    width: 100%;
-}
+<style lang="stylus" scoped>
 
 #main {
     width: 100%;

@@ -1,0 +1,52 @@
+/**
+* Variables $
+*/
+
+$light_grey = #cccccc
+
+/**
+* Global Style
+*/
+text, span, input, button
+    font-weight: 600
+
+/**
+* input box Style
+*/
+input
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-width: 0px
+    border-bottom: 3px solid $light_grey
+    background-color: rgba(255,255,255,0)
+    &:focus
+        outline: none;
+        border-bottom: 6px solid $light_grey
+        transition-property: border-bottom
+        transition-duration: 0.2s
+        
+
+/**
+* Button Style
+*/
+button
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-width: 0px
+    border-bottom: 3px solid $light_grey
+
+
+/**
+* Select Style
+*/
+select
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -moz-appearance:textfield; 
+    background: rgba(0,0,0,0)
+    max-width: 100%
+    border-width: 0px
+    border-bottom: 3px solid $light_grey

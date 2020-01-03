@@ -47,6 +47,8 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style lang="stylus" scoped>
+
+@import "../../assets/luminus.styl"
 
 </style>

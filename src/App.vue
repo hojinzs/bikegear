@@ -58,6 +58,12 @@ export default {
 }
 </script>
 
+<style lang="stylus">
+
+@import "./assets/luminus.styl"
+
+</style>
+
 <style lang="stylus" scoped>
 
 @import "./assets/variable.styl"
