@@ -361,11 +361,6 @@ $shadow_color = #595959
     transition-duration: 0.5s;
 }
 
-#Menu.mobile_menu_hidden{
-    transition-property: background-color border color;
-    transition-duration: 0.5s;
-}
-
 #Menu.menu_clear.hover{
     transition-property: background-color border color;
     transition-duration: 0.5s;
