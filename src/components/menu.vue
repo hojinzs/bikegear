@@ -1,109 +1,107 @@
 <template>
-    <transition
-    name="fade-blocked"
-    >
-        <div
-            id="Menu" ref="menu"
-            @mouseover="doMouseOver"
-            @mouseout="doMouseOut"
-            :class="{'hover': menu_hover, 'menu_show': mobile_show_menu, 'menu_blocked': !isClear, 'menu_clear': (isClear && !mobile_show_menu)}">
+    <div id="Menu" ref="menu"
+        @mouseover="doMouseOver"
+        @mouseout="doMouseOut"
+        :class="{
+            'hover': menu_hover, 'unhover': !menu_hover,
+            'mobile_menu_hidden': !mobile_show_menu, 'mobile_menu_show': mobile_show_menu,
+            'menu_blocked': !isClear, 'menu_clear': (isClear && !mobile_show_menu)}">
 
-            <div class="menu-wrapper">
-                <div id="MenuLeft">
-                    <ul>
-                        <router-link 
-                        to="/"
-                        @click.native="mobile_show_menu = false">
-                            <div class="logo_item">
-                                <span><b>{{TitleText}}</b></span>
-                            </div>
-                        </router-link>
+        <div class="menu-wrapper">
+            <div id="MenuLeft">
+                <ul>
+                    <router-link 
+                    to="/"
+                    @click.native="mobile_show_menu = false">
+                        <div class="logo_item">
+                            <span><b>{{TitleText}}</b></span>
+                        </div>
+                    </router-link>
+                </ul>
+
+                <template v-if="!isMobile">
+
+                    <ul v-for="(Link,i) in MenuLeft"
+                        v-bind:key="i">
+                        <a :href='Link.url' :target="Link.target">
+                            {{Link.name}}
+                        </a>
                     </ul>
 
-                    <template v-if="!isMobile">
+                </template>
+            </div>
 
-                        <ul v-for="(Link,i) in MenuLeft"
-                            v-bind:key="i">
-                            <a :href='Link.url' :target="Link.target">
-                                {{Link.name}}
-                            </a>
+            <template v-if="isMobile">
+                <div id="MobileMenu">
+                    <ul v-on:click="mobile_show_menu = !mobile_show_menu">
+                        <img
+                            class="showmenu"
+                            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iMzJweCIgaWQ9IkxheWVyXzEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMyIDMyOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMzIgMzIiIHdpZHRoPSIzMnB4IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48cGF0aCBkPSJNNCwxMGgyNGMxLjEwNCwwLDItMC44OTYsMi0ycy0wLjg5Ni0yLTItMkg0QzIuODk2LDYsMiw2Ljg5NiwyLDhTMi44OTYsMTAsNCwxMHogTTI4LDE0SDRjLTEuMTA0LDAtMiwwLjg5Ni0yLDIgIHMwLjg5NiwyLDIsMmgyNGMxLjEwNCwwLDItMC44OTYsMi0yUzI5LjEwNCwxNCwyOCwxNHogTTI4LDIySDRjLTEuMTA0LDAtMiwwLjg5Ni0yLDJzMC44OTYsMiwyLDJoMjRjMS4xMDQsMCwyLTAuODk2LDItMiAgUzI5LjEwNCwyMiwyOCwyMnoiLz48L3N2Zz4=">
+                    </ul>
+                </div>
+            </template>
+
+            <template v-if="(!isMobile || mobile_show_menu)">
+
+                <div id="MenuRight">
+
+                    <div class="flex_wrapper">
+
+                        <ul v-for="(First,i1) in MenuRight"
+                            v-bind:key="i1">
+
+                            <template v-if="First.use">
+                                <router-link 
+                                    :to="First.url"
+                                    @click.native="mobile_show_menu = false;">
+
+                                    <span class="first_menu">{{First.name}}</span>
+
+                                </router-link>
+                            </template>
+                            <template v-else>
+                                <span class="first_menu unused">{{First.name}}</span>
+                            </template>
+
+                            <hr v-show="isMobile">
+
+                            <transition name="menu-fade">
+
+                            <menuitem v-show="(MenuRight_expaneded || isMobile)">
+
+                                <li class="item"
+                                v-for="(Second, i2) in First.children"
+                                v-bind:key="i2">
+
+                                    <template v-if="Second.use">
+                                        <router-link
+                                            :to="First.url+Second.url"
+                                            @click.native="doCloseMenu()">
+
+                                            <span class="second_menu">{{Second.name}}</span>
+
+                                        </router-link>
+                                    </template>
+                                    <template v-else>
+                                        <span class="second_menu unused">{{Second.name}}</span>
+                                    </template>
+
+                                </li>
+
+                            </menuitem>
+
+                            </transition>
+
                         </ul>
 
-                    </template>
+                    </div>
+
                 </div>
 
-                <template v-if="isMobile">
-                    <div id="MobileMenu">
-                        <ul v-on:click="mobile_show_menu = !mobile_show_menu">
-                            <img
-                                class="showmenu"
-                                src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iMzJweCIgaWQ9IkxheWVyXzEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMyIDMyOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMzIgMzIiIHdpZHRoPSIzMnB4IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48cGF0aCBkPSJNNCwxMGgyNGMxLjEwNCwwLDItMC44OTYsMi0ycy0wLjg5Ni0yLTItMkg0QzIuODk2LDYsMiw2Ljg5NiwyLDhTMi44OTYsMTAsNCwxMHogTTI4LDE0SDRjLTEuMTA0LDAtMiwwLjg5Ni0yLDIgIHMwLjg5NiwyLDIsMmgyNGMxLjEwNCwwLDItMC44OTYsMi0yUzI5LjEwNCwxNCwyOCwxNHogTTI4LDIySDRjLTEuMTA0LDAtMiwwLjg5Ni0yLDJzMC44OTYsMiwyLDJoMjRjMS4xMDQsMCwyLTAuODk2LDItMiAgUzI5LjEwNCwyMiwyOCwyMnoiLz48L3N2Zz4=">
-                        </ul>
-                    </div>
-                </template>
-
-                <template v-if="(!isMobile || mobile_show_menu)">
-
-                    <div id="MenuRight">
-
-                        <div class="flex_wrapper">
-
-                            <ul v-for="(First,i1) in MenuRight"
-                                v-bind:key="i1">
-
-                                <template v-if="First.use">
-                                    <router-link 
-                                        :to="First.url"
-                                        @click.native="mobile_show_menu = false;">
-
-                                        <span class="first_menu">{{First.name}}</span>
-
-                                    </router-link>
-                                </template>
-                                <template v-else>
-                                    <span class="first_menu unused">{{First.name}}</span>
-                                </template>
-
-                                <hr v-show="isMobile">
-
-                                <transition name="second_menu_fade">
-
-                                <menuitem v-show="(MenuRight_expaneded || isMobile)">
-
-                                    <li v-for="(Second, i2) in First.children"
-                                        v-bind:key="i2"
-                                        class="item">
-
-                                            <template v-if="Second.use">
-                                                <router-link
-                                                    :to="First.url+Second.url"
-                                                    @click.native="doCloseMenu()">
-
-                                                    <span class="second_menu">{{Second.name}}</span>
-
-                                                </router-link>
-                                            </template>
-                                            <template v-else>
-                                                <span class="second_menu unused">{{Second.name}}</span>
-                                            </template>
-
-                                    </li>
-
-                                </menuitem>
-
-                                </transition>
-
-                            </ul>
-
-                        </div>
-
-                    </div>
-
-                </template>
-
-            </div>
-        </div>    
-    </transition>
+            </template>
+            
+        </div>
+    </div>    
 </template>
 
 <script>
@@ -210,11 +208,6 @@ export default {
     mounted(){
         this.scrollLimit = this.$refs['menu'].offsetHeight
     },
-    watch:{
-        isClear(_val){
-            console.log("Clear Status Changed!! => ",_val)
-        }
-    }
 }
 </script>
 
@@ -266,7 +259,7 @@ $shadow_color = #595959
         &.hover
             background: rgba(0,0,0,0.5)
             text-shadow none
-    &.menu_show
+    &.mobile_menu_show
         background white
 
     ul
@@ -317,8 +310,9 @@ $shadow_color = #595959
 
 @media (min-width: $container_width)
     #Menu
-        &.menu_show
+        &.mobile_menu_show
             border-radius 10px
+            border-bottom 1px solid $link_color_disabled
         #MenuRight
             float right
             right 20px
@@ -362,12 +356,17 @@ $shadow_color = #595959
     transition-duration: 0.5s;
 }
 
-#Menu.menu_clear{
+#Menu.mobile_menu_show{
     transition-property: background-color border color;
     transition-duration: 0.5s;
 }
 
-#Menu.hover{
+#Menu.mobile_menu_hidden{
+    transition-property: background-color border color;
+    transition-duration: 0.5s;
+}
+
+#Menu.menu_clear.hover{
     transition-property: background-color border color;
     transition-duration: 0.5s;
 }
