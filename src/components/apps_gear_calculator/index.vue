@@ -1,14 +1,13 @@
 <template>
     <div id="main">
-        <div id="chart" class="boxing">
+        <div id="chart" class="boxing lumi-box">
             <RatioChart
                 :Gears="GearSettings">
             </RatioChart>
         </div>
 
         <h2>DATA INPUT</h2>
-        <hr>
-        <div>
+        <div class="lumi-box">
             <SetBike
                 :wheelset="wheelset"
                 :cadence="cadence">
@@ -39,7 +38,7 @@
         </div>
 
         <div class="gear_settings">
-            <div class="set_gear boxing"
+            <div class="set_gear boxing lumi-box"
             v-for="(Setting, index) in GearSettings"
             :key='index'>
                 <SetGear
@@ -60,6 +59,7 @@
 import Gear from './Gear'
 import Chart from './Chart'
 import Bike from './Bike'
+// import FlexBox from '../../components/interface/flex-card-list'
 
 // import Classes
 import Calc from '../../plugins/calc'
@@ -76,11 +76,46 @@ class GearSetting extends Calc {
     }
 }
 
+const Colors = [
+    {
+        index: 0,
+        name: 'Splint Green',
+        code: '#00E679',
+        used: false,
+    },
+    {
+        index: 1,
+        name: 'Leader Yellow',
+        code: '#ffcc66',
+        used: false,
+    },
+    {
+        index: 2,
+        name: 'Giro Pink',
+        code: '#ff6699',
+        used: false,
+    },
+    {
+        index: 3,
+        name: 'Enduro Purple',
+        code: '#9966ff',
+        used: false,
+    },
+    {
+        index: 4,
+        name: 'Wolf Blue',
+        code: '#0066ff',
+        used: false,
+    },
+]
+
+
 export default {
     components: {
         'SetGear' : Gear,
         'RatioChart' : Chart,
         'SetBike' : Bike,
+        // FlexBox,
     },
     data: function(){
         return {
@@ -108,38 +143,7 @@ export default {
                     }
                 ],
             },
-            colors: [
-                {
-                    index: 0,
-                    name: 'Splint Green',
-                    code: '#00E679',
-                    used: false,
-                },
-                {
-                    index: 1,
-                    name: 'Leader Yellow',
-                    code: '#ffcc66',
-                    used: false,
-                },
-                {
-                    index: 2,
-                    name: 'Giro Pink',
-                    code: '#ff6699',
-                    used: false,
-                },
-                {
-                    index: 3,
-                    name: 'Enduro Purple',
-                    code: '#9966ff',
-                    used: false,
-                },
-                {
-                    index: 4,
-                    name: 'Wolf Blue',
-                    code: '#0066ff',
-                    used: false,
-                },
-            ],
+            colors: Colors,
             data_api_key : '$2b$10$f43n1zdglWI0iahcScqZpum658LKAA.sptdNd3DHABAoPFf.tY5ey',
         }
     },
@@ -234,32 +238,25 @@ export default {
 
 <style lang="stylus" scoped>
 
-#main {
-    width: 100%;
-}
+@import '../../assets/variable.styl'
+@import '../../assets/luminus.styl'
 
-#id{
-    width: 100%;
-}
+.gear_settings
+    width: 100%
+    display: flex
+    overflow-x: auto
+    .set_gear
+        flex: 0 0 320px
+        overflow: none;
+        margin: 0 0 1em 1em
+        &:first-child
+            margin-left 0px
+        $:last-child
+            margin-right  0px
 
-.gear_settings{
-    width: 100%;
-    display: flex;
-    overflow-x: scroll
-}
+@media (max-width: $container_width)
+    .gear_settings
+        .set_gear
+            flex 0 0 70%
 
-.gear_settings .set_gear{
-    overflow: none;
-    margin: 10px;
-
-}
-
-.boxing{
-    border: 1px black solid;
-    border-radius: 5px;
-}
-
-select{
-    width: 100%;
-}
 </style>

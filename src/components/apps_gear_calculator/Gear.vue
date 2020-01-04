@@ -1,12 +1,13 @@
 <template>
     <div id="gears">
-        <div class="header"
+        <div class="header lumi-box-header"
             :style='{backgroundColor:settings.color}'>
 
             <h3><b>#{{setting_number + 1}}</b></h3>
 
             <div class="input-wrapper">
-                <input v-model.lazy="settings.name">
+                <input class="input-white"
+                v-model.lazy="settings.name">
             </div>
         </div>
         
@@ -22,6 +23,7 @@
 
             <select name="crank_select"
                 v-model="crank_select">
+                <option selected disabled>crank select</option>
                 <option
                     v-for="(crank,index) in preset.cranks"
                     v-bind:key="index"
@@ -43,6 +45,7 @@
 
             <select name="sprocket_select"
                 v-model="sprocket_select">
+                <option value="none"  disabled selected>select sprocket</option>
                 <option
                     v-for="(spr,index) in preset.sprockets"
                     :key="index"
@@ -59,16 +62,13 @@
             </ListController>
 
         </div>
-        <hr>
-        <div id="gear ratio" class="wrapper">
+
+        <div id="GearRatio" class="wrapper">
             <h3>Gear Ratio</h3>
-            <hr>
             <table>
                 <tr>
                     <td>
-                        <th>
-                        Crank / Sprocket
-                        </th>
+                        <th></th>
                     </td>
                     <td v-for="(chainring, index) in settings.crank"
                         v-bind:key="index">
@@ -168,18 +168,15 @@ export default {
 
 select
     width 100%
-    font-size: 1.4em
 
 #gears
     text-align: center
 
     .header
-        margin-top: 0px
         margin-bottom: 10px
-        width: 100%
+        // width: 100%
         padding-top: 0.5em
         padding-bottom: 0.5em
-        border-bottom: 1px black solid
 
         h3
             margin: 0px
@@ -194,5 +191,12 @@ select
                 font-size: 100%
 
     .wrapper
-            padding: 5%
+        padding: 5%
+
+    .input-white
+        border-bottom-color: white
+        &:hover
+            border-bottom-color: white
+        &:focus
+            border-bottom-color: white
 </style>

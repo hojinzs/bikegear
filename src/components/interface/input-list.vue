@@ -123,4 +123,14 @@ export default {
             flex 1
             right  0
 
+.button-group
+    display flex
+    button
+        flex 1
+        margin 0.5em
+        &:first-child
+            margin-left 0
+        &:last-child
+            margin-right 0
+
 </style>

@@ -1,8 +1,9 @@
 <template>
-    <div class="inputs boxing">
-        <div id="wheel_type" class="input-boxs">
+    <div class="inputs">
+
+        <div id="wheel_type" class="input-properties">
             <h3>Set Wheel Type</h3>
-            <div>
+            <div class="lumi-input-group lumi-flex-column">
                 <input
                     name="wheel"
                     placeholder="wheel size"
@@ -12,13 +13,11 @@
                     placeholder="tire size"
                     v-model.lazy.number="wheelset.tire">
             </div>
-            <div>
-                {{ calc.calRound(this.wheelset.wheel,this.wheelset.tire).toFixed(2) }}
-            </div>
         </div>
-        <div id="cadence">
+
+        <div id="cadence" class="input-properties">
             <h3>Cadence</h3>
-            <div>
+            <div class="lumi-input-group lumi-flex-column">
                 <input
                     name="min_cadence"
                     placeholder="minimum_cadence"
@@ -29,6 +28,7 @@
                     v-model.lazy.number="cadence.max">
             </div>
         </div>
+        
     </div>
 </template>
 
@@ -51,4 +51,9 @@ export default {
 
 @import "../../assets/luminus.styl"
 
+input
+    text-align center
+
+.input-properties
+    max-width 100%
 </style>
