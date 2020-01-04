@@ -242,18 +242,6 @@ export default {
     width: 100%;
 }
 
-.inputs{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-.inputs .input-boxs{
-    flex: none;
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
 .gear_settings{
     width: 100%;
     display: flex;
@@ -261,9 +249,7 @@ export default {
 }
 
 .gear_settings .set_gear{
-    flex: none;
-    max-width: 180px;
-    overflow: hidden;
+    overflow: none;
     margin: 10px;
 
 }

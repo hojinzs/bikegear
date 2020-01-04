@@ -1,0 +1,22 @@
+/**
+* Reset CSSs
+*/
+
+body{
+    margin: 0px;
+}
+
+input,button, select{
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    border: none;
+    outline: none;
+}
+
+input, textarea, button, select{
+    -webkit-border-radius:0; -moz-border-radius:0; -o-border-radius:0; border-radius:0;
+}
+
+button{
+    -webkit-appearance: none;
+    background-color: white;
+  }

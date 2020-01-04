@@ -15,8 +15,9 @@
                 :disabled="!settingDelStatus" 
                 @click="remove">remove</button>
         </div>
-
-        <div id="crank">
+        
+        
+        <div id="crank" class="wrapper">
             <h3>1. Crank</h3>
 
             <select name="crank_select"
@@ -37,7 +38,7 @@
             </ListController>
 
         </div>
-        <div id="sprocket">
+        <div id="sprocket" class="wrapper">
             <h3>2. sprocket</h3>
 
             <select name="sprocket_select"
@@ -59,7 +60,7 @@
 
         </div>
         <hr>
-        <div id="gear ratio">
+        <div id="gear ratio" class="wrapper">
             <h3>Gear Ratio</h3>
             <hr>
             <table>
@@ -191,10 +192,7 @@ select
                 width: 100%
                 text-align: center
                 font-size: 100%
-                border-width: 0px
-                padding: 2px
 
-// .lnput-list
-//     font-size: 1.4em
-
+    .wrapper
+            padding: 5%
 </style>
