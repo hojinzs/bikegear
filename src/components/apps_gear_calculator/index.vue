@@ -76,40 +76,6 @@ class GearSetting extends Calc {
     }
 }
 
-const Colors = [
-    {
-        index: 0,
-        name: 'Splint Green',
-        code: '#00E679',
-        used: false,
-    },
-    {
-        index: 1,
-        name: 'Leader Yellow',
-        code: '#ffcc66',
-        used: false,
-    },
-    {
-        index: 2,
-        name: 'Giro Pink',
-        code: '#ff6699',
-        used: false,
-    },
-    {
-        index: 3,
-        name: 'Enduro Purple',
-        code: '#9966ff',
-        used: false,
-    },
-    {
-        index: 4,
-        name: 'Wolf Blue',
-        code: '#0066ff',
-        used: false,
-    },
-]
-
-
 export default {
     components: {
         'SetGear' : Gear,
@@ -143,7 +109,38 @@ export default {
                     }
                 ],
             },
-            colors: Colors,
+            colors: [
+                {
+                    index: 0,
+                    name: 'Splint Green',
+                    code: '#00E679',
+                    used: false,
+                },
+                {
+                    index: 1,
+                    name: 'Leader Yellow',
+                    code: '#ffcc66',
+                    used: false,
+                },
+                {
+                    index: 2,
+                    name: 'Giro Pink',
+                    code: '#ff6699',
+                    used: false,
+                },
+                {
+                    index: 3,
+                    name: 'Enduro Purple',
+                    code: '#9966ff',
+                    used: false,
+                },
+                {
+                    index: 4,
+                    name: 'Wolf Blue',
+                    code: '#0066ff',
+                    used: false,
+                },
+            ],
             data_api_key : '$2b$10$f43n1zdglWI0iahcScqZpum658LKAA.sptdNd3DHABAoPFf.tY5ey',
         }
     },
