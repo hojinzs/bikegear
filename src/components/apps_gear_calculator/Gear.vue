@@ -21,16 +21,18 @@
         <div id="crank" class="wrapper">
             <h3>1. Crank</h3>
 
-            <select name="crank_select"
-                v-model="crank_select">
-                <option selected disabled>crank select</option>
-                <option
-                    v-for="(crank,index) in preset.cranks"
-                    v-bind:key="index"
-                    v-bind:value="crank.chainring">
-                    {{crank.name}}
-                </option>
-            </select>
+            <div class="lumi-select">
+                <select name="crank_select"
+                    v-model="crank_select">
+                    <option value="" disabled selected>crank select</option>
+                    <option
+                        v-for="(crank,index) in preset.cranks"
+                        v-bind:key="index"
+                        v-bind:value="crank.chainring">
+                        {{crank.name}}
+                    </option>
+                </select>
+            </div>
 
             <ListController class="input-list"
                 v-model="crank"
@@ -43,16 +45,18 @@
         <div id="sprocket" class="wrapper">
             <h3>2. sprocket</h3>
 
-            <select name="sprocket_select"
-                v-model="sprocket_select">
-                <option value="none"  disabled selected>select sprocket</option>
-                <option
-                    v-for="(spr,index) in preset.sprockets"
-                    :key="index"
-                    :value="spr.cog">
-                    {{spr.name}}
-                </option>
-            </select>
+            <div class="lumi-select">
+                <select name="sprocket_select"
+                    v-model="sprocket_select">
+                    <option value="none"  disabled selected>select sprocket</option>
+                    <option
+                        v-for="(spr,index) in preset.sprockets"
+                        :key="index"
+                        :value="spr.cog">
+                        {{spr.name}}
+                    </option>
+                </select>
+            </div>
 
             <ListController
                 v-model="sprocket"
@@ -65,22 +69,18 @@
 
         <div id="GearRatio" class="wrapper">
             <h3>Gear Ratio</h3>
-            <table>
+            <table class="lumi-table">
                 <tr>
-                    <td>
-                        <th></th>
-                    </td>
-                    <td v-for="(chainring, index) in settings.crank"
+                    <th></th>
+                    <th v-for="(chainring, index) in settings.crank"
                         v-bind:key="index">
-                        <th> {{ chainring }}t </th>
-                    </td>
+                        {{ chainring }}t
+                    </th>
                 </tr>
                 <tr 
                 v-for="(cog, index) in settings.sprocket"
                 v-bind:key="index">
-                    <td>
-                        <th>{{ cog }}t </th>
-                    </td>
+                    <th>{{ cog }}t </th>
                     <td v-for="(chainring, index) in settings.crank"
                         v-bind:key="index">
                         {{ calc.calGearRatio(chainring,cog).toFixed(2) }}
@@ -174,17 +174,13 @@ select
 
     .header
         margin-bottom: 10px
-        // width: 100%
         padding-top: 0.5em
         padding-bottom: 0.5em
-
         h3
             margin: 0px
-
         .input-wrapper
             width: 90%
             margin: auto
-
             input
                 width: 100%
                 text-align: center
@@ -199,4 +195,8 @@ select
             border-bottom-color: white
         &:focus
             border-bottom-color: white
+
+table
+    width 100%
+    text-align center
 </style>

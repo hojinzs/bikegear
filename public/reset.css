@@ -8,12 +8,21 @@ body{
 
 input,button, select{
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    vertical-align: baseline;
     border: none;
     outline: none;
+    font-size: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 input, textarea, button, select{
     -webkit-border-radius:0; -moz-border-radius:0; -o-border-radius:0; border-radius:0;
+}
+
+select::-ms-expand{
+    display: none;
 }
 
 button{
