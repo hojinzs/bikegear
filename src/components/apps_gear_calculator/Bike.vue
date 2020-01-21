@@ -4,11 +4,11 @@
         <div id="wheel_type" class="input-properties">
             <h3>Set Wheel Type</h3>
             <div class="lumi-input-group lumi-flex-column">
-                <input
+                <input class="lumi-input-liner"
                     name="wheel"
                     placeholder="wheel size"
                     v-model.lazy.number="wheelset.wheel">
-                <input
+                <input class="lumi-input-liner"
                     name="tire"
                     placeholder="tire size"
                     v-model.lazy.number="wheelset.tire">
@@ -18,11 +18,11 @@
         <div id="cadence" class="input-properties">
             <h3>Cadence</h3>
             <div class="lumi-input-group lumi-flex-column">
-                <input
+                <input class="lumi-input-liner"
                     name="min_cadence"
                     placeholder="minimum_cadence"
                     v-model.lazy.number="cadence.min">
-                <input
+                <input class="lumi-input-liner"
                     name="max_cadence"
                     placeholder="maximum_cadence"
                     v-model.lazy.number="cadence.max">

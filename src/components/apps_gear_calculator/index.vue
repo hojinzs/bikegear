@@ -1,21 +1,21 @@
 <template>
     <div id="main">
-        <div id="chart" class="boxing lumi-box">
+        <div id="chart" class="boxing lumi-box lumi-box-border">
             <RatioChart
                 :Gears="GearSettings">
             </RatioChart>
         </div>
 
         <h2>DATA INPUT</h2>
-        <div class="lumi-box">
+        <div class="lumi-box lumi-box-border section">
             <SetBike
                 :wheelset="wheelset"
                 :cadence="cadence">
             </SetBike>
         </div>
 
-        <div>
-            <button
+        <div class="section">
+            <button class="lumi-button-liner"
                 :disabled="!settingAddStatus"
                 v-on:click="newGearSetting()">
                 New Setting
@@ -37,8 +37,8 @@
 
         </div>
 
-        <div class="gear_settings">
-            <div class="set_gear boxing lumi-box"
+        <div class="gear_settings section">
+            <div class="set_gear boxing lumi-box lumi-box-border"
             v-for="(Setting, index) in GearSettings"
             :key='index'>
                 <SetGear
@@ -250,6 +250,9 @@ export default {
             margin-left 0px
         $:last-child
             margin-right  0px
+
+.section
+    margin-top 1em
 
 @media (max-width: $container_width)
     .gear_settings

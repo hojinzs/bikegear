@@ -141,6 +141,11 @@ const GlobalMenu = [
                 use: true,
             },
             {
+                name: "Component DB",
+                url: "/comp-db",
+                use: true,
+            },
+            {
                 name: "Route Map",
                 url: "/gears",
                 use: false,

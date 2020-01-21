@@ -7,18 +7,18 @@
             v-for="(item, index) in list"
             v-bind:key="index">
 
-                <input class="input-item"
+                <input class="lumi-input-liner input-item"
                 v-if="type == 'number'"
                 v-model.lazy.number="list[index]"
                 :name="'item_'+index"
                 :placeholder="placeholder">
-                <input 
+                <input class="lumi-input-liner"
                 v-else
                 v-model.lazy="list[index]"
                 :name="'item_'+index"
                 :placeholder="placeholder">
 
-                <button
+                <button class="lumi-button lumi-button-black"
                 :disabled="!DelStatus" 
                 v-on:click="itemDelete(index)"> - </button>
 
@@ -27,11 +27,11 @@
 
         <div class="button-group">
 
-            <button
+            <button class="lumi-button lumi-button-black"
             :disabled="!AddStatus"
             v-on:click="itemInsert()"> + </button>
 
-            <button
+            <button class="lumi-button lumi-button-black"
             v-on:click="sorting(list)"> sort </button>
 
         </div>

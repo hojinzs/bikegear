@@ -1,5 +1,9 @@
 <template>
-    <Gears></Gears>
+    <div class="container">
+        <div class="container_wrapper">
+            <Gears></Gears>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -10,7 +14,8 @@ export default {
         Gears,
     },
     created(){
-        this.$store.commit('title_change',"Bike Gear Ratio Calulator")
+        this.$store.commit('cover_show_change',1);
+        this.$store.commit('title_change',"Journey66");
     }
 }
 </script>

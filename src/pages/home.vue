@@ -1,13 +1,16 @@
 <template>
-    <div>
-        <h3>now constructing...</h3>
+    <div class="container">
+        <div class="container_wrapper">
+            <h3>now constructing...</h3>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
     created(){
-        this.$store.commit('title_change',"Journey66")
+        this.$store.commit('cover_show_change',1);
+        this.$store.commit('title_change',"Journey66");
     }
 }
 </script>

@@ -6,7 +6,7 @@
             <h3><b>#{{setting_number + 1}}</b></h3>
 
             <div class="input-wrapper">
-                <input class="input-white"
+                <input class="lumi-input-liner input-white"
                 v-model.lazy="settings.name">
             </div>
         </div>
@@ -22,7 +22,7 @@
             <h3>1. Crank</h3>
 
             <div class="lumi-select">
-                <select name="crank_select"
+                <select name="crank_select" class="lumi-input-liner"
                     v-model="crank_select">
                     <option value="" disabled selected>crank select</option>
                     <option
@@ -46,7 +46,7 @@
             <h3>2. sprocket</h3>
 
             <div class="lumi-select">
-                <select name="sprocket_select"
+                <select name="sprocket_select" class="lumi-input-liner"
                     v-model="sprocket_select">
                     <option value="none"  disabled selected>select sprocket</option>
                     <option
