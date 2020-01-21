@@ -15,7 +15,7 @@
         </div>
 
         <div class="section">
-            <button class="lumi-button-liner"
+            <button class="lumi-button lumi-button-black"
                 :disabled="!settingAddStatus"
                 v-on:click="newGearSetting()">
                 New Setting

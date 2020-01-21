@@ -26,6 +26,12 @@ input, textarea, select
             border-bottom: 6px solid $light_grey_focused
             transition-property: border-bottom padding-bottom
             transition-duration: 0.2s
+        &.lumi-liner-white
+            border-bottom-color: white
+            &:hover
+                border-bottom-color: white
+            &:focus
+                border-bottom-color: white
 
 /**
 * Button Style
@@ -52,6 +58,12 @@ button
             border-bottom: 3px solid $light_grey
             background-color: rgba(0,0,0,0)
             transition-property: none
+        &.lumi-liner-white
+            border-bottom-color: white
+            &:hover
+                border-bottom-color: white
+            &:focus
+                border-bottom-color: white
     &.lumi-button
         min-width: 35px
         border-radius: 5px
@@ -61,6 +73,9 @@ button
         overflow: hidden
         &:hover, &:focus
             box-shadow 0px 0px 5px rgba(0,0,0,0.25)
+        &:disabled
+            box-shadow none
+            opacity 0.5
         &.lumi-button-black
             background rgba(0,0,0,0.25)
 

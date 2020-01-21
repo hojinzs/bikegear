@@ -6,13 +6,13 @@
             <h3><b>#{{setting_number + 1}}</b></h3>
 
             <div class="input-wrapper">
-                <input class="lumi-input-liner input-white"
+                <input class="lumi-input-liner lumi-liner-white"
                 v-model.lazy="settings.name">
             </div>
         </div>
         
         <div>
-            <button
+            <button class="lumi-button lumi-button-black"
                 :disabled="!settingDelStatus" 
                 @click="remove">remove</button>
         </div>
@@ -188,13 +188,6 @@ select
 
     .wrapper
         padding: 5%
-
-    .input-white
-        border-bottom-color: white
-        &:hover
-            border-bottom-color: white
-        &:focus
-            border-bottom-color: white
 
 table
     width 100%
