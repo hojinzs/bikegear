@@ -34,9 +34,8 @@
             <template v-if="isMobile">
                 <div id="MobileMenu">
                     <ul v-on:click="mobile_show_menu = !mobile_show_menu">
-                        <img
-                            class="showmenu"
-                            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iMzJweCIgaWQ9IkxheWVyXzEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMyIDMyOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMzIgMzIiIHdpZHRoPSIzMnB4IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48cGF0aCBkPSJNNCwxMGgyNGMxLjEwNCwwLDItMC44OTYsMi0ycy0wLjg5Ni0yLTItMkg0QzIuODk2LDYsMiw2Ljg5NiwyLDhTMi44OTYsMTAsNCwxMHogTTI4LDE0SDRjLTEuMTA0LDAtMiwwLjg5Ni0yLDIgIHMwLjg5NiwyLDIsMmgyNGMxLjEwNCwwLDItMC44OTYsMi0yUzI5LjEwNCwxNCwyOCwxNHogTTI4LDIySDRjLTEuMTA0LDAtMiwwLjg5Ni0yLDJzMC44OTYsMiwyLDJoMjRjMS4xMDQsMCwyLTAuODk2LDItMiAgUzI5LjEwNCwyMiwyOCwyMnoiLz48L3N2Zz4=">
+                        <font-awesome-icon v-if="!mobile_show_menu" class="showmenu" icon="bars" />
+                        <font-awesome-icon v-if="mobile_show_menu" class="showmenu" icon="times" />
                     </ul>
                 </div>
             </template>
@@ -101,6 +100,9 @@
             </template>
             
         </div>
+        <div class="mobile-bg"
+            @click="doCloseMenu()"
+            v-show="mobile_show_menu"></div>
     </div>    
 </template>
 
@@ -126,23 +128,25 @@ const GlobalMenu = [
         use: false,
     },
     {
-        name: "Information",
-        url: '/datas',
+        name: "Database",
+        url: '/data',
         use: false,
+        children: [
+            {
+                name: "Component DB",
+                url: "/components",
+                use: true,
+            },   
+        ]
     },
     {
         name: "Apps",
         url: "/app",
-        use: true,
+        use: false,
         children: [
             {
                 name: "Gear Calculator",
                 url: "/gears",
-                use: true,
-            },
-            {
-                name: "Component DB",
-                url: "/comp-db",
                 use: true,
             },
             {
@@ -156,7 +160,16 @@ const GlobalMenu = [
 
 import StyleVariable from '../assets/variable.styl'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBars,faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faBars,faTimes)
+
 export default {
+    components:{
+        'font-awesome-icon' : FontAwesomeIcon
+    },
     data(){
         return {
             StyleVariable,
@@ -232,10 +245,11 @@ $shadow_color = #595959
     width 100%
     z-index 100
     align-items center
+    font-weight 500
     a
         color: $link_color
         text-decoration: none
-        font-weight 500
+        font-weight 700
         &:link
         &:visited
             color: $link_color
@@ -247,7 +261,7 @@ $shadow_color = #595959
         a
             color: $link_color
             text-decoration: none
-            font-weight 500
+            font-weight 700
             &:link
             &:visited
                 color: $link_color
@@ -264,54 +278,52 @@ $shadow_color = #595959
         &.hover
             background: rgba(0,0,0,0.5)
             text-shadow none
+        .showmenu
+            color $is_clear_link_color
     &.mobile_menu_show
         background white
-
     ul
         padding-inline-start 0px
         font-size 1em
-
     .menu-wrapper
         max-width $container_width
         margin 0 auto
-
         span.unused
             color: $link_color_disabled
-
         #MenuLeft
             float left
             display flex
             left 0px
             width 30%
-
             ul
                 float left 
                 flex 1
-
                 .logo_item
                     padding-left 10px
-
         #MobileMenu
             float right
-
-            img.showmenu
+            .showmenu
                 height 1em
                 margin-right 1em
 
         #MenuRight
-
             .flex_wrapper
                 display flex
-
                 ul
                     flex 1
-                        
                     li.item
                         margin-top 1em
                         margin-bottom 1em
                         display block
                         font-size 90%
                         overflow hidden
+
+.mobile-bg
+    position absolute
+    z-index 99
+    height 100%
+    width 100%
+    background-color rgba(0,0,0,0.5)
 
 @media (min-width: $container_width)
     #Menu
@@ -322,10 +334,8 @@ $shadow_color = #595959
             float right
             right 20px
             width 50%
-
             ul
-                float left
-                        
+                float left   
                 li.item
                     margin-top 1em
                     margin-bottom 1em
@@ -339,14 +349,11 @@ $shadow_color = #595959
 @media (max-width: $container_width)
 
     #Menu
-
         #MenuRight
             display flow-root
             width 100%
-
             .flex_wrapper
                 flex-direction column
-
             ul
                 hr
                     width 60%
@@ -354,7 +361,7 @@ $shadow_color = #595959
 
 </style>
 
-<style>
+<style scoped>
 
 #Menu.menu_blocked{
     transition-property: background-color border color;

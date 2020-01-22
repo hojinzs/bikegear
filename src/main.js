@@ -21,7 +21,7 @@ import home from './pages/home'
 import home_cover from './components/home/cover.vue'
 import apps from './pages/apps/index'
 import gear_calculator from './pages/apps/gears'
-import component_database from './pages/apps/gear-database'
+import component_database from './pages/datas/components'
 
 const router = new VueRouter({
   mode: 'history',
@@ -35,6 +35,11 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/data/components',
+      name: 'Component Database',
+      component: component_database,
+    },
+    {
       path: '/app',
       name: 'Apps',
       component: apps,
@@ -43,12 +48,7 @@ const router = new VueRouter({
       path: '/app/gears',
       name: 'Gear Calculator',
       component: gear_calculator,
-    },
-    {
-      path: '/app/comp-db',
-      name: 'Component Database',
-      component: component_database,
-    },
+    }
   ]
 })
 
