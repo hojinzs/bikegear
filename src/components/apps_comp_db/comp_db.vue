@@ -4,7 +4,7 @@
         <hr>
         <div class="lumi-box">asdf
             <div>
-                <input class="lumi-input-liner">
+                <input class="lumi-input-liner lumi-liner-white">
             </div>
         </div>
         <button class="lumi-button">asdf</button>
