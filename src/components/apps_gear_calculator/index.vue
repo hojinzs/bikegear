@@ -141,7 +141,6 @@ export default {
                     used: false,
                 },
             ],
-            data_api_key : '$2b$10$f43n1zdglWI0iahcScqZpum658LKAA.sptdNd3DHABAoPFf.tY5ey',
         }
     },
     computed: {
@@ -195,14 +194,13 @@ export default {
         },
     },
     mounted(){
-
         let preset = this.Preset;
 
         // sprocket preset update
         axios({
             method: 'GET',
-            url: 'https://api.jsonbin.io/b/5dfb11a40bbce135bb5439e6/1',
-            headers: { 'secret-key': this.data_api_key }
+            url: process.env.VUE_APP_COMPDB_SPROCKET_URL,
+            headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
         })
             .then(function(res){
                 console.log('RESPONSE =>',res.data)
@@ -216,8 +214,8 @@ export default {
         // crank preset update
         axios({
             method: 'GET',
-            url: 'https://api.jsonbin.io/b/5dfb4bf12c714135cda4046a',
-            headers: { 'secret-key': this.data_api_key }
+            url: process.env.VUE_APP_COMPDB_CRANK_URL,
+            headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
         })
             .then(function(res){
                 console.log('RESPONSE =>',res.data)
