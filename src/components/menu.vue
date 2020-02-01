@@ -188,7 +188,7 @@ export default {
         }
     },
     computed:{
-        isMobile(){ return this.window.width < 900 },
+        isMobile(){ return this.window.width < Number(this.StyleVariable.containerWidth.replace("px","")) },
         isClear(){ return this.scrollLimit > this.scroll }
     },
     created(){

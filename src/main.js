@@ -3,53 +3,29 @@
  */
 import Vue from 'vue'
 
-/**
- * vue.js libralies
- */
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
-/**
- * vue.js config
- */
 Vue.config.productionTip = false
 
 /**
  * vue.js Router Settings
  */
-import home from './pages/home'
-import home_cover from './components/home/cover.vue'
-import apps from './pages/apps/index'
-import gear_calculator from './pages/apps/gears'
-import component_database from './pages/datas/components'
+import VueRouter from 'vue-router'
+import routes from './routes'
+
+Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: 'history',
-  routes: [
-    {
-      path: '/',
-      name: 'Home',
-      components: {
-        default: home,
-        cover: home_cover
-      },
+    mode: 'history',
+    routes: routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return {
+                x: 0,
+                y: 0
+            }
+        }
     },
-    {
-      path: '/data/components',
-      name: 'Component Database',
-      component: component_database,
-    },
-    {
-      path: '/app',
-      name: 'Apps',
-      component: apps,
-    },
-    {
-      path: '/app/gears',
-      name: 'Gear Calculator',
-      component: gear_calculator,
-    }
-  ]
 })
 
 /**
@@ -59,7 +35,7 @@ import App from './App.vue'
 import { store } from './store'
 
 new Vue({
-  router,
-  store,
-  render: h => h(App),
+    router,
+    store,
+    render: h => h(App),
 }).$mount('#app')
