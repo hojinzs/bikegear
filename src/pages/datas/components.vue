@@ -22,7 +22,8 @@ export default {
 <style lang="stylus" scoped>
 #gear-database
     background linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.4)),url(bw-bike01.jpg)
-    background-repeat: no-repeat
-    background-size: cover
-    background-position : center
+    background-repeat no-repeat
+    background-size cover
+    background-position center
+    background-attachment fixed
 </style>
