@@ -1,7 +1,10 @@
 <template>
     <div id="app">
 
-        <TopMenuBar></TopMenuBar>
+        <TopMenuBar
+            :TitleText="'Journey66'"
+            :MenuLeft="ShotLinks"
+            :MenuRight="GlobalMenu"></TopMenuBar>
 
         <div id="cover" :style="[Background]" :hidden="!this.$store.state.cover_show" >
             <h2>{{ this.$store.state.cover_title }}</h2>
@@ -23,11 +26,77 @@
 import TopMenuBar from './components/menu'
 import Footer from './components/footer'
 
+let ShotLinks = [
+    {
+        name: 'old',
+        url: 'https://www.journey66.cc',
+        target: '_blank',
+    }
+]
+
+let GlobalMenu = [
+    {
+        name: "Route",
+        url: '/route',
+        use: false,
+    },
+    // {
+    //     name: "Community",
+    //     url: '/community',
+    //     use: false,
+    // },
+    {
+        name: "Database",
+        url: '/data',
+        use: false,
+        children: [
+            {
+                name: "Components",
+                url: "/components",
+                use: true,
+            },
+            {
+                name: "Infra-Map",
+                url: "/infra-map",
+                use: false,
+            },
+            {
+                name: "Events",
+                url: "/events",
+                use: false,
+            },
+        ]
+    },
+    {
+        name: "Apps",
+        url: "/app",
+        use: false,
+        children: [
+            {
+                name: "Gear Calculator",
+                url: "/gears",
+                use: true,
+            },
+            {
+                name: "Route Map",
+                url: "/gears",
+                use: false,
+            }
+        ]
+    }
+]
+
 export default {
     name: 'app',
     components: {
         TopMenuBar,
         Footer,
+    },
+    data(){
+        return {
+            GlobalMenu,
+            ShotLinks,
+        }
     },
     computed:{
         username(){

@@ -107,57 +107,6 @@
 </template>
 
 <script>
-
-const ShotLinks = [
-    {
-        name: 'old',
-        url: 'https://www.journey66.cc',
-        target: '_blank',
-    }
-]
-
-const GlobalMenu = [
-    {
-        name: "Route",
-        url: '/route',
-        use: false,
-    },
-    {
-        name: "Community",
-        url: '/community',
-        use: false,
-    },
-    {
-        name: "Database",
-        url: '/data',
-        use: false,
-        children: [
-            {
-                name: "Component DB",
-                url: "/components",
-                use: true,
-            },   
-        ]
-    },
-    {
-        name: "Apps",
-        url: "/app",
-        use: false,
-        children: [
-            {
-                name: "Gear Calculator",
-                url: "/gears",
-                use: true,
-            },
-            {
-                name: "Route Map",
-                url: "/gears",
-                use: false,
-            }
-        ]
-    }
-]
-
 import StyleVariable from '../assets/variable.styl'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -170,12 +119,18 @@ export default {
     components:{
         'font-awesome-icon' : FontAwesomeIcon
     },
+    props: {
+        TitleText: String,
+        MenuLeft: {
+            type: Array,
+        },
+        MenuRight: {
+            type: Array,
+        }
+    },
     data(){
         return {
             StyleVariable,
-            TitleText: 'Journey66',
-            MenuLeft: ShotLinks,
-            MenuRight: GlobalMenu,
             MenuRight_expaneded: false,
             scroll: 0,
             scrollLimit: 0,
