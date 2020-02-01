@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="footer">
         <hr>
         Footer        
     </div>
@@ -13,5 +13,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+#footer
+    background-color white
+    
 </style>

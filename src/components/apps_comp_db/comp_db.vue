@@ -153,7 +153,10 @@ export default {
     #CompSelect_Mobile
         ul
             display flex
-            overflow-x auto
+            overflow-x scroll
+            margin-left -5px
+            margin-right -5px
+            padding 5px
             li
                 float left
                 margin-right 1.2em

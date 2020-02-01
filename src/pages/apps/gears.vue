@@ -15,7 +15,8 @@ export default {
     },
     created(){
         this.$store.commit('cover_show_change',1);
-        this.$store.commit('title_change',"Journey66");
+        this.$store.commit('title_change',"Gear Ratio Calculator");
+        this.$store.commit('background_change','/images/w-cycling.jpg');
     }
 }
 </script>

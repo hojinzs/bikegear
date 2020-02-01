@@ -15,15 +15,14 @@ export default {
     },
     created(){
         this.$store.commit('cover_show_change',0);
+        this.$store.commit('background_change','/images/bw-bike01.jpg');
     }
 }
 </script>
 
 <style lang="stylus" scoped>
 #gear-database
-    background linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.4)),url(bw-bike01.jpg)
-    background-repeat no-repeat
-    background-size cover
-    background-position center
-    background-attachment fixed
+    .container_wrapper
+        padding-left 1em
+        padding-right 1em
 </style>

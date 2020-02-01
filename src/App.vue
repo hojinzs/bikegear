@@ -6,18 +6,27 @@
             :MenuLeft="ShotLinks"
             :MenuRight="GlobalMenu"></TopMenuBar>
 
-        <div id="cover" :style="[Background]" :hidden="!this.$store.state.cover_show" >
+        <div id="FullCover"
+            v-if="!this.$store.state.cover_show"
+            :style="[FullCover]"></div>
+
+        <div id="TitleCover"
+            v-if="this.$store.state.cover_show"
+            :style="[Background]">
+            
             <h2>{{ this.$store.state.cover_title }}</h2>
             <div class="container_wrapper cover_contents">
                 <router-view name="cover"></router-view>
             </div>
         </div>
 
-        <div>
+        <div id="contents">
             <router-view></router-view>
         </div>
 
-        <Footer></Footer>
+        <div id="footer">
+            <Footer></Footer>
+        </div>
         
     </div>
 </template>
@@ -104,12 +113,14 @@ export default {
         },
         Background(){
             return {
-                backgroundImage: 'url(' + this.$store.state.cover_background + ')',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
+                backgroundImage: "url(" + this.$store.state.cover_background + ")",
             }
         },
+        FullCover(){
+            return {
+                backgroundImage: "linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.4)), url(" + this.$store.state.cover_background + ")",
+            }
+        }
     },
     methods:{
         goBack(){
@@ -126,34 +137,30 @@ export default {
 </script>
 
 <style lang="stylus">
-
 @import "./assets/luminus.styl"
 @import "./assets/variable.styl"
 
+$footer_height = 50px
+
 #app
-    .container
-        background-color white
-        z-index 100
-        .container_wrapper
-            max-width $container_width
-            padding-top 2em
-            margin 0 auto
-        &.coverless
-            padding-top 30px
-        &.backgrounded
-            color white
-            text-shadow 1px 1px 5px black
-
-@media (min-width: $container_width)
-    #app
-        .container
-            min-height 80vh
-
-@media (max-width: $container_width)
-    .container
+    #contents
         min-height 100vh
-        .container_wrapper
-            padding 2em 2% 0 2%
+        .container
+            background none
+            z-index 100
+            .container_wrapper
+                max-width $container_width
+                padding-top 2em
+                margin 0 auto
+                @media (max-width: $container_width)
+                    padding 2em 2% 0 2%
+            &.coverless
+                padding-top 30px
+            &.backgrounded
+                color white
+                text-shadow 1px 1px 5px black
+    #footer
+        min-height $footer_height
 
 </style>
 
@@ -165,25 +172,37 @@ export default {
     -moz-osx-font-smoothing: grayscale
     text-align: center
     color: #2c3e50
-
-    #cover
+    position relative
+    height 100%
+    width 100%
+    overflow-y scroll
+    #FullCover
+        position fixed
+        background-position center
+        background-repeat no-repeat
+        background-size cover
         top 0
+        z-index -10
+        width 100%
+        height 100%
+    #TitleCover
+        top 0
+        background-position center
+        background-repeat no-repeat
+        background-size cover
         width 100%
         overflow hidden
         z-index -100
         padding-top 60px
-
         h2
             color white;
             text-shadow 1px 1px 5px black
             top 30%
             position relative
-
         .cover_contents
             margin-top 1em
             margin-bottom  1em
-
-    #cover:after
-        background rgba(0,0,0,1)
+        &:after
+            background rgba(0,0,0,1)
 
 </style>
