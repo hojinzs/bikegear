@@ -9,7 +9,15 @@
                 <!-- Mobile Selector -->
                 <div v-if="isMobile" id="CompSelect_Mobile">
                     <b>Component</b>
+
                     <ul class="">
+                        <!-- Before Loading -->
+                        <div class="lumi-box" 
+                            v-if="component_list.length == 0">
+                            Loading...
+                        </div>
+                        <!-- Before Loading End -->
+
                         <li class=""
                             v-for="(component,index) in component_list" 
                             :key="index">
@@ -26,7 +34,15 @@
                 <div v-if="!isMobile" id="CompSelect_PC" class="flex-sidemenu">
                     <div class="lumi-box">
                         <b>Component</b>
+                        
                         <ul class="lumi-list-select-group">
+
+                            <!-- Before Loading -->
+                            <div v-if="component_list.length == 0">
+                                Loading...
+                            </div>
+                            <!-- Before Loading End -->
+
                             <li class="lumi-list-select-item"
                                 v-for="(component,index) in component_list" 
                                 :key="index"
@@ -44,7 +60,7 @@
                         <li class="items"
                             v-for="(item,index) in item_selected.items"
                             :key="index">
-                            <div class="lumi-box lumi-box-block-white">
+                            <div class="lumi-box lumi-box-block-white lumi-box-shadow">
                                 <div class="name">{{item.name}}</div>
                                 <ul>
                                     <li v-for="prop in Object.keys(item)" :key="prop">
@@ -141,11 +157,13 @@ export default {
             li
                 float left
                 margin-right 1.2em
+                button
+                    padding-left 16px
+                    padding-right 16px
 
 @media (min-width: $container_width)
     .flex-wrapper
         display flex
-        overflow hidden
         .flex-sidemenu
             flex 0
             flex-basis 250px
@@ -153,7 +171,5 @@ export default {
             margin-left 1.2em
             flex-grow 1
             flex-basis auto
-            overflow auto
-
 
 </style>

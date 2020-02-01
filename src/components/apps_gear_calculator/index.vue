@@ -194,32 +194,18 @@ export default {
         },
     },
     mounted(){
-        let preset = this.Preset;
-
-        // sprocket preset update
+        // Get Component Database JSON
+        let preset = this.Preset
         axios({
             method: 'GET',
-            url: process.env.VUE_APP_COMPDB_SPROCKET_URL,
+            url: process.env.VUE_APP_COMPDB_ALL_URL,
             headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
         })
             .then(function(res){
                 console.log('RESPONSE =>',res.data)
+
                 // update sprocket preset
                 preset.sprockets = res.data.sprockets;
-            })
-            .catch(function(error){
-                console.log('ERROR => ',error,'preset data');
-            })
-        
-        // crank preset update
-        axios({
-            method: 'GET',
-            url: process.env.VUE_APP_COMPDB_CRANK_URL,
-            headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
-        })
-            .then(function(res){
-                console.log('RESPONSE =>',res.data)
-                // update sprocket preset
                 preset.cranks = res.data.cranks;
             })
             .catch(function(error){

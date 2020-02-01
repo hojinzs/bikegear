@@ -18,7 +18,7 @@
         </div>
         
         
-        <div id="crank" class="wrapper">
+        <div id="crank">
             <h3>1. Crank</h3>
 
             <div class="lumi-select">
@@ -42,7 +42,7 @@
             </ListController>
 
         </div>
-        <div id="sprocket" class="wrapper">
+        <div id="sprocket">
             <h3>2. sprocket</h3>
 
             <div class="lumi-select">
@@ -173,9 +173,6 @@ select
     text-align: center
 
     .header
-        margin-bottom: 10px
-        padding-top: 0.5em
-        padding-bottom: 0.5em
         h3
             margin: 0px
         .input-wrapper
@@ -185,9 +182,6 @@ select
                 width: 100%
                 text-align: center
                 font-size: 100%
-
-    .wrapper
-        padding: 5%
 
 table
     width 100%
