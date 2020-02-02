@@ -67,7 +67,7 @@ let GlobalMenu = [
             {
                 name: "Infra-Map",
                 url: "/infra-map",
-                use: false,
+                use: true,
             },
             {
                 name: "Events",
