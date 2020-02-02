@@ -130,8 +130,7 @@ export default {
         }
     },
     mounted(){
-        console.log(this.$route);
-        console.log(this.$store);
+        
     }
 }
 </script>
@@ -173,9 +172,6 @@ $footer_height = 50px
     text-align: center
     color: #2c3e50
     position relative
-    height 100%
-    width 100%
-    overflow-y scroll
     #FullCover
         position fixed
         background-position center
@@ -184,7 +180,7 @@ $footer_height = 50px
         top 0
         z-index -10
         width 100%
-        height 100%
+        height 100vh
     #TitleCover
         top 0
         background-position center
