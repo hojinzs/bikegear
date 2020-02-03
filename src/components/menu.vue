@@ -5,7 +5,7 @@
         :class="{
             'hover': menu_hover, 'unhover': !menu_hover,
             'mobile_menu_hidden': !mobile_show_menu, 'mobile_menu_show': mobile_show_menu,
-            'menu_blocked': !isClear, 'menu_clear': (isClear && !mobile_show_menu)}">
+            'menu_blocked': (Blocked || !isClear), 'menu_clear': (isClear && !mobile_show_menu && !Blocked) }">
 
         <div class="menu-wrapper">
             <div id="MenuLeft">
@@ -126,6 +126,10 @@ export default {
         },
         MenuRight: {
             type: Array,
+        },
+        Blocked: {
+            type: Boolean,
+            default: true,
         }
     },
     data(){
@@ -197,8 +201,9 @@ $shadow_color = #595959
 
 #Menu
     position fixed
+    top 0
     width 100%
-    z-index 100
+    z-index 500
     align-items center
     font-weight 500
     a
@@ -223,7 +228,7 @@ $shadow_color = #595959
             &:hover
                 font-weight bolder
     &.menu_clear
-        background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0))
+        background: none //linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0))
         text-shadow 1px 1px 2px $shadow_color
         a
             color: $is_clear_link_color
@@ -239,7 +244,7 @@ $shadow_color = #595959
         background white
     ul
         padding-inline-start 0px
-        font-size 1em
+        font-size 1rem
     .menu-wrapper
         max-width $container_width
         margin 0 auto

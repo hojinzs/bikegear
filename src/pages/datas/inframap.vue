@@ -10,9 +10,9 @@ export default {
         InfraMap,
     },
     created(){
-        this.$store.commit('cover_show_change',1);
-        this.$store.commit('title_change',"Bike Infra Map");
-        this.$store.commit('background_change','/images/w-cycling.jpg');
+        this.$store.commit('cover_style_change','none');
+        this.$store.commit('cover_title_change','');
+        this.$store.commit('background_change','');
     }
 }
 </script>

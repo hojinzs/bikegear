@@ -9,7 +9,8 @@
 <script>
 export default {
     created(){
-        this.$store.commit('title_change',"Useful Apps")
+        this.$store.commit('cover_style_change','cover');
+        this.$store.commit('cover_title_change',"Useful Apps");
         this.$store.commit('background_change','/images/w-cycling.jpg');
     }
 }

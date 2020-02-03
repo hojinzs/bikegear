@@ -14,7 +14,8 @@ export default {
         CompDB,
     },
     created(){
-        this.$store.commit('cover_show_change',0);
+        this.$store.commit('cover_style_change','full');
+        this.$store.commit('cover_title_change','');
         this.$store.commit('background_change','/images/bw-bike01.jpg');
     }
 }

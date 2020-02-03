@@ -1,17 +1,18 @@
 <template>
-    <div id="app">
+    <div id="app" :class="{blocked: (this.$store.state.cover_style == 'none') }">
 
         <TopMenuBar
+            :Blocked="(this.$store.state.cover_style == 'none')"
             :TitleText="'Journey66'"
             :MenuLeft="ShotLinks"
             :MenuRight="GlobalMenu"></TopMenuBar>
 
         <div id="FullCover"
-            v-if="!this.$store.state.cover_show"
+            v-if="this.$store.state.cover_style == 'full'"
             :style="[FullCover]"></div>
 
         <div id="TitleCover"
-            v-if="this.$store.state.cover_show"
+            v-if="this.$store.state.cover_style == 'cover'"
             :style="[Background]">
             
             <h2>{{ this.$store.state.cover_title }}</h2>
@@ -20,11 +21,11 @@
             </div>
         </div>
 
-        <div id="contents">
+        <div id="contents" :class="{scrolled: (this.$store.state.cover_style != 'none') }">
             <router-view></router-view>
         </div>
 
-        <div id="footer">
+        <div id="footer" v-if="(this.$store.state.cover_style != 'none')">
             <Footer></Footer>
         </div>
         
@@ -113,7 +114,7 @@ export default {
         },
         Background(){
             return {
-                backgroundImage: "url(" + this.$store.state.cover_background + ")",
+                backgroundImage: "linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2),rgba(0,0,0,0.2),rgba(0,0,0,0.5)), url(" + this.$store.state.cover_background + ")",
             }
         },
         FullCover(){
@@ -140,10 +141,24 @@ export default {
 @import "./assets/variable.styl"
 
 $footer_height = 50px
+$menu_height = ($global_inline_height * 2) + ($global_font_text / 2)
+
 
 #app
+    font-family: 'Avenir', Helvetica, Arial, sans-serif
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    text-align: center
+    color: #2c3e50
+    position relative
+    &.blocked
+        margin-top $menu_height
+        height 100%
+        overflow-y scroll
     #contents
-        min-height 100vh
+        height 100%
+        &.scrolled
+            min-height 100vh
         .container
             background none
             z-index 100
@@ -154,7 +169,7 @@ $footer_height = 50px
                 @media (max-width: $container_width)
                     padding 2em 2% 0 2%
             &.coverless
-                padding-top 30px
+                padding-top $menu_height
             &.backgrounded
                 color white
                 text-shadow 1px 1px 5px black
@@ -164,14 +179,7 @@ $footer_height = 50px
 </style>
 
 <style lang="stylus" scoped>
-
 #app
-    font-family: 'Avenir', Helvetica, Arial, sans-serif
-    -webkit-font-smoothing: antialiased
-    -moz-osx-font-smoothing: grayscale
-    text-align: center
-    color: #2c3e50
-    position relative
     #FullCover
         position fixed
         background-position center
