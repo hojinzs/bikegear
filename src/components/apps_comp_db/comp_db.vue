@@ -7,26 +7,47 @@
             <div class="flex-wrapper">
 
                 <!-- Mobile Selector -->
-                <div v-if="isMobile" id="CompSelect_Mobile">
+                <div v-if="isMobile" id="CompSelect_Mobile" class="lumi-flex-slier-wrapper">
                     <b>Component</b>
 
-                    <ul class="">
+                    <ul class="lumi-flex-slider">
                         <!-- Before Loading -->
-                        <div class="lumi-box" 
+                        <li class="lumi-flex-slider-item"
                             v-if="component_list.length == 0">
-                            Loading...
-                        </div>
+                            <div class="lumi-box">
+                                Loading...
+                            </div>
+                        </li>
                         <!-- Before Loading End -->
 
-                        <li class=""
+                        <li class="lumi-flex-slider-item"
                             v-for="(component,index) in component_list" 
                             :key="index">
                             <button class="lumi-button"
-                                :class="{'active': (component == item_selected.name)}"
+                                :class="{'selected': (component == item_selected.name)}"
                                 @click="comp_select(component)">
                                 {{component}}
                             </button>
                         </li>
+
+                        <li class="lumi-flex-slider-item">
+                            <button class="lumi-button">
+                                TEST DUMMY
+                            </button>
+                        </li>
+
+                        <li class="lumi-flex-slider-item">
+                            <button class="lumi-button">
+                                TEST DUMMY
+                            </button>
+                        </li>
+
+                        <li class="lumi-flex-slider-item">
+                            <button class="lumi-button">
+                                TEST DUMMY
+                            </button>
+                        </li>
+
                     </ul>
                 </div>
 
@@ -46,7 +67,7 @@
                             <li class="lumi-list-select-item"
                                 v-for="(component,index) in component_list" 
                                 :key="index"
-                                :class="{'active': (component == item_selected.name)}"
+                                :class="{'selected': (component == item_selected.name)}"
                                 @click="comp_select(component)">
                                 {{component}}
                             </li>
@@ -135,6 +156,7 @@ export default {
 
 <style lang="stylus" scoped>
 @import "../../assets/variable.styl"
+@import "../../assets/lumigrid.styl"
 
 #CompDB
     text-align left
@@ -149,20 +171,6 @@ export default {
             font-weight 800
             padding 0px 0px 10px 0px
 
-@media (max-width: $container_width)
-    #CompSelect_Mobile
-        ul
-            display flex
-            overflow-x scroll
-            margin-left -5px
-            margin-right -5px
-            padding 5px
-            li
-                float left
-                margin-right 1.2em
-                button
-                    padding-left 16px
-                    padding-right 16px
 
 @media (min-width: $container_width)
     .flex-wrapper

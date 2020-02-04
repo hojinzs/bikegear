@@ -1,0 +1,22 @@
+/**
+* Variables $
+*/
+@import "variable.styl"
+
+.lumi-flex-slier-wrapper
+    overflow-x scroll
+    -ms-overflow-style none
+    scrollbar-width none
+    &::-webkit-scrollbar
+        display none !important
+    ul.lumi-flex-slider
+        display flex
+        flex-wrap nowrap
+        li.lumi-flex-slider-item
+            float left
+            margin-right 1rem
+        &:first-child
+            margin-left 1rem
+        &:last-child::after
+            visibility hidden
+            content "."
