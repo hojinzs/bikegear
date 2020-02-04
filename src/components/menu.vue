@@ -200,7 +200,7 @@ $link_color_disabled = #b3b3b3
 $shadow_color = #595959
 
 #Menu
-    position fixed
+    position absolute
     top 0
     width 100%
     z-index 500

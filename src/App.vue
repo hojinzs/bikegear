@@ -152,9 +152,9 @@ $menu_height = ($global_inline_height * 2) + ($global_font_text / 2)
     color: #2c3e50
     position relative
     &.blocked
-        margin-top $menu_height
+        // margin-top $menu_height
         height 100%
-        overflow-y scroll
+        overflow none
     #contents
         height 100%
         &.scrolled
