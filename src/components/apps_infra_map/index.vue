@@ -1,6 +1,7 @@
 <template>
     <div id="app">
-        <div id="Menu1">
+
+        <div id="MenuTop">
             <div class="lumi-flex-slier-wrapper">
                 <ul class="lumi-flex-slider">
 
@@ -19,24 +20,54 @@
                     </li>
                     <!-- LOOP END -->
 
-                    <li class="lumi-flex-slider-item">
-                        <button class="lumi-button lumi-button-block-white lumi-box-border">
-                            DUMMY
-                        </button>
-                    </li>
-                    <li class="lumi-flex-slider-item">
-                        <button class="lumi-button lumi-button-block-white lumi-box-border">
-                            DUMMY
-                        </button>
-                    </li>
                 </ul>
             </div>
         </div>
+
+        <div id="MenuBottom">
+            <div class="lumi-flex-slier-wrapper">
+                <ul class="lumi-flex-slider">
+
+                    <!-- LOOP START -->
+                    <li class="lumi-flex-slider-item">
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
+                            <div>
+                            <font-awesome-icon class="infra-icon"
+                                :icon="'charging-station'"
+                                :style="{color:'red'}"/>
+                            충전
+                            <span class="infra-count-int"
+                                :style="{color:'red'}">
+                                14
+                            </span>
+                            </div>
+                            <div>
+                                asdfasdf
+                            </div>
+                        </button>
+                    </li>
+                    <!-- LOOP END -->
+
+                </ul>
+            </div>
+        </div>
+
+
         <naver-maps class="maps" style="width: 100%; height: 100%;"
             :width="100"
             :height="100"
             :mapOptions="mapOptions"
             @load="onLoad">
+                <div class="infra-marker"
+                    v-for="(marker, index) in markers"
+                    :key="index" >
+                    <naver-marker
+                        v-for="(marker, index) in markers"
+                        :key="index"
+                        :lat="marker.lat"
+                        :lng="marker.lng">
+                    </naver-marker>
+                </div>
         </naver-maps>
     </div>
 </template>
@@ -49,13 +80,26 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faChargingStation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faChargingStation)
+// import axios from 'axios'
 
+// Sample Data
+import { response } from './sampledb'
+
+/**
+ * vue-naver-maps
+ * doc: https://shin-jaeheon.github.io/vue-naver-maps/#/
+ */
 Vue.use(naver,{
     clientID: process.env.VUE_APP_NAVER_API_CLIENT_KEY,
     useGovAPI: false,
     subModules:''
 });
+
+/**
+ * vue-fontawesome
+ * doc: https://www.npmjs.com/package/@fortawesome/vue-fontawesome
+ */
+library.add(faChargingStation)
 
 export default {
     components:{
@@ -63,19 +107,38 @@ export default {
     },
     data(){
         return {
+            infraList: response,
+            markers: [],
             mapOptions: {
-                lat: 37,
-                lng: 127,
-                zoom: 10,
+                lat: 37.4876,
+                lng: 127.1246,
+                zoom: 11,
             }
         }
     },
     methods:{
         onLoad(){
+            this.markers = this.getMarkers();
+            console.log("Markers => ", this.markers);
         },
+        getMarkers(){
+            let markers = []
+
+            this.infraList.forEach(element => {
+                let marker = {}
+
+                marker.lat = element.geoPoint.latitude
+                marker.lng = element.geoPoint.longitude
+                marker.name = element.name
+
+                markers.push(marker)
+            })
+
+            return markers
+        }
     },
     mounted(){
-        setInterval(()=> this.count++,1000)
+        console.log(this.infraList)
     }
 }
 </script>
@@ -88,15 +151,20 @@ export default {
     height 100%
     width 100%
     overflow hidden
-    #Menu1
-        width 100%
+    #MenuTop
+        max-width 100%
         position absolute
         top 3rem
         z-index 100
+    #MenuBottom
+        max-width 100%
+        bottom 0
+        position absolute
+        z-index 100
 
-        .infra-indicator
-            color $light_black
-            .infra-icon
-                padding-right 0.2rem
+.infra-indicator
+    color $light_black
+    .infra-icon
+        padding-right 0.2rem
 
 </style>
