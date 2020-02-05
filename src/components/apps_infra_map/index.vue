@@ -6,7 +6,7 @@
 
                     <!-- LOOP START -->
                     <li class="lumi-flex-slider-item">
-                        <button class="infra-indicator lumi-button lumi-button-block-white">
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
                             <font-awesome-icon class="infra-icon"
                                 :icon="'charging-station'"
                                 :style="{color:'red'}"/>
@@ -20,12 +20,12 @@
                     <!-- LOOP END -->
 
                     <li class="lumi-flex-slider-item">
-                        <button class="lumi-button lumi-button-block-white">
+                        <button class="lumi-button lumi-button-block-white lumi-box-border">
                             DUMMY
                         </button>
                     </li>
                     <li class="lumi-flex-slider-item">
-                        <button class="lumi-button lumi-button-block-white">
+                        <button class="lumi-button lumi-button-block-white lumi-box-border">
                             DUMMY
                         </button>
                     </li>
