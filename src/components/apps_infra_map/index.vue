@@ -15,7 +15,7 @@
                                 :style="{color: item.color}"/>
                             {{item.label}}
                             <span class="infra-count-int"
-                                :style="{color: 'red'}">
+                                :style="{backgroundColor: 'red'}">
                                 14
                             </span>
                         </button>
@@ -154,7 +154,7 @@ export default {
         }
     },
     mounted(){
-        
+
     }
 }
 </script>
@@ -182,5 +182,12 @@ export default {
     color $light_black
     .infra-icon
         padding-right 0.2rem
+    .infra-count-int
+        margin-left 0.2rem
+        border-radius 0.5rem
+        color white
+        font-size 0.8rem
+        font-weight 800
+        padding 0.2rem
 
 </style>
