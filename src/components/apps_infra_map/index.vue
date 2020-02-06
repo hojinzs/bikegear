@@ -6,14 +6,16 @@
                 <ul class="lumi-flex-slider">
 
                     <!-- LOOP START -->
-                    <li class="lumi-flex-slider-item">
+                    <li v-for="(item,index) in FeaturedItems"
+                        :key="index"
+                        class="lumi-flex-slider-item">
                         <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
                             <font-awesome-icon class="infra-icon"
-                                :icon="'charging-station'"
-                                :style="{color:'red'}"/>
-                            충전
+                                :icon="item.icon"
+                                :style="{color: item.color}"/>
+                            {{item.label}}
                             <span class="infra-count-int"
-                                :style="{color:'red'}">
+                                :style="{color: 'red'}">
                                 14
                             </span>
                         </button>
@@ -52,7 +54,6 @@
             </div>
         </div>
 
-
         <naver-maps class="maps" style="width: 100%; height: 100%;"
             :width="100"
             :height="100"
@@ -69,6 +70,7 @@
                     </naver-marker>
                 </div>
         </naver-maps>
+
     </div>
 </template>
 
@@ -77,13 +79,13 @@ import Vue from 'vue'
 import naver from 'vue-naver-maps'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChargingStation } from '@fortawesome/free-solid-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // import axios from 'axios'
 
 // Sample Data
-import { response } from './sampledb'
+import { featured, tags, response } from './sampledb'
 
 /**
  * vue-naver-maps
@@ -99,7 +101,7 @@ Vue.use(naver,{
  * vue-fontawesome
  * doc: https://www.npmjs.com/package/@fortawesome/vue-fontawesome
  */
-library.add(faChargingStation)
+library.add(fas)
 
 export default {
     components:{
@@ -107,6 +109,8 @@ export default {
     },
     data(){
         return {
+            featured,
+            tags,
             infraList: response,
             markers: [],
             mapOptions: {
@@ -116,10 +120,22 @@ export default {
             }
         }
     },
+    computed: {
+        FeaturedItems(){
+            let featured = []
+
+            this.featured.forEach(name => {
+                let i = this.tags.findIndex((e) => e.name == name)
+                featured.push(this.tags[i])
+            });
+
+
+            return featured
+        }
+    },
     methods:{
         onLoad(){
             this.markers = this.getMarkers();
-            console.log("Markers => ", this.markers);
         },
         getMarkers(){
             let markers = []
@@ -138,7 +154,7 @@ export default {
         }
     },
     mounted(){
-        console.log(this.infraList)
+        
     }
 }
 </script>

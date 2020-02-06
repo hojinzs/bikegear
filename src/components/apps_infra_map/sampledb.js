@@ -1,7 +1,53 @@
-const main = ['repair', 'recharge', 'sharing', 'lockstand', 'ice', 'viewpoint', 'restpoint']
-const type = ['shop', 'stand', 'sharing', 'convinience','goverment']
+const featured = ['maintenance','recharge','share-point','monument','supply-point']
+
+const tags = [
+    {
+        'name' : 'maintenance',
+        'label' : '정비',
+        'icon' : 'tools',
+        'color' : '#ffcc66'
+    },
+    {
+        'name' : 'recharge',
+        'label' : '충전소',
+        'icon' : 'charging-station',
+        'color' : '#00cc7a'
+    },
+    {
+        'name' : 'share-point',
+        'label' : '공유',
+        'icon' : 'bicycle',
+        'color' : '#009900'
+    },
+    {
+        'name' : 'supply-point',
+        'label' : '보급',
+        'icon' : 'pizza-slice',
+        'color' : '#ff3300'
+    },
+    {
+        'name' : 'bike-pariking',
+        'label' : '거치',
+        'icon' : 'parking',
+        'color' : '#ff0080',
+    },
+    {
+        'name' : 'drinking',
+        'label' : '음료제공',
+        'icon' : 'glass-whiskey',
+        'color' : '#1a75ff'
+    },
+    {
+        'name' : 'monument',
+        'label' : '볼거리',
+        'icon' : 'monument',
+        'color' : '#6600ff'
+    },
+]
+
+const type = ['shop', 'lockstand', 'sharing', 'convinience','monument', 'goverment']
 const brand = ['trek','bontrager','rapha','cannondale',]
-const product = ['cycle','minivelo' ,'mtb', 'e-mtb', 'e-bike', 'smartmobility', 'component', 'apparel']
+const merchant = ['cycle','minivelo' ,'mtb', 'e-mtb', 'e-bike', 'smartmobility', 'component', 'food', 'coffee', 'apparel']
 
 const response = [
     {
@@ -22,6 +68,9 @@ const response = [
             ],
             "Brand": [
                 "trek"
+            ],
+            "Merchant": [
+                "cycle", "mtb"
             ],
             "others": [
 
@@ -47,6 +96,9 @@ const response = [
             "Brand": [
                 "trek"
             ],
+            "Merchant": [
+                "cycle", "mtb"
+            ],
             "others": [
 
             ]
@@ -69,8 +121,8 @@ const response = [
             "Brand": [
                 "trek"
             ],
-            "Product": [
-                "bike"
+            "Merchant": [
+                "cycle", "mtb"
             ],
             "others": []
         }
@@ -92,13 +144,81 @@ const response = [
             "Brand": [
                 "trek"
             ],
-            "Product": [
-                "bike"
+            "Merchant": [
+                "cycle", "mtb"
             ],
             "others": []
         }
+    },
+    {
+        "name": "홍가네슈퍼",
+        "type": "convinience",
+        "description": "홍가네슈퍼",
+        "geoPoint": {
+            "latitude": 37.49065,
+            "longitude": 127.39235
+        },
+        "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
+        "Image": "https://t1.daumcdn.net/cfile/tistory/2348FA3F57B325052E",
+        "Tags": {
+            "Utility": [
+                "supply-point"
+            ],
+            "Brand": [
+            ],
+            "Merchant": [
+                "food", "apparel"
+            ],
+            "others": []
+        }
+    },
+    {
+        "name": "북악 팔각정",
+        "type": "monument",
+        "description": "북악 팔각정",
+        "geoPoint": {
+            "latitude": 37.49065,
+            "longitude": 127.39235
+        },
+        "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
+        "Image": "https://t1.daumcdn.net/cfile/tistory/2348FA3F57B325052E",
+        "Tags": {
+            "Utility": [
+                "supply-point", "maintenance"
+            ],
+            "Brand": [
+                "cannondale"
+            ],
+            "Merchant": [
+                "food", "apparel", "coffee", "component"
+            ],
+            "others": []
+        },
+    },
+    {
+        "name": "남산",
+        "type": "monument",
+        "description": "남산",
+        "geoPoint": {
+            "latitude": 37.49065,
+            "longitude": 127.39235
+        },
+        "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
+        "Image": "https://t1.daumcdn.net/cfile/tistory/2348FA3F57B325052E",
+        "Tags": {
+            "Utility": [
+                "supply-point", "maintenance"
+            ],
+            "Brand": [
+                "cannondale"
+            ],
+            "Merchant": [
+                "food", "apparel", "coffee", "component"
+            ],
+            "others": []
+        },
     }
 ]
 
 
-export { response, main, type, brand, product }
+export { response, tags, featured, type, brand, merchant }
