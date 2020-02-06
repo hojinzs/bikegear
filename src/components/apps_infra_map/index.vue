@@ -15,7 +15,7 @@
                                 :style="{color: item.color}"/>
                             {{item.label}}
                             <span class="infra-count-int"
-                                :style="{backgroundColor: 'red'}">
+                                :style="{backgroundColor: item.color}">
                                 14
                             </span>
                         </button>
