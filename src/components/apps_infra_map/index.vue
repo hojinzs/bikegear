@@ -5,18 +5,30 @@
             <div class="lumi-flex-slier-wrapper">
                 <ul class="lumi-flex-slider">
 
+                    <li class="lumi-flex-slider-item"
+                    v-if="infraList.length == 0">
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border"
+                        @click="setFilter(item.name)">
+                            <font-awesome-icon class="infra-icon"
+                                :icon="'file-download'"/>
+                                <!-- :style="{color: item.color}"/> -->
+                            Loading..
+                        </button>
+                    </li>
+
                     <!-- LOOP START -->
                     <li class="lumi-flex-slider-item"
                     v-for="(item,index) in FeaturedItems"
                     :key="index">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border"
+                        @click="setFilter(item.name)">
                             <font-awesome-icon class="infra-icon"
                                 :icon="item.icon"
                                 :style="{color: item.color}"/>
                             {{item.label}}
                             <span class="infra-count-int"
                                 :style="{backgroundColor: item.color}">
-                                14
+                                {{item.count}}
                             </span>
                         </button>
                     </li>
@@ -85,10 +97,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-// import axios from 'axios'
+import axios from 'axios'
 
 // Sample Data
-import { featured, tags, response } from './sampledb'
+import { featured, tags } from './sampledb'
 
 // import Jimp from 'jimp'
 
@@ -116,7 +128,11 @@ export default {
         return {
             featured,
             tags,
-            infraList: response,
+            // infraList: response,
+            infraList: [],
+            filter: {
+                tags: []
+            },
             markers: [],
             mapOptions: {
                 lat: 37.4876,
@@ -131,18 +147,24 @@ export default {
 
             this.featured.forEach(name => {
                 let i = this.tags.findIndex((e) => e.name == name)
-                featured.push(this.tags[i])
+                let item = {
+                    name : this.tags[i].name,
+                    label : this.tags[i].label,
+                    icon : this.tags[i].icon,
+                    color : this.tags[i].color,
+                    count : this.countInfrasByTag(this.infraList,this.tags[i].name).length
+                }
+                featured.push(item)
             });
-
 
             return featured
         },
         DisplayItems(){
-            let items = []
-
-            items = this.infraList
-
-            return items
+            if(this.filter.tags.length != 0){
+                let items = this.infraList.filter((item) => this.findTagsOnInfra(item,this.filter.tags));
+                return items
+            }
+            return this.infraList
         }
     },
     methods:{
@@ -163,9 +185,50 @@ export default {
             })
 
             return markers
+        },
+        setFilter(_filter){
+            this.filter.tags = [_filter]
+        },
+        findTagsOnInfra(_item,_tagArray = []){
+            let keys = Object.keys(_item.Tags)
+            let tagFind = 0
+
+            keys.forEach(key => {
+                _tagArray.forEach(searchTag => {
+                    _item.Tags[key].forEach(targetTag => {
+                        console.log("item => ", _item, "\nsearchTag => ", searchTag, "\ntargetTag => ", targetTag)
+                        if(targetTag == searchTag) ++tagFind
+                        console.log("tagFind => ", tagFind)
+                    })
+                })
+            });
+
+            return tagFind > 0
+        },
+        countInfrasByTag(_itemArray,_tagName){
+
+            let tagArray = [_tagName],
+                newInfras = _itemArray.filter((item) => this.findTagsOnInfra(item,tagArray) > 0)
+
+            return newInfras
         }
     },
     mounted(){
+        
+        // Get Infra Database JSON
+        axios({
+            method: 'GET',
+            url: process.env.VUE_APP_INFRADB_URL,
+            headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
+        })
+            .then((res) => {
+                console.log('AXIOS RESPONSE =>',res.data)
+                this.infraList = res.data.Infras
+
+            })
+            .catch((error) => {
+                console.log('AXIOS ERROR => ',error,'preset data');
+            })
 
     }
 }
@@ -206,7 +269,7 @@ export default {
     text-align left
     width 340px
     overflow hidden
-    @media (max-width: $container_width)
+    @media (max-width: 400px)
         width 80vw
     hr
         border 0.5px solid $light_grey

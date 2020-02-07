@@ -64,7 +64,7 @@ const response = [
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_348194?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
             "Utility": [
-                "repair"
+                "maintenance"
             ],
             "Brand": [
                 "trek"
@@ -91,7 +91,7 @@ const response = [
         "Image": "https://modo-phinf.pstatic.net/20151110_11/1447154093942Ut5Vk_JPEG/mosa6YkuQl.jpeg?type=w1100",
         "Tags": {
             "Utility": [
-                "repair"
+                "maintenance"
             ],
             "Brand": [
                 "trek"
@@ -116,7 +116,7 @@ const response = [
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_390332?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
             "Utility": [
-                "repair"
+                "maintenance"
             ],
             "Brand": [
                 "trek"
@@ -139,7 +139,7 @@ const response = [
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_389636?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
             "Utility": [
-                "repair"
+                "maintenance"
             ],
             "Brand": [
                 "trek"
@@ -184,7 +184,7 @@ const response = [
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=16151&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {
             "Utility": [
-                "supply-point", "maintenance"
+                "monument", "supply-point", "maintenance"
             ],
             "Brand": [
                 "cannondale"
@@ -193,7 +193,7 @@ const response = [
                 "food", "apparel", "coffee", "component"
             ],
             "others": []
-        },
+        }
     },
     {
         "name": "남산",
@@ -207,7 +207,7 @@ const response = [
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=17972&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {
             "Utility": [
-                "supply-point", "maintenance"
+                "monument", "supply-point"
             ],
             "Brand": [
                 "cannondale"
