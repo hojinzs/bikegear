@@ -35,10 +35,14 @@
                     v-for="(place,index) in DisplayItems"
                     :key="index">
                         <button class="infra-place lumi-button lumi-button-block-white lumi-box-border">
-                            <div class="infra-place-thumbnail">
-                                <!-- 센터 정렬 필요 -->
-                                <img :src="place.Image">
+                            <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
+                                <div class="thumbnail">
+                                    <div class="centered">
+                                        <img :src="place.Image">
+                                    </div>
+                                </div>
                             </div>
+                            <hr>
                             <div class="infra-place-title">
                                 {{place.name}}
                             </div>
@@ -85,6 +89,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // Sample Data
 import { featured, tags, response } from './sampledb'
+
+// import Jimp from 'jimp'
 
 /**
  * vue-naver-maps
@@ -177,16 +183,12 @@ export default {
         max-width 100%
         position absolute
         top 3rem
-        z-index 100
+        z-index 200
     #MenuBottom
         max-width 100%
         bottom 0
         position absolute
-        z-index 100
-        ul
-            li
-                width 360px
-                overflow hidden
+        z-index 200
 
 .infra-indicator
     color $light_black
@@ -202,13 +204,45 @@ export default {
 
 .infra-place
     text-align left
-    width 100%
+    width 340px
+    overflow hidden
+    @media (max-width: $container_width)
+        width 80vw
+    hr
+        border 0.5px solid $light_grey
     .infra-place-title
         font-size 1.2rem
         font-weight bolder
     .infra-place-thumbnail
-        img
-            width 100%
-            min-height 12rem
+        overflow hidden
+
+.thumbnail-wrapper
+    background-color $light_grey
+    width 100%
+    &.thumbnail-border-radius
+        border 0.5px solid $light_grey
+        border-radius 0.5rem
+    .thumbnail
+        position relative
+        padding-top 56.25% /** 16:9 */
+        overflow hidden
+        .centered
+            position absolute
+            top 0
+            left 0
+            right 0
+            bottom 0
+            -webkit-transform translate(50%,50%)
+            -ms-transform translate(50%,50%)
+            transform translate(50%,50%)
+            img
+                position absolute
+                top 0
+                left 0
+                max-width 100%
+                height auto
+                -webkit-transform translate(-50%,-50%)
+                -ms-transform translate(-50%,-50%)
+                transform translate(-50%,-50%)
 
 </style>

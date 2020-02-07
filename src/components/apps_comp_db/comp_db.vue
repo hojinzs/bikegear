@@ -130,20 +130,19 @@ export default {
     created(){
 
         // Get Component Database JSON
-        let _this = this
         axios({
             method: 'GET',
             url: process.env.VUE_APP_COMPDB_ALL_URL,
             headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
         })
-            .then(function(res){
+            .then((res) => {
                 console.log('RESPONSE =>',res.data)
 
                 // update sprocket preset
-                _this.datas = res.data;
-                _this.component_list = Object.keys(res.data);
+                this.datas = res.data;
+                this.component_list = Object.keys(res.data);
             })
-            .catch(function(error){
+            .catch((error) => {
                 console.log('ERROR => ',error,'preset data');
             })
 
