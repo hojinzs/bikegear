@@ -74,16 +74,14 @@
             :height="100"
             :mapOptions="mapOptions"
             @load="onLoad">
-                <div class="infra-marker"
-                    v-for="(marker, index) in markers"
-                    :key="index" >
+
                     <naver-marker
-                        v-for="(marker, index) in markers"
+                        v-for="(marker, index) in DisplayMarkers"
                         :key="index"
                         :lat="marker.lat"
                         :lng="marker.lng">
                     </naver-marker>
-                </div>
+
         </naver-maps>
 
     </div>
@@ -128,7 +126,6 @@ export default {
         return {
             featured,
             tags,
-            // infraList: response,
             infraList: [],
             filter: {
                 tags: []
@@ -165,16 +162,11 @@ export default {
                 return items
             }
             return this.infraList
-        }
-    },
-    methods:{
-        onLoad(){
-            this.markers = this.getMarkers();
         },
-        getMarkers(){
+        DisplayMarkers(){
             let markers = []
 
-            this.infraList.forEach(element => {
+            this.DisplayItems.forEach(element => {
                 let marker = {}
 
                 marker.lat = element.geoPoint.latitude
@@ -185,6 +177,10 @@ export default {
             })
 
             return markers
+        }
+    },
+    methods:{
+        onLoad(){
         },
         setFilter(_filter){
             this.filter.tags = [_filter]
@@ -196,9 +192,7 @@ export default {
             keys.forEach(key => {
                 _tagArray.forEach(searchTag => {
                     _item.Tags[key].forEach(targetTag => {
-                        console.log("item => ", _item, "\nsearchTag => ", searchTag, "\ntargetTag => ", targetTag)
                         if(targetTag == searchTag) ++tagFind
-                        console.log("tagFind => ", tagFind)
                     })
                 })
             });
