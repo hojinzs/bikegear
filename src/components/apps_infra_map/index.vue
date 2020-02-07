@@ -6,9 +6,9 @@
                 <ul class="lumi-flex-slider">
 
                     <!-- LOOP START -->
-                    <li v-for="(item,index) in FeaturedItems"
-                        :key="index"
-                        class="lumi-flex-slider-item">
+                    <li class="lumi-flex-slider-item"
+                    v-for="(item,index) in FeaturedItems"
+                    :key="index">
                         <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
                             <font-awesome-icon class="infra-icon"
                                 :icon="item.icon"
@@ -31,20 +31,19 @@
                 <ul class="lumi-flex-slider">
 
                     <!-- LOOP START -->
-                    <li class="lumi-flex-slider-item">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
-                            <div>
-                            <font-awesome-icon class="infra-icon"
-                                :icon="'charging-station'"
-                                :style="{color:'red'}"/>
-                            충전
-                            <span class="infra-count-int"
-                                :style="{color:'red'}">
-                                14
-                            </span>
+                    <li class="lumi-flex-slider-item"
+                    v-for="(place,index) in DisplayItems"
+                    :key="index">
+                        <button class="infra-place lumi-button lumi-button-block-white lumi-box-border">
+                            <div class="infra-place-thumbnail">
+                                <!-- 센터 정렬 필요 -->
+                                <img :src="place.Image">
+                            </div>
+                            <div class="infra-place-title">
+                                {{place.name}}
                             </div>
                             <div>
-                                asdfasdf
+                                {{place.type}}
                             </div>
                         </button>
                     </li>
@@ -131,6 +130,13 @@ export default {
 
 
             return featured
+        },
+        DisplayItems(){
+            let items = []
+
+            items = this.infraList
+
+            return items
         }
     },
     methods:{
@@ -177,6 +183,10 @@ export default {
         bottom 0
         position absolute
         z-index 100
+        ul
+            li
+                width 360px
+                overflow hidden
 
 .infra-indicator
     color $light_black
@@ -189,5 +199,16 @@ export default {
         font-size 0.8rem
         font-weight 800
         padding 0.2rem
+
+.infra-place
+    text-align left
+    width 100%
+    .infra-place-title
+        font-size 1.2rem
+        font-weight bolder
+    .infra-place-thumbnail
+        img
+            width 100%
+            min-height 12rem
 
 </style>

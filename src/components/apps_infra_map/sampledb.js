@@ -39,7 +39,7 @@ const tags = [
     },
     {
         'name' : 'monument',
-        'label' : '볼거리',
+        'label' : '명소',
         'icon' : 'monument',
         'color' : '#6600ff'
     },
@@ -88,7 +88,7 @@ const response = [
         "phone": "024912040",
         "formattedAddress": "서울 중랑구 중랑천로 10길 98 , (면목동) 1층",
         "Url": "http://www.manitoubike.co.kr/",
-        "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_348194?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
+        "Image": "https://modo-phinf.pstatic.net/20151110_11/1447154093942Ut5Vk_JPEG/mosa6YkuQl.jpeg?type=w1100",
         "Tags": {
             "Utility": [
                 "repair"
@@ -181,7 +181,7 @@ const response = [
             "longitude": 127.39235
         },
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
-        "Image": "https://t1.daumcdn.net/cfile/tistory/2348FA3F57B325052E",
+        "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=16151&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {
             "Utility": [
                 "supply-point", "maintenance"
@@ -204,7 +204,7 @@ const response = [
             "longitude": 127.39235
         },
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
-        "Image": "https://t1.daumcdn.net/cfile/tistory/2348FA3F57B325052E",
+        "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=17972&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {
             "Utility": [
                 "supply-point", "maintenance"
