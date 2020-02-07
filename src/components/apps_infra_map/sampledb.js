@@ -177,8 +177,8 @@ const response = [
         "type": "monument",
         "description": "북악 팔각정",
         "geoPoint": {
-            "latitude": 37.49065,
-            "longitude": 127.39235
+            "latitude": 37.601575,
+            "longitude": 126.980692
         },
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=16151&fileTy=MEDIA&fileNo=1&thumbTy=L",
@@ -200,8 +200,8 @@ const response = [
         "type": "monument",
         "description": "남산",
         "geoPoint": {
-            "latitude": 37.49065,
-            "longitude": 127.39235
+            "latitude": 37.55086,
+            "longitude": 126.99089
         },
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=17972&fileTy=MEDIA&fileNo=1&thumbTy=L",
