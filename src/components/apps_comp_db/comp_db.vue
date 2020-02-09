@@ -7,9 +7,8 @@
             <div class="flex-wrapper">
 
                 <!-- Mobile Selector -->
-                <div v-if="isMobile" id="CompSelect_Mobile" class="lumi-flex-slier-wrapper">
+                <div v-if="isMobile" id="CompSelect_Mobile" class="lumi-flex-slider-wrapper">
                     <b>Component</b>
-
                     <ul class="lumi-flex-slider">
                         <!-- Before Loading -->
                         <li class="lumi-flex-slider-item"

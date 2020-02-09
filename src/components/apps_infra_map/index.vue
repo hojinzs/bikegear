@@ -2,17 +2,28 @@
     <div id="app">
 
         <div id="MenuTop">
-            <div class="lumi-flex-slier-wrapper">
+            <div class="lumi-flex-slider-wrapper">
                 <ul class="lumi-flex-slider">
 
+
+                    <!-- Loading -->
                     <li class="lumi-flex-slider-item"
-                    v-if="infraList.length == 0">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border"
-                        @click="setFilter(item.name)">
-                            <font-awesome-icon class="infra-icon"
-                                :icon="'file-download'"/>
+                    v-if="infraList_status == 'loading'">
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
+                            <img class="loading" src="/images/Spinner-1s-104px.gif">
                                 <!-- :style="{color: item.color}"/> -->
-                            Loading..
+                            Loading
+                        </button>
+                    </li>
+
+                    <!-- Load Error -->
+                    <li class="lumi-flex-slider-item"
+                    v-if="infraList_status == 'error'">
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border"
+                            :style="{color: 'red'}">
+                            <font-awesome-icon class="infra-icon"
+                                :icon="'exclamation-triangle'" />
+                            Error
                         </button>
                     </li>
 
@@ -39,14 +50,15 @@
         </div>
 
         <div id="MenuBottom">
-            <div class="lumi-flex-slier-wrapper">
+            <div class="lumi-flex-slider-wrapper">
                 <ul class="lumi-flex-slider">
 
                     <!-- LOOP START -->
                     <li class="lumi-flex-slider-item"
                     v-for="(place,index) in DisplayItems"
                     :key="index">
-                        <button class="infra-place lumi-button lumi-button-block-white lumi-box-border">
+                        <button class="infra-place lumi-button lumi-button-block-white lumi-box-border"
+                        @click="doShowPreview(place)">
                             <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
                                 <div class="thumbnail">
                                     <div class="centered">
@@ -79,7 +91,8 @@
                         v-for="(marker, index) in DisplayMarkers"
                         :key="index"
                         :lat="marker.lat"
-                        :lng="marker.lng">
+                        :lng="marker.lng"
+                        @click="doShowPreview(marker.place)">
                     </naver-marker>
 
         </naver-maps>
@@ -99,6 +112,8 @@ import axios from 'axios'
 
 // Sample Data
 import { featured, tags } from './sampledb'
+
+import geo from './geo_calc'
 
 // import Jimp from 'jimp'
 
@@ -124,9 +139,11 @@ export default {
     },
     data(){
         return {
+            geo,
             featured,
             tags,
             infraList: [],
+            infraList_status : 'loading',
             filter: {
                 tags: []
             },
@@ -135,7 +152,8 @@ export default {
                 lat: 37.4876,
                 lng: 127.1246,
                 zoom: 11,
-            }
+            },
+            map: null
         }
     },
     computed: {
@@ -169,6 +187,7 @@ export default {
             this.DisplayItems.forEach(element => {
                 let marker = {}
 
+                marker.place = element
                 marker.lat = element.geoPoint.latitude
                 marker.lng = element.geoPoint.longitude
                 marker.name = element.name
@@ -180,10 +199,31 @@ export default {
         }
     },
     methods:{
-        onLoad(){
+        onLoad(_map){
+            this.map = _map
         },
         setFilter(_filter){
             this.filter.tags = [_filter]
+        },
+        getInfraData(){
+
+            axios({
+                method: 'GET',
+                url: process.env.VUE_APP_INFRADB_URL,
+                headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) },
+            })
+                .then((res) => {
+                    // console.log('AXIOS RESPONSE =>',res.data)
+                    this.infraList_status = 'loaded'
+                    this.infraList = res.data.Infras
+
+                })
+                .catch((error) => {
+                    console.log('AXIOS ERROR => ',error,'preset data');
+                    this.infraList_status = 'error'
+                })
+
+            this.infraList_status = 'loading'
         },
         findTagsOnInfra(_item,_tagArray = []){
             let keys = Object.keys(_item.Tags)
@@ -205,25 +245,28 @@ export default {
                 newInfras = _itemArray.filter((item) => this.findTagsOnInfra(item,tagArray) > 0)
 
             return newInfras
-        }
+        },
+        doShowPreview(_place){
+            this.map.setCenter(_place.geoPoint.latitude,_place.geoPoint.longitude)
+        },
     },
     mounted(){
-        
-        // Get Infra Database JSON
-        axios({
-            method: 'GET',
-            url: process.env.VUE_APP_INFRADB_URL,
-            headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
-        })
-            .then((res) => {
-                console.log('AXIOS RESPONSE =>',res.data)
-                this.infraList = res.data.Infras
+        this.getInfraData()
+    },
+    watch: {
+        DisplayMarkers(newItems){
+            if(this.map != null){
+                let Arr_LatLng = new Array,
+                    centerLatLng = new geo.LatLng
 
-            })
-            .catch((error) => {
-                console.log('AXIOS ERROR => ',error,'preset data');
-            })
+                newItems.forEach((item) => {
+                    Arr_LatLng.push(new geo.LatLng(item.lat,item.lng))
+                })
+                centerLatLng = geo.Calc.getCenterLatLng(Arr_LatLng);
 
+                this.map.setCenter(centerLatLng.Lat,centerLatLng.Lng)
+            }
+        }
     }
 }
 </script>
@@ -249,6 +292,7 @@ export default {
 
 .infra-indicator
     color $light_black
+    font-size 1rem
     .infra-icon
         padding-right 0.2rem
     .infra-count-int
@@ -258,6 +302,9 @@ export default {
         font-size 0.8rem
         font-weight 800
         padding 0.2rem
+    img.loading
+        width 0.8rem
+        height auto
 
 .infra-place
     text-align left
