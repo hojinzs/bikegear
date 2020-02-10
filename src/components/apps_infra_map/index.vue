@@ -50,49 +50,57 @@
 
         <div id="MenuBottom">
             <div class="lumi-flex-slider-wrapper">
-                <ul class="lumi-flex-slider lumi-flex-slider-aligin-bottom">
+                <!-- <ul class="lumi-flex-slider lumi-flex-slider-aligin-bottom"> -->
+                <transition-group tag="ul" class="lumi-flex-slider lumi-flex-slider-aligin-bottom"
+                    name="infra-place-fade"
+                    v-bind:css="false"
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:leave="leave">
 
                     <!-- LOOP START -->
-                    <li class="lumi-flex-slider-item"
-                    v-for="(place,index) in DisplayItems"
-                    :key="index">
-                        <button class="infra-place lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
-                            :class="{
-                                'infra-place-mini' : ( DisplayItems_toggled != 'item_'+index ),
-                                'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
-                            }"
-                            :ref="'item_'+index"
-                            @click.stop="doItemToggle('item_'+index,place)">
+                        <li class="lumi-flex-slider-item"
+                        v-for="(place,index) in DisplayItems"
+                        :key="index">
 
-                            <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
-                                <div class="thumbnail">
-                                    <div class="centered">
-                                        <img :src="place.Image">
+                            <button class="infra-place lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
+                                :class="{
+                                    'infra-place-mini' : ( DisplayItems_toggled != 'item_'+index ),
+                                    'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
+                                }"
+                                :ref="'item_'+index"
+                                @click.stop="doItemToggle('item_'+index,place)">
+
+                                <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
+                                    <div class="thumbnail">
+                                        <div class="centered">
+                                            <img :src="place.Image">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="infra-place-contents">
-                                <div class="infra-place-title infra-place-contents-blocks">
-                                    {{place.name}}
+                                <div class="infra-place-contents">
+                                    <div class="infra-place-title infra-place-contents-blocks">
+                                        {{place.name}}
+                                    </div>
+                                    <div class="infra-place-description infra-place-contents-blocks">
+                                        {{place.type}}
+                                    </div>
+                                    <div class="infra-detail infra-place-contents-blocks"
+                                    v-if="( DisplayItems_toggled == 'item_'+index )">
+                                        <button class="lumi-button-liner"
+                                        @click.stop="showDetail()">
+                                            정보 보기
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="infra-place-description infra-place-contents-blocks">
-                                    {{place.type}}
-                                </div>
-                                <div class="infra-detail infra-place-contents-blocks"
-                                v-if="( DisplayItems_toggled == 'item_'+index )"
-                                @click.stop.capture="showDetail()">
-                                    <button class="lumi-button-liner">
-                                        정보 보기
-                                    </button>
-                                </div>
-                            </div>
+                            </button>
 
-                        </button>
-                    </li>
+                        </li>
                     <!-- LOOP END -->
 
-                </ul>
+                </transition-group>
+                <!-- </ul> -->
             </div>
         </div>
 
@@ -124,6 +132,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import axios from 'axios'
+import Velocity from'velocity-animate'
 
 // Sample Data
 import { featured, tags } from './sampledb'
@@ -219,13 +228,14 @@ export default {
             this.map = _map
         },
         setFilter(_filter){
+            this.DisplayItems_toggled = null
             this.filter.tags = [_filter]
         },
         doItemToggle(_ref,_place){
             console.log("ClickItems!! =>", this.$refs[_ref])
 
             if(this.DisplayItems_toggled == _ref){
-                this.DisplayItems_toggled = 'none'
+                this.DisplayItems_toggled = null
             } else {
                 this.DisplayItems_toggled = _ref
             }
@@ -278,6 +288,32 @@ export default {
         },
         showDetail(){
             alert("TEST!!")
+        },
+        /**
+         * Transition methods
+         */
+        beforeEnter(el) {
+            el.style.opacity = 0
+        },
+        enter(el, done) {
+            let delay = el.dataset.index * 150
+            setTimeout(function () {
+                Velocity(
+                    el,
+                    { opacity: 1 },
+                    { complete: done }
+                )
+            }, delay)
+        },
+        leave(el, done) {
+            let delay = el.dataset.index * 150
+            setTimeout(function () {
+                Velocity(
+                    el,
+                    { opacity: 0},
+                    { complete: done }
+                )
+            }, delay)
         }
     },
     mounted(){
@@ -404,5 +440,13 @@ export default {
                 -ms-transform translate(-50%,-50%)
                 transform translate(-50%,-50%)
                 -webkit-user-drag none
+
+.fade-enter-active,
+.fade-leave-active
+    transition opacity .5s
+
+.fade-enter,
+.fade-leave-to
+    opacity 0
 
 </style>
