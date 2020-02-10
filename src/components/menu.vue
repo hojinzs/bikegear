@@ -200,7 +200,7 @@ $link_color_disabled = #b3b3b3
 $shadow_color = #595959
 
 #Menu
-    position absolute
+    position fixed
     top 0
     width 100%
     z-index 500
@@ -307,7 +307,6 @@ $shadow_color = #595959
        
 
 @media (max-width: $container_width)
-
     #Menu
         #MenuRight
             display flow-root
@@ -324,6 +323,11 @@ $shadow_color = #595959
 <style scoped>
 
 #Menu.menu_blocked{
+    transition-property: background-color border color;
+    transition-duration: 0.5s;
+}
+
+#Menu.menu_clear{
     transition-property: background-color border color;
     transition-duration: 0.5s;
 }
