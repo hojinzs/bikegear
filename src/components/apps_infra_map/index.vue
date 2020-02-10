@@ -5,7 +5,6 @@
             <div class="lumi-flex-slider-wrapper">
                 <ul class="lumi-flex-slider">
 
-
                     <!-- Loading -->
                     <li class="lumi-flex-slider-item"
                     v-if="infraList_status == 'loading'">
@@ -31,7 +30,7 @@
                     <li class="lumi-flex-slider-item"
                     v-for="(item,index) in FeaturedItems"
                     :key="index">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border"
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
                         @click="setFilter(item.name)">
                             <font-awesome-icon class="infra-icon"
                                 :icon="item.icon"
@@ -51,14 +50,20 @@
 
         <div id="MenuBottom">
             <div class="lumi-flex-slider-wrapper">
-                <ul class="lumi-flex-slider">
+                <ul class="lumi-flex-slider lumi-flex-slider-aligin-bottom">
 
                     <!-- LOOP START -->
                     <li class="lumi-flex-slider-item"
                     v-for="(place,index) in DisplayItems"
                     :key="index">
-                        <button class="infra-place lumi-button lumi-button-block-white lumi-box-border"
-                        @click="doShowPreview(place)">
+                        <button class="infra-place lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
+                            :class="{
+                                'infra-place-mini' : ( DisplayItems_toggled != 'item_'+index ),
+                                'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
+                            }"
+                            :ref="'item_'+index"
+                            @click.stop="doItemToggle('item_'+index,place)">
+
                             <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
                                 <div class="thumbnail">
                                     <div class="centered">
@@ -66,13 +71,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr>
-                            <div class="infra-place-title">
-                                {{place.name}}
+
+                            <div class="infra-place-contents">
+                                <div class="infra-place-title infra-place-contents-blocks">
+                                    {{place.name}}
+                                </div>
+                                <div class="infra-place-description infra-place-contents-blocks">
+                                    {{place.type}}
+                                </div>
+                                <div class="infra-detail infra-place-contents-blocks"
+                                v-if="( DisplayItems_toggled == 'item_'+index )"
+                                @click.stop.capture="showDetail()">
+                                    <button class="lumi-button-liner">
+                                        정보 보기
+                                    </button>
+                                </div>
                             </div>
-                            <div>
-                                {{place.type}}
-                            </div>
+
                         </button>
                     </li>
                     <!-- LOOP END -->
@@ -144,6 +159,7 @@ export default {
             tags,
             infraList: [],
             infraList_status : 'loading',
+            DisplayItems_toggled : null,
             filter: {
                 tags: []
             },
@@ -205,6 +221,17 @@ export default {
         setFilter(_filter){
             this.filter.tags = [_filter]
         },
+        doItemToggle(_ref,_place){
+            console.log("ClickItems!! =>", this.$refs[_ref])
+
+            if(this.DisplayItems_toggled == _ref){
+                this.DisplayItems_toggled = 'none'
+            } else {
+                this.DisplayItems_toggled = _ref
+            }
+
+            this.map.setCenter(_place.geoPoint.latitude,_place.geoPoint.longitude)
+        },
         getInfraData(){
 
             axios({
@@ -249,6 +276,9 @@ export default {
         doShowPreview(_place){
             this.map.setCenter(_place.geoPoint.latitude,_place.geoPoint.longitude)
         },
+        showDetail(){
+            alert("TEST!!")
+        }
     },
     mounted(){
         this.getInfraData()
@@ -290,6 +320,7 @@ export default {
         position absolute
         z-index 200
 
+
 .infra-indicator
     color $light_black
     font-size 1rem
@@ -307,8 +338,10 @@ export default {
         height auto
 
 .infra-place
+    position relative
     text-align left
     width 340px
+    height auto
     overflow hidden
     @media (max-width: 400px)
         width 80vw
@@ -319,6 +352,28 @@ export default {
         font-weight bolder
     .infra-place-thumbnail
         overflow hidden
+    .infra-place-contents
+        .infra-place-contents-blocks
+            overflow hidden
+        .infra-detail
+            padding-top 0.2rem
+            padding-bottom 0.2rem
+            text-align right
+    &.infra-place-mini
+        height 100px
+        .infra-place-thumbnail
+            display inline-block
+            height 100%
+            width 45%
+        .infra-place-contents
+            position absolute
+            display inline-block
+            width 55%
+            right 0
+            overflow hidden
+            .infra-place-contents-blocks
+                margin-left 0.5rem
+                margin-right 0.5rem
 
 .thumbnail-wrapper
     background-color $light_grey
