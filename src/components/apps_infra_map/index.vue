@@ -111,11 +111,12 @@
             @load="onLoad">
 
                     <naver-marker
-                        v-for="(marker, index) in DisplayMarkers"
+                        v-for="(item, index) in DisplayItems"
                         :key="index"
-                        :lat="marker.lat"
-                        :lng="marker.lng"
-                        @click="doShowPreview(marker.place)">
+                        :lat="item.geoPoint.latitude"
+                        :lng="item.geoPoint.longitude"
+                        @load="onMarkerLoad"
+                        @click="doItemToggle('item_'+index,item)">
                     </naver-marker>
 
         </naver-maps>
@@ -172,7 +173,6 @@ export default {
             filter: {
                 tags: []
             },
-            markers: [],
             mapOptions: {
                 lat: 37.4876,
                 lng: 127.1246,
@@ -206,33 +206,19 @@ export default {
             }
             return this.infraList
         },
-        DisplayMarkers(){
-            let markers = []
-
-            this.DisplayItems.forEach(element => {
-                let marker = {}
-
-                marker.place = element
-                marker.lat = element.geoPoint.latitude
-                marker.lng = element.geoPoint.longitude
-                marker.name = element.name
-
-                markers.push(marker)
-            })
-
-            return markers
-        }
     },
     methods:{
         onLoad(_map){
             this.map = _map
+        },
+        onMarkerLoad(_marker){
+            console.log(_marker)
         },
         setFilter(_filter){
             this.DisplayItems_toggled = null
             this.filter.tags = [_filter]
         },
         doItemToggle(_ref,_place){
-            console.log("ClickItems!! =>", this.$refs[_ref])
 
             if(this.DisplayItems_toggled == _ref){
                 this.DisplayItems_toggled = null
@@ -320,13 +306,13 @@ export default {
         this.getInfraData()
     },
     watch: {
-        DisplayMarkers(newItems){
+        DisplayItems(newItems){
             if(this.map != null && newItems.length > 0){
                 let Arr_LatLng = new Array,
                     centerLatLng = new geo.LatLng
 
                 newItems.forEach((item) => {
-                    Arr_LatLng.push(new geo.LatLng(item.lat,item.lng))
+                    Arr_LatLng.push(new geo.LatLng(item.geoPoint.latitude,item.geoPoint.longitude))
                 })
                 centerLatLng = geo.Calc.getCenterLatLng(Arr_LatLng);
 
