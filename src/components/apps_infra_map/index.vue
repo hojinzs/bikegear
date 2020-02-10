@@ -255,7 +255,7 @@ export default {
     },
     watch: {
         DisplayMarkers(newItems){
-            if(this.map != null){
+            if(this.map != null && newItems.length > 0){
                 let Arr_LatLng = new Array,
                     centerLatLng = new geo.LatLng
 
