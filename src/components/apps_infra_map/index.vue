@@ -8,7 +8,7 @@
                     <!-- Loading -->
                     <li class="lumi-flex-slider-item"
                     v-if="infraList_status == 'loading'">
-                        <button class="infra-indicator lumi-button lumi-button-block-white">
+                        <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow">
                             <img class="loading" src="/images/Spinner-1s-104px.gif">
                                 <!-- :style="{color: item.color}"/> -->
                             Loading
@@ -18,7 +18,7 @@
                     <!-- Load Error -->
                     <li class="lumi-flex-slider-item"
                     v-if="infraList_status == 'error'">
-                        <button class="infra-indicator lumi-button lumi-button-block-white"
+                        <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
                             :style="{color: 'red'}">
                             <font-awesome-icon class="infra-icon"
                                 :icon="'exclamation-triangle'" />
@@ -30,13 +30,18 @@
                     <li class="lumi-flex-slider-item"
                     v-for="(item,index) in FeaturedItems"
                     :key="index">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-button-shadow"
-                        @click="setFilter(item.name)">
-                            <font-awesome-icon class="infra-icon"
+                        <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
+                        @click="toggleFilter(item.name)">
+                            <span class="dot infra-indicator-item"
+                                :class="{'active' : (filter.tags.indexOf(item.name) != -1) }">
+                            </span>
+                            <font-awesome-icon class="infra-icon infra-indicator-item"
                                 :icon="item.icon"
                                 :style="{color: item.color}"/>
-                            {{item.label}}
-                            <span class="infra-count-int"
+                            <span class="infra-indicator-item">
+                                {{item.label}}
+                            </span>
+                            <span class="infra-count-int infra-indicator-item"
                                 :style="{backgroundColor: item.color}">
                                 {{item.count}}
                             </span>
@@ -226,9 +231,21 @@ export default {
                 backgroundPosition: 'center center'
             }
         },
-        setFilter(_filter){
+        toggleFilter(_filter){
+
+            let i = this.filter.tags.indexOf(_filter)
+
+            if(i != -1){
+                this.filter.tags.splice(i,1)
+            } else {
+                this.filter.tags.push(_filter)
+            }
+
             this.DisplayItems_toggled = null
-            this.filter.tags = [_filter]
+        },
+        addFilter(_filter){
+            this.DisplayItems_toggled = null
+            this.filter.tags.push(_filter)
         },
         doItemToggle(_ref,_place){
 
@@ -356,9 +373,24 @@ export default {
 
 .infra-indicator
     color $light_black
-    font-size 1rem
+    font-size 1.2rem
+    line-height 1.2rem
+    display flex
+    .infra-indicator-item
+        margin auto 0
+    span.dot
+        height 0.6em
+        width 0.6em
+        background-color $light_grey
+        border-radius 50%
+        display inline-block
+        margin-left 0.2em
+        margin-right 0.2em
+        &.active
+            background-color #009933
     .infra-icon
-        padding-right 0.2rem
+        margin-left 0.2em
+        margin-right 0.2em
     .infra-count-int
         margin-left 0.2rem
         border-radius 0.5rem
@@ -419,6 +451,9 @@ export default {
                 text-align right
     .infra-place-section-2
         display flex
+        margin-top 1rem
+        button 
+            margin-left auto
 
 .fade-enter-active,
 .fade-leave-active
