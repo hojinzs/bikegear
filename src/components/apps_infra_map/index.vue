@@ -8,7 +8,7 @@
                     <!-- Loading -->
                     <li class="lumi-flex-slider-item"
                     v-if="infraList_status == 'loading'">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border">
+                        <button class="infra-indicator lumi-button lumi-button-block-white">
                             <img class="loading" src="/images/Spinner-1s-104px.gif">
                                 <!-- :style="{color: item.color}"/> -->
                             Loading
@@ -18,7 +18,7 @@
                     <!-- Load Error -->
                     <li class="lumi-flex-slider-item"
                     v-if="infraList_status == 'error'">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border"
+                        <button class="infra-indicator lumi-button lumi-button-block-white"
                             :style="{color: 'red'}">
                             <font-awesome-icon class="infra-icon"
                                 :icon="'exclamation-triangle'" />
@@ -30,7 +30,7 @@
                     <li class="lumi-flex-slider-item"
                     v-for="(item,index) in FeaturedItems"
                     :key="index">
-                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
+                        <button class="infra-indicator lumi-button lumi-button-block-white lumi-button-shadow"
                         @click="setFilter(item.name)">
                             <font-awesome-icon class="infra-icon"
                                 :icon="item.icon"
@@ -50,6 +50,7 @@
 
         <div id="MenuBottom">
             <div class="lumi-flex-slider-wrapper">
+
                 <!-- <ul class="lumi-flex-slider lumi-flex-slider-aligin-bottom"> -->
                 <transition-group tag="ul" class="lumi-flex-slider lumi-flex-slider-aligin-bottom"
                     name="infra-place-fade"
@@ -65,35 +66,39 @@
 
                             <button class="infra-place lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
                                 :class="{
-                                    'infra-place-mini' : ( DisplayItems_toggled != 'item_'+index ),
                                     'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
                                 }"
                                 :ref="'item_'+index"
                                 @click.stop="doItemToggle('item_'+index,place)">
+                                
+                                <div class="infra-place-section-1">
 
-                                <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
-                                    <div class="thumbnail">
-                                        <div class="centered">
-                                            <img :src="place.Image">
+                                    <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
+                                        <div class="thumbnail"
+                                            v-bind:style="backgroundImage(place.Image)" >
+                                            <!-- <img :src="place.Image"> -->
                                         </div>
                                     </div>
+
+                                    <div class="infra-place-contents">
+                                        <div class="infra-place-title infra-place-contents-blocks">
+                                            {{place.name}}
+                                        </div>
+                                        <div class="infra-place-description infra-place-contents-blocks">
+                                            {{place.type}}
+                                        </div>
+                                    </div>
+                                
                                 </div>
 
-                                <div class="infra-place-contents">
-                                    <div class="infra-place-title infra-place-contents-blocks">
-                                        {{place.name}}
-                                    </div>
-                                    <div class="infra-place-description infra-place-contents-blocks">
-                                        {{place.type}}
-                                    </div>
-                                    <div class="infra-detail infra-place-contents-blocks"
+                                <div class="infra-place-section-2"
                                     v-if="( DisplayItems_toggled == 'item_'+index )">
-                                        <button class="lumi-button-liner"
-                                        @click.stop="showDetail()">
-                                            정보 보기
-                                        </button>
-                                    </div>
+                                    <button class="lumi-button-liner"
+                                    @click.stop="showDetail()">
+                                        정보 보기
+                                    </button>
                                 </div>
+
                             </button>
 
                         </li>
@@ -101,6 +106,7 @@
 
                 </transition-group>
                 <!-- </ul> -->
+                
             </div>
         </div>
 
@@ -160,7 +166,7 @@ library.add(fas)
 
 export default {
     components:{
-        'font-awesome-icon' : FontAwesomeIcon
+        'font-awesome-icon' : FontAwesomeIcon,
     },
     data(){
         return {
@@ -211,8 +217,14 @@ export default {
         onLoad(_map){
             this.map = _map
         },
-        onMarkerLoad(_marker){
-            console.log(_marker)
+        onMarkerLoad(){
+        },
+        backgroundImage(_URL){
+            return {
+                backgroundImage: 'url('+_URL+')',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center center'
+            }
         },
         setFilter(_filter){
             this.DisplayItems_toggled = null
@@ -342,7 +354,6 @@ export default {
         position absolute
         z-index 200
 
-
 .infra-indicator
     color $light_black
     font-size 1rem
@@ -363,69 +374,51 @@ export default {
     position relative
     text-align left
     width 340px
+    // height 100px
     height auto
     overflow hidden
+    // pointer-events auto
     @media (max-width: 400px)
         width 80vw
-    hr
-        border 0.5px solid $light_grey
-    .infra-place-title
-        font-size 1.2rem
-        font-weight bolder
-    .infra-place-thumbnail
-        overflow hidden
-    .infra-place-contents
-        .infra-place-contents-blocks
-            overflow hidden
-        .infra-detail
-            padding-top 0.2rem
-            padding-bottom 0.2rem
-            text-align right
-    &.infra-place-mini
-        height 100px
+    .infra-place-section-1
+        display flex
         .infra-place-thumbnail
+            flex-grow 100px
+            overflow hidden
             display inline-block
-            height 100%
-            width 45%
+            width auto
+            &.thumbnail-wrapper
+                background-color $light_grey
+                &.thumbnail-border-radius
+                    // border 0.5px solid $light_grey
+                    border-radius 0.5rem
+                .thumbnail
+                    overflow hidden
+                    display flex
+                    align-items center 
+                    justify-content center
+                    width 100px
+                    height 100px
+                    img
+                        width auto
+                        height 100%
         .infra-place-contents
-            position absolute
+            flex 1
             display inline-block
-            width 55%
-            right 0
             overflow hidden
             .infra-place-contents-blocks
+                overflow hidden
                 margin-left 0.5rem
                 margin-right 0.5rem
-
-.thumbnail-wrapper
-    background-color $light_grey
-    width 100%
-    &.thumbnail-border-radius
-        border 0.5px solid $light_grey
-        border-radius 0.5rem
-    .thumbnail
-        position relative
-        padding-top 56.25% /** 16:9 */
-        overflow hidden
-        .centered
-            position absolute
-            top 0
-            left 0
-            right 0
-            bottom 0
-            -webkit-transform translate(50%,50%)
-            -ms-transform translate(50%,50%)
-            transform translate(50%,50%)
-            img
-                position absolute
-                top 0
-                left 0
-                max-width 100%
-                height auto
-                -webkit-transform translate(-50%,-50%)
-                -ms-transform translate(-50%,-50%)
-                transform translate(-50%,-50%)
-                -webkit-user-drag none
+            .infra-place-title
+                font-size 1.2rem
+                font-weight bolder
+            .infra-detail
+                padding-top 0.2rem
+                padding-bottom 0.2rem
+                text-align right
+    .infra-place-section-2
+        display flex
 
 .fade-enter-active,
 .fade-leave-active
