@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Gears from '../../components/apps_gear_calculator/index'
+import Gears from '@/components/apps_gear_calculator/index'
 
 export default {
     components:{

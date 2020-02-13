@@ -92,11 +92,11 @@
 </template>
 <script>
 // import library
-import Calc from '../../plugins/calc'
+import Calc from '@/plugins/calc'
 
 
 // import components
-import list_controller from '../../components/interface/input-list'
+import list_controller from '@/components/interface/input-list'
 
 export default {
     components: {
@@ -164,7 +164,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/luminus.styl"
+@import "../../../assets/luminus.styl"
 
 select
     width 100%

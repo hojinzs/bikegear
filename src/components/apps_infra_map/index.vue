@@ -221,6 +221,11 @@ export default {
     methods:{
         onLoad(_map){
             this.map = _map
+
+            navigator.geolocation.getCurrentPosition((_position) => {
+                this.map.setCenter(_position.coords.latitude,_position.coords.longitude)
+            })
+
         },
         onMarkerLoad(){
         },
@@ -335,19 +340,19 @@ export default {
         this.getInfraData()
     },
     watch: {
-        DisplayItems(newItems){
-            if(this.map != null && newItems.length > 0){
-                let Arr_LatLng = new Array,
-                    centerLatLng = new geo.LatLng
+        // DisplayItems(newItems){
+        //     if(this.map != null && newItems.length > 0){
+        //         let Arr_LatLng = new Array,
+        //             centerLatLng = new geo.LatLng
 
-                newItems.forEach((item) => {
-                    Arr_LatLng.push(new geo.LatLng(item.geoPoint.latitude,item.geoPoint.longitude))
-                })
-                centerLatLng = geo.Calc.getCenterLatLng(Arr_LatLng);
+        //         newItems.forEach((item) => {
+        //             Arr_LatLng.push(new geo.LatLng(item.geoPoint.latitude,item.geoPoint.longitude))
+        //         })
+        //         centerLatLng = geo.Calc.getCenterLatLng(Arr_LatLng);
 
-                this.map.setCenter(centerLatLng.Lat,centerLatLng.Lng)
-            }
-        }
+        //         this.map.setCenter(centerLatLng.Lat,centerLatLng.Lng)
+        //     }
+        // }
     }
 }
 </script>

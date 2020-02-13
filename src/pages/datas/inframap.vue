@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import InfraMap from '../../components/apps_infra_map/index.vue'
+import InfraMap from '@/components/apps_infra_map/index.vue'
 
 export default {
     components:{

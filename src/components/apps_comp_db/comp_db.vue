@@ -102,7 +102,7 @@
 <script>
 import axios from 'axios'
 import { vueWindowSizeMixin } from 'vue-window-size';
-import StyleVariable from '../../assets/variable.styl'
+import StyleVariable from '@/assets/variable.styl'
 
 export default {
     mixins: [vueWindowSizeMixin],

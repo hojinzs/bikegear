@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import StyleVariable from '../assets/variable.styl'
+import StyleVariable from '@/assets/variable.styl'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBars,faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -317,33 +317,26 @@ $shadow_color = #595959
                 hr
                     width 60%
                     border: solid 1px $link_color_disabled
-
-</style>
-
-<style scoped>
-
-#Menu.menu_blocked{
-    transition-property: background-color border color;
+/**
+* Animation Styles
+*/
+#Menu.menu_blocked
+    transition-property: background-color border color
     transition-duration: 0.5s;
-}
 
-#Menu.menu_clear{
-    transition-property: background-color border color;
-    transition-duration: 0.5s;
-}
+#Menu.menu_clear
+    transition-property background-color border color
+    transition-duration 0.5s
 
-#Menu.mobile_menu_show{
-    transition-property: background-color border color;
-    transition-duration: 0.5s;
-}
+#Menu.mobile_menu_show
+    transition-property background-color border color
+    transition-duration 0.5s
 
-#Menu.menu_clear.hover{
-    transition-property: background-color border color;
-    transition-duration: 0.5s;
-}
+#Menu.menu_clear.hover
+    transition-property background-color border color
+    transition-duration 0.5s
 
-.second_menu_fade-enter-active, .second_menu_fade-leave-active{
-    transition: height 0.5s
-}
-
+.second_menu_fade-enter-active
+.second_menu_fade-leave-active
+    transition height 0.5s
 </style>

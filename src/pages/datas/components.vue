@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import CompDB from '../../components/apps_comp_db/comp_db.vue'
+import CompDB from '@/components/apps_comp_db/comp_db.vue'
 
 export default {
     components:{

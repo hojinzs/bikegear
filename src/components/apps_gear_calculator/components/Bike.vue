@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Calc from '../../plugins/calc'
+import Calc from '@/plugins/calc'
 
 export default {
     props: [
@@ -47,9 +47,11 @@ export default {
     },
 }
 </script>
-<style lang="stylus" scoped>
 
-@import "../../assets/luminus.styl"
+
+<style lang="stylus" scoped>
+@import '../../../assets/luminus.styl'
+@import '../../../assets/luminus.styl'
 
 input
     text-align center

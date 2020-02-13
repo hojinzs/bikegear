@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SpeedChart from '../../plugins/chart'
+import SpeedChart from '@/plugins/chart'
 
 export default {
     props: [
@@ -122,6 +122,4 @@ export default {
     width: 100%;
     background-color: white;
 }
-
-
 </style>

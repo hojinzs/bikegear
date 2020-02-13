@@ -137,8 +137,14 @@ export default {
 </script>
 
 <style lang="stylus">
-@import "./assets/luminus.styl"
-@import "./assets/variable.styl"
+
+@import 'assets/*'
+
+// @import "./assets/luminus.styl"
+// @import "./assets/variable.styl"
+
+@require 'luminus'
+@require 'variable'
 
 $footer_height = 50px
 $menu_height = ($global_inline_height * 2) + ($global_font_text / 2)
