@@ -53,11 +53,11 @@
             </div>
         </div>
 
-        <div id="MenuBottom">
+        <div id="MenuBottom" style="display:none">
             <div class="lumi-flex-slider-wrapper">
 
-                <!-- <ul class="lumi-flex-slider lumi-flex-slider-aligin-bottom"> -->
-                <transition-group tag="ul" class="lumi-flex-slider lumi-flex-slider-aligin-bottom"
+                <!-- <transition-group tag="ul" class="lumi-flex-slider lumi-flex-slider-aligin-bottom" -->
+                <ul class="lumi-flex-slider lumi-flex-slider-aligin-bottom"
                     name="infra-place-fade"
                     v-bind:css="false"
                     v-on:before-enter="beforeEnter"
@@ -69,7 +69,7 @@
                         v-for="(place,index) in DisplayItems"
                         :key="index">
 
-                            <button class="infra-place lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
+                            <div class="infra-place lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
                                 :class="{
                                     'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
                                 }"
@@ -79,12 +79,8 @@
                                 <div class="infra-place-section-1">
 
                                     <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
-                                        <div class="thumbnail"
-                                            v-bind:style="backgroundImage(place.Image)" >
-                                            <!-- <img :src="place.Image"> -->
-                                        </div>
+                                        <div class="thumbnail" v-bind:style="backgroundImage(place.Image)" ></div>
                                     </div>
-
                                     <div class="infra-place-contents">
                                         <div class="infra-place-title infra-place-contents-blocks">
                                             {{place.name}}
@@ -104,16 +100,63 @@
                                     </button>
                                 </div>
 
-                            </button>
+                            </div>
 
                         </li>
                     <!-- LOOP END -->
 
-                </transition-group>
-                <!-- </ul> -->
+                <!-- </transition-group> -->
+                </ul>
                 
             </div>
         </div>
+        <div id="MenuBottom">
+            <lumiCaroucel
+                :speedStiky="400"
+                :positionStiky="'left'">
+                <lumiCaroucelSlide
+                    v-for="(place,index) in DisplayItems"
+                    :key="index">
+
+                        <div class="infra-place lumi-box lumi-box-block-white lumi-box-border lumi-box-shadow"
+                            :class="{
+                                'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
+                            }"
+                            :ref="'item_'+index"
+                            @click.stop="doItemToggle('item_'+index,place)">
+                            
+                            <div class="infra-place-section-1">
+
+                                <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
+                                    <div class="thumbnail" v-bind:style="backgroundImage(place.Image)" />
+                                </div>
+
+                                <div class="infra-place-contents">
+                                    <div class="infra-place-title infra-place-contents-blocks">
+                                        {{place.name}}
+                                    </div>
+                                    <div class="infra-place-description infra-place-contents-blocks">
+                                        {{place.type}}
+                                    </div>
+                                </div>
+                            
+                            </div>
+
+                            <div class="infra-place-section-2"
+                                v-if="( DisplayItems_toggled == 'item_'+index )">
+                                <button class="lumi-button-liner"
+                                @click.stop="showDetail()">
+                                    정보 보기
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                </lumiCaroucelSlide>
+            </lumiCaroucel>
+        </div>
+
 
         <naver-maps class="maps" style="width: 100%; height: 100%;"
             :width="100"
@@ -149,6 +192,8 @@ import Velocity from'velocity-animate'
 // Sample Data
 import { featured, tags } from './sampledb'
 
+import { lumiCaroucel, lumiCaroucelSlide } from '~/vue-luminus-style/luminus/components'
+
 import geo from './geo_calc'
 
 // import Jimp from 'jimp'
@@ -172,6 +217,8 @@ library.add(fas)
 export default {
     components:{
         'font-awesome-icon' : FontAwesomeIcon,
+        lumiCaroucel,
+        lumiCaroucelSlide
     },
     data(){
         return {
