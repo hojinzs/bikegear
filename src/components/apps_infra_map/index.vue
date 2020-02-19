@@ -192,7 +192,7 @@ import Velocity from'velocity-animate'
 // Sample Data
 import { featured, tags } from './sampledb'
 
-import { lumiCaroucel, lumiCaroucelSlide } from '~/vue-luminus-style/luminus/components'
+import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 
 import geo from './geo_calc'
 
