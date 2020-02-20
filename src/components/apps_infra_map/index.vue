@@ -2,7 +2,7 @@
     <div id="app">
 
         <div id="MenuTop">
-            <div class="lumi-flex-slider-wrapper">
+            <div class="lumi-flex-slider-wrapper scroll-free">
                 <ul class="lumi-flex-slider">
 
                     <!-- Loading -->
@@ -112,7 +112,7 @@
         </div>
         <div id="MenuBottom">
             <lumiCaroucel
-                :speedStiky="400"
+                :speedStiky="300"
                 :positionStiky="'left'">
                 <lumiCaroucelSlide
                     v-for="(place,index) in DisplayItems"
@@ -122,8 +122,8 @@
                             :class="{
                                 'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
                             }"
-                            :ref="'item_'+index"
-                            @click.stop="doItemToggle('item_'+index,place)">
+                            :ref="'item_'+index">
+                            <!-- @click.stop="doItemToggle('item_'+index,place)"> -->
                             
                             <div class="infra-place-section-1">
 
