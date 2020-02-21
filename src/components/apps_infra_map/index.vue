@@ -112,8 +112,10 @@
         </div>
         <div id="MenuBottom">
             <lumiCaroucel
-                :speedStiky="300"
-                :positionStiky="'left'">
+                :speedStiky="500"
+                :positionStiky="'center'"
+                :async="true"
+                @loaded="setCaroucel">
                 <lumiCaroucelSlide
                     v-for="(place,index) in DisplayItems"
                     :key="index">
@@ -222,6 +224,7 @@ export default {
     },
     data(){
         return {
+            slide: null,
             geo,
             featured,
             tags,
@@ -321,6 +324,8 @@ export default {
                     this.infraList_status = 'loaded'
                     this.infraList = res.data.Infras
 
+                    this.slide.setAsyncFinish()
+
                 })
                 .catch((error) => {
                     console.log('AXIOS ERROR => ',error,'preset data');
@@ -355,6 +360,9 @@ export default {
         },
         showDetail(){
             alert("TEST!!")
+        },
+        setCaroucel($slide){
+            this.slide = $slide
         },
         /**
          * Transition methods
