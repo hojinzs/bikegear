@@ -3,7 +3,7 @@
 
         <div id="MenuTop">
             <div class="lumi-flex-slider-wrapper scroll-free">
-                <ul class="lumi-flex-slider">
+                <ul class="lumi-flex-slider" style="padding-left: 1em">
 
                     <!-- Loading -->
                     <li class="lumi-flex-slider-item"
@@ -471,7 +471,7 @@ export default {
     overflow hidden
     // pointer-events auto
     @media (max-width: 400px)
-        width 80vw
+        width 75vw
     .infra-place-section-1
         display flex
         .infra-place-thumbnail
