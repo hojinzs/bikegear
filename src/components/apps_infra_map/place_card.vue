@@ -57,13 +57,14 @@ export default {
 .infra-place
     position relative
     text-align left
-    width 340px
+    width 360px
     // height 100px
     height auto
     overflow hidden
     // pointer-events auto
-    // @media (max-width: 400px)
-    //     width 75vw
+    @media (max-width: 400px)
+        width 70vw
+        min-width 240px
     .infra-place-section-1
         display flex
         .infra-place-thumbnail
