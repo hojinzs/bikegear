@@ -53,63 +53,6 @@
             </div>
         </div>
 
-        <div id="MenuBottom" style="display:none">
-            <div class="lumi-flex-slider-wrapper">
-
-                <!-- <transition-group tag="ul" class="lumi-flex-slider lumi-flex-slider-aligin-bottom" -->
-                <ul class="lumi-flex-slider lumi-flex-slider-aligin-bottom"
-                    name="infra-place-fade"
-                    v-bind:css="false"
-                    v-on:before-enter="beforeEnter"
-                    v-on:enter="enter"
-                    v-on:leave="leave">
-
-                    <!-- LOOP START -->
-                        <li class="lumi-flex-slider-item"
-                        v-for="(place,index) in DisplayItems"
-                        :key="index">
-
-                            <div class="infra-place lumi-button lumi-button-block-white lumi-box-border lumi-button-shadow"
-                                :class="{
-                                    'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
-                                }"
-                                :ref="'item_'+index"
-                                @click.stop="doItemToggle('item_'+index,place)">
-                                
-                                <div class="infra-place-section-1">
-
-                                    <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
-                                        <div class="thumbnail" v-bind:style="backgroundImage(place.Image)" ></div>
-                                    </div>
-                                    <div class="infra-place-contents">
-                                        <div class="infra-place-title infra-place-contents-blocks">
-                                            {{place.name}}
-                                        </div>
-                                        <div class="infra-place-description infra-place-contents-blocks">
-                                            {{place.type}}
-                                        </div>
-                                    </div>
-                                
-                                </div>
-
-                                <div class="infra-place-section-2"
-                                    v-if="( DisplayItems_toggled == 'item_'+index )">
-                                    <button class="lumi-button-liner"
-                                    @click.stop="showDetail()">
-                                        정보 보기
-                                    </button>
-                                </div>
-
-                            </div>
-
-                        </li>
-                    <!-- LOOP END -->
-
-                <!-- </transition-group> -->
-                </ul>
-                
-            </div>
-        </div>
         <div id="MenuBottom">
             <lumiCaroucel
                 :speedStiky="500"
@@ -120,45 +63,22 @@
                     v-for="(place,index) in DisplayItems"
                     :key="index">
 
-                        <div class="infra-place lumi-box lumi-box-block-white lumi-box-border lumi-box-shadow"
-                            :class="{
-                                'infra-place-activate' : ( DisplayItems_toggled == 'item_'+index )
-                            }"
-                            :ref="'item_'+index">
-                            <!-- @click.stop="doItemToggle('item_'+index,place)"> -->
-                            
-                            <div class="infra-place-section-1">
-
-                                <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
-                                    <div class="thumbnail" v-bind:style="backgroundImage(place.Image)" />
-                                </div>
-
-                                <div class="infra-place-contents">
-                                    <div class="infra-place-title infra-place-contents-blocks">
-                                        {{place.name}}
-                                    </div>
-                                    <div class="infra-place-description infra-place-contents-blocks">
-                                        {{place.type}}
-                                    </div>
-                                </div>
-                            
-                            </div>
-
-                            <div class="infra-place-section-2"
-                                v-if="( DisplayItems_toggled == 'item_'+index )">
+                        <PlaceCard
+                            :title="place.name"
+                            :thumbnail_img_url="place.Image"
+                            :extention_toggled="(DisplayItems_toggled == index)">
+                            {{place.type}}
+                            <template v-slot:expention>
                                 <button class="lumi-button-liner"
                                 @click.stop="showDetail()">
                                     정보 보기
                                 </button>
-                            </div>
-
-                        </div>
-
+                            </template>
+                        </PlaceCard>
 
                 </lumiCaroucelSlide>
             </lumiCaroucel>
         </div>
-
 
         <naver-maps class="maps" style="width: 100%; height: 100%;"
             :width="100"
@@ -172,7 +92,7 @@
                         :lat="item.geoPoint.latitude"
                         :lng="item.geoPoint.longitude"
                         @load="onMarkerLoad"
-                        @click="doItemToggle('item_'+index,item)">
+                        @click="doItemToggle(index,item)">
                     </naver-marker>
 
         </naver-maps>
@@ -195,10 +115,15 @@ import Velocity from'velocity-animate'
 import { featured, tags } from './sampledb'
 
 import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
+import PlaceCard from './place_card'
 
 import geo from './geo_calc'
 
-// import Jimp from 'jimp'
+/**
+ * vue-fontawesome
+ * doc: https://www.npmjs.com/package/@fortawesome/vue-fontawesome
+ */
+library.add(fas)
 
 /**
  * vue-naver-maps
@@ -210,17 +135,13 @@ Vue.use(naver,{
     subModules:''
 });
 
-/**
- * vue-fontawesome
- * doc: https://www.npmjs.com/package/@fortawesome/vue-fontawesome
- */
-library.add(fas)
 
 export default {
     components:{
         'font-awesome-icon' : FontAwesomeIcon,
         lumiCaroucel,
-        lumiCaroucelSlide
+        lumiCaroucelSlide,
+        PlaceCard,
     },
     data(){
         return {
@@ -302,15 +223,12 @@ export default {
             this.DisplayItems_toggled = null
             this.filter.tags.push(_filter)
         },
-        doItemToggle(_ref,_place){
-
+        doItemToggle(_ref){
             if(this.DisplayItems_toggled == _ref){
                 this.DisplayItems_toggled = null
             } else {
                 this.DisplayItems_toggled = _ref
             }
-
-            this.map.setCenter(_place.geoPoint.latitude,_place.geoPoint.longitude)
         },
         getInfraData(){
 
@@ -395,6 +313,19 @@ export default {
         this.getInfraData()
     },
     watch: {
+        DisplayItems_toggled(toggledItemNumber){
+
+            if(toggledItemNumber != null){
+                this.slide.doItemFocus(toggledItemNumber)
+
+                let target = this.DisplayItems[toggledItemNumber],
+                    lat = target.geoPoint.latitude,
+                    lng = target.geoPoint.longitude
+
+                // this.map.setCenter(lat,lng)
+                this.map.panTo({lat,lng})
+            }
+        }
         // DisplayItems(newItems){
         //     if(this.map != null && newItems.length > 0){
         //         let Arr_LatLng = new Array,
@@ -426,7 +357,7 @@ export default {
         top 3rem
         z-index 200
     #MenuBottom
-        max-width 100%
+        width 100%
         bottom 0
         position absolute
         z-index 200
@@ -461,59 +392,6 @@ export default {
     img.loading
         width 0.8rem
         height auto
-
-.infra-place
-    position relative
-    text-align left
-    width 340px
-    // height 100px
-    height auto
-    overflow hidden
-    // pointer-events auto
-    @media (max-width: 400px)
-        width 75vw
-    .infra-place-section-1
-        display flex
-        .infra-place-thumbnail
-            flex-grow 100px
-            overflow hidden
-            display inline-block
-            width auto
-            &.thumbnail-wrapper
-                background-color $light_grey
-                &.thumbnail-border-radius
-                    // border 0.5px solid $light_grey
-                    border-radius 0.5rem
-                .thumbnail
-                    overflow hidden
-                    display flex
-                    align-items center 
-                    justify-content center
-                    width 100px
-                    height 100px
-                    img
-                        width auto
-                        height 100%
-        .infra-place-contents
-            flex 1
-            display inline-block
-            overflow hidden
-            .infra-place-contents-blocks
-                overflow hidden
-                margin-left 0.5rem
-                margin-right 0.5rem
-            .infra-place-title
-                font-size 1.2rem
-                font-weight bolder
-            .infra-detail
-                padding-top 0.2rem
-                padding-bottom 0.2rem
-                text-align right
-    .infra-place-section-2
-        display flex
-        margin-top 1rem
-        button 
-            margin-left auto
 
 .fade-enter-active,
 .fade-leave-active
