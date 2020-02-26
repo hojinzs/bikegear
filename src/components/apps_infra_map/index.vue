@@ -53,6 +53,9 @@
             </div>
         </div>
 
+        <div id="MenuLeft">
+        </div>
+
         <div id="MenuBottom">
             <lumiCaroucel
                 :speedStiky="500"
@@ -72,7 +75,7 @@
                             {{place.type}}
                             <template v-slot:expention>
                                 <button class="lumi-button-liner"
-                                @click.stop="showDetail()">
+                                @click.stop="showDetail(index)">
                                     정보 보기
                                 </button>
                             </template>
@@ -99,6 +102,7 @@
 
         </naver-maps>
 
+        <slot></slot>
     </div>
 </template>
 
@@ -291,7 +295,10 @@ export default {
         /**
          * 아이템 정보 보기 클릭시 액션
          */
-        showDetail(){ alert("TEST!!") },
+        showDetail(_id){
+            // this.$router.push("/data/infra-map"+"/place/"+_id)
+            this.$router.push({ name: 'place', params: { id: _id } } )
+        },
     },
     mounted(){
         this.getInfraData()
@@ -316,16 +323,25 @@ export default {
     height 100%
     width 100%
     overflow hidden
-    #MenuTop
-        max-width 100%
+    #MenuLeft
         position absolute
+        top 3rem
+        left 0
+        z-index 200
+    #MenuTop
+        position absolute
+        max-width 100%
         top 3rem
         z-index 200
     #MenuBottom
+        position absolute
         width 100%
         bottom 0
-        position absolute
         z-index 200
+    #place_info
+        position absolute
+        top 4rem
+        left 50%
 
 .activate
     border none

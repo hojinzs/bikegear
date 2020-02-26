@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import TopMenuBar from './components/menu'
-import Footer from './components/footer'
+import TopMenuBar from '@/components/menu'
+import Footer from '@/components/footer'
 
 let ShotLinks = [
     {

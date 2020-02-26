@@ -1,5 +1,9 @@
 <template>
-    <InfraMap></InfraMap>
+    <InfraMap>
+        <transition>
+            <router-view></router-view>
+        </transition>
+    </InfraMap>
 </template>
 
 <script>

@@ -4,6 +4,7 @@ import apps from './pages/apps/index'
 import gear_calculator from './pages/apps/gears'
 import component_database from './pages/datas/components'
 import infra_map from './pages/datas/inframap'
+import place_info from './pages/datas/place'
 
 const routes = [
     {
@@ -23,6 +24,13 @@ const routes = [
         path: '/data/infra-map',
         name: 'Bike Infra Map',
         component: infra_map,
+        children: [
+            {
+                path: 'place/:id',
+                name: 'place',
+                component: place_info,
+            }
+        ]
     },
     {
         path: '/app',
