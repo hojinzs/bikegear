@@ -58,7 +58,8 @@
                 :speedStiky="500"
                 :positionStiky="'center'"
                 :async="true"
-                @loaded="setCaroucel">
+                @loaded="setCaroucel"
+                @focused="getFocused">
                 <lumiCaroucelSlide
                     v-for="(place,index) in DisplayItems"
                     :key="index">
@@ -91,8 +92,7 @@
                         :key="index"
                         :lat="item.geoPoint.latitude"
                         :lng="item.geoPoint.longitude"
-                        @load="onMarkerLoad"
-                        @click="doItemToggle(index,item)">
+                        @click="changeFocus(index)">
                     </naver-marker>
 
         </naver-maps>
@@ -109,7 +109,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import axios from 'axios'
-import Velocity from'velocity-animate'
+// import Velocity from'velocity-animate'
 
 // Sample Data
 import { featured, tags } from './sampledb'
@@ -151,7 +151,7 @@ export default {
             tags,
             infraList: [],
             infraList_status : 'loading',
-            DisplayItems_toggled : null,
+            DisplayItems_toggled : 0,
             filter: {
                 tags: []
             },
@@ -198,36 +198,32 @@ export default {
             })
 
         },
-        onMarkerLoad(){
+        setCaroucel($slide){
+            this.slide = $slide
         },
-        backgroundImage(_URL){
-            return {
-                backgroundImage: 'url('+_URL+')',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center center'
-            }
+        getFocused(_focusNumber){
+            this.changeFocus(_focusNumber)
+        },
+        changeFocus(_focusNumber){
+            console.log("Change Focus => ", _focusNumber)
+            this.DisplayItems_toggled = _focusNumber
         },
         toggleFilter(_filter){
 
             let i = this.filter.tags.indexOf(_filter)
 
-            if(i != -1){
+            if(i !== -1){
                 this.filter.tags.splice(i,1)
             } else {
                 this.filter.tags.push(_filter)
             }
-
-            this.DisplayItems_toggled = null
+            this.changeFocus(0)
         },
-        addFilter(_filter){
-            this.DisplayItems_toggled = null
-            this.filter.tags.push(_filter)
-        },
-        doItemToggle(_ref){
-            if(this.DisplayItems_toggled == _ref){
-                this.DisplayItems_toggled = null
+        doItemToggle(_index){
+            if(this.DisplayItems_toggled === _index){
+                this.DisplayItems_toggled = 0
             } else {
-                this.DisplayItems_toggled = _ref
+                this.DisplayItems_toggled = _index
             }
         },
         getInfraData(){
@@ -259,86 +255,42 @@ export default {
             keys.forEach(key => {
                 _tagArray.forEach(searchTag => {
                     _item.Tags[key].forEach(targetTag => {
-                        if(targetTag == searchTag) ++tagFind
+                        if(targetTag === searchTag) ++tagFind
                     })
                 })
             });
-
             return tagFind > 0
         },
         countInfrasByTag(_itemArray,_tagName){
-
             let tagArray = [_tagName],
                 newInfras = _itemArray.filter((item) => this.findTagsOnInfra(item,tagArray) > 0)
-
             return newInfras
         },
-        doShowPreview(_place){
-            this.map.setCenter(_place.geoPoint.latitude,_place.geoPoint.longitude)
+        doSlideToggle(_SlideNumber){
+            if(this.slide.slideFocused !== _SlideNumber) {
+                console.log("Slider Controll => ", _SlideNumber)
+                this.slide.doItemFocus(_SlideNumber)
+            }
         },
-        showDetail(){
-            alert("TEST!!")
+        doPanToPlace(_DisplayItemNumber){
+            let target = this.DisplayItems[_DisplayItemNumber],
+                lat = target.geoPoint.latitude,
+                lng = target.geoPoint.longitude
+            this.map.panTo({lat,lng})
         },
-        setCaroucel($slide){
-            this.slide = $slide
-        },
-        /**
-         * Transition methods
-         */
-        beforeEnter(el) {
-            el.style.opacity = 0
-        },
-        enter(el, done) {
-            let delay = el.dataset.index * 150
-            setTimeout(function () {
-                Velocity(
-                    el,
-                    { opacity: 1 },
-                    { complete: done }
-                )
-            }, delay)
-        },
-        leave(el, done) {
-            let delay = el.dataset.index * 150
-            setTimeout(function () {
-                Velocity(
-                    el,
-                    { opacity: 0},
-                    { complete: done }
-                )
-            }, delay)
-        }
+        showDetail(){ alert("TEST!!") },
     },
     mounted(){
         this.getInfraData()
     },
     watch: {
-        DisplayItems_toggled(toggledItemNumber){
-
-            if(toggledItemNumber != null){
-                this.slide.doItemFocus(toggledItemNumber)
-
-                let target = this.DisplayItems[toggledItemNumber],
-                    lat = target.geoPoint.latitude,
-                    lng = target.geoPoint.longitude
-
-                // this.map.setCenter(lat,lng)
-                this.map.panTo({lat,lng})
+        DisplayItems_toggled(_toggledItemNumber){
+            if(_toggledItemNumber !== null ){
+                console.log("Toggle Controll => ", _toggledItemNumber)
+                this.doPanToPlace(_toggledItemNumber)
+                this.doSlideToggle(_toggledItemNumber)
             }
         }
-        // DisplayItems(newItems){
-        //     if(this.map != null && newItems.length > 0){
-        //         let Arr_LatLng = new Array,
-        //             centerLatLng = new geo.LatLng
-
-        //         newItems.forEach((item) => {
-        //             Arr_LatLng.push(new geo.LatLng(item.geoPoint.latitude,item.geoPoint.longitude))
-        //         })
-        //         centerLatLng = geo.Calc.getCenterLatLng(Arr_LatLng);
-
-        //         this.map.setCenter(centerLatLng.Lat,centerLatLng.Lng)
-        //     }
-        // }
     }
 }
 </script>
@@ -361,6 +313,9 @@ export default {
         bottom 0
         position absolute
         z-index 200
+
+.activate
+    border none
 
 .infra-indicator
     color $light_black
