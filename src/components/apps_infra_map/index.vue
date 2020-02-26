@@ -60,6 +60,7 @@
                 :async="true"
                 @loaded="setCaroucel"
                 @focused="getFocused">
+                
                 <lumiCaroucelSlide
                     v-for="(place,index) in DisplayItems"
                     :key="index">
@@ -78,6 +79,7 @@
                         </PlaceCard>
 
                 </lumiCaroucelSlide>
+
             </lumiCaroucel>
         </div>
 
@@ -92,7 +94,7 @@
                         :key="index"
                         :lat="item.geoPoint.latitude"
                         :lng="item.geoPoint.longitude"
-                        @click="changeFocus(index)">
+                        @click="getFocused(index)">
                     </naver-marker>
 
         </naver-maps>
@@ -145,9 +147,10 @@ export default {
     },
     data(){
         return {
-            slide: null,
+            // 샘플 데이터
             geo,
             featured,
+            // 샘플 데이터 edn
             tags,
             infraList: [],
             infraList_status : 'loading',
@@ -155,15 +158,21 @@ export default {
             filter: {
                 tags: []
             },
+            // 슬라이더 오브젝트
+            slide: null,
+            // 지도 오브젝트
+            map: null,
             mapOptions: {
                 lat: 37.4876,
                 lng: 127.1246,
                 zoom: 11,
             },
-            map: null
         }
     },
     computed: {
+        /**
+         * 상단에 띄울 태그 목록을 제어하는 Getter
+         */
         FeaturedItems(){
             let featured = []
 
@@ -181,6 +190,9 @@ export default {
 
             return featured
         },
+        /**
+         * 마커 목록을 보여주는 Getter
+         */
         DisplayItems(){
             if(this.filter.tags.length != 0){
                 let items = this.infraList.filter((item) => this.findTagsOnInfra(item,this.filter.tags));
@@ -190,6 +202,9 @@ export default {
         },
     },
     methods:{
+        /**
+         * 페이지 로드시 세팅
+         */
         onLoad(_map){
             this.map = _map
 
@@ -202,29 +217,7 @@ export default {
             this.slide = $slide
         },
         getFocused(_focusNumber){
-            this.changeFocus(_focusNumber)
-        },
-        changeFocus(_focusNumber){
-            console.log("Change Focus => ", _focusNumber)
             this.DisplayItems_toggled = _focusNumber
-        },
-        toggleFilter(_filter){
-
-            let i = this.filter.tags.indexOf(_filter)
-
-            if(i !== -1){
-                this.filter.tags.splice(i,1)
-            } else {
-                this.filter.tags.push(_filter)
-            }
-            this.changeFocus(0)
-        },
-        doItemToggle(_index){
-            if(this.DisplayItems_toggled === _index){
-                this.DisplayItems_toggled = 0
-            } else {
-                this.DisplayItems_toggled = _index
-            }
         },
         getInfraData(){
 
@@ -248,6 +241,21 @@ export default {
 
             this.infraList_status = 'loading'
         },
+        /**
+         * 필터 컨트롤을 위한 메소드
+         */
+        toggleFilter(_filter){
+
+            let i = this.filter.tags.indexOf(_filter)
+
+            if(i !== -1){
+                this.filter.tags.splice(i,1)
+            } else {
+                this.filter.tags.push(_filter)
+            }
+
+            this.getFocused(0)
+        },
         findTagsOnInfra(_item,_tagArray = []){
             let keys = Object.keys(_item.Tags)
             let tagFind = 0
@@ -266,18 +274,23 @@ export default {
                 newInfras = _itemArray.filter((item) => this.findTagsOnInfra(item,tagArray) > 0)
             return newInfras
         },
+        /**
+         * 아이템 토글 제어
+         */
         doSlideToggle(_SlideNumber){
-            if(this.slide.slideFocused !== _SlideNumber) {
-                console.log("Slider Controll => ", _SlideNumber)
-                this.slide.doItemFocus(_SlideNumber)
-            }
+            console.log("Slider Controll => ", _SlideNumber, this.slide.slideFocused !== _SlideNumber)
+            if(this.slide.slideFocused !== _SlideNumber) this.slide.doItemFocus(_SlideNumber)
         },
         doPanToPlace(_DisplayItemNumber){
             let target = this.DisplayItems[_DisplayItemNumber],
                 lat = target.geoPoint.latitude,
                 lng = target.geoPoint.longitude
+
             this.map.panTo({lat,lng})
         },
+        /**
+         * 아이템 정보 보기 클릭시 액션
+         */
         showDetail(){ alert("TEST!!") },
     },
     mounted(){
