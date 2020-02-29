@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import PopUp from '@/components/interface/lumi-popup'
+import PopUp from '@/components/interface/lumi-popup.vue'
 
 export default {
     name: 'place_info',

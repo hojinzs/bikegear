@@ -2,6 +2,8 @@
     <div class="container">
         <div class="container_wrapper">
             <h2>Apps</h2>
+
+            <router-view></router-view>
         </div>
     </div>
 </template>

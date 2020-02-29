@@ -1,8 +1,6 @@
 <template>
     <InfraMap>
-        <transition>
-            <router-view></router-view>
-        </transition>
+        <router-view></router-view>
     </InfraMap>
 </template>
 
