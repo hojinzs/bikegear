@@ -66,7 +66,8 @@
                 
                 <lumiCaroucelSlide
                     v-for="(place,index) in DisplayItems"
-                    :key="index">
+                    :key="index"
+                    @onClick="getFocused(index)">
 
                         <PlaceCard
                             :title="place.name"
