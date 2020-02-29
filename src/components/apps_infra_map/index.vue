@@ -58,7 +58,7 @@
 
         <div id="MenuBottom">
             <lumiCaroucel
-                :speedStiky="500"
+                :speedStiky="700"
                 :positionStiky="'center'"
                 :async="true"
                 @loaded="setCaroucel"

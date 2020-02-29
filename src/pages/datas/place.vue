@@ -1,21 +1,27 @@
 <template>
-    <PopUp
+    <lumiPopupPannel
+        :display.sync="show"
         :returnTo="CloseUrl()">
         Place Id is => {{ $route.params.id }}
-    </PopUp>
+    </lumiPopupPannel>
 </template>
 
 <script>
-import PopUp from '@/components/interface/lumi-popup.vue'
+import { lumiPopupPannel } from 'vue-luminus-style'
 
 export default {
     name: 'place_info',
     components:{
-        PopUp
+        lumiPopupPannel
+    },
+    data(){
+        return {
+            show: true
+        }
     },
     methods: {
         CloseUrl(){
-            return { name: 'Bike Infra Map'}
+            return { name: 'Bike Infra Map' }
         }
     },
 
