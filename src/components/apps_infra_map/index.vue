@@ -222,6 +222,7 @@ export default {
             this.slide = $slide
         },
         getFocused(_focusNumber){
+            this.doPanToPlace(_focusNumber)
             this.DisplayItems_toggled = _focusNumber
         },
         getInfraData(){
@@ -259,6 +260,7 @@ export default {
                 this.filter.tags.push(_filter)
             }
 
+            this.doPanToPlace(0)
             this.getFocused(0)
         },
         findTagsOnInfra(_item,_tagArray = []){
@@ -287,11 +289,13 @@ export default {
             if(this.slide.slideFocused !== _SlideNumber) this.slide.doItemFocus(_SlideNumber)
         },
         doPanToPlace(_DisplayItemNumber){
-            let target = this.DisplayItems[_DisplayItemNumber],
-                lat = target.geoPoint.latitude,
-                lng = target.geoPoint.longitude
+            if(this.DisplayItems[_DisplayItemNumber] != undefined){
+                let target = this.DisplayItems[_DisplayItemNumber],
+                    lat = target.geoPoint.latitude,
+                    lng = target.geoPoint.longitude
 
-            this.map.panTo({lat,lng})
+                this.map.panTo({lat,lng})
+            }
         },
         /**
          * 아이템 정보 보기 클릭시 액션
