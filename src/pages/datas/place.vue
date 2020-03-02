@@ -11,14 +11,121 @@
 
         <!-- Data Load Fisish -->
         <div v-if="place_data" class="place-data">
-            <div>
+            <div class="place-title">
                 <h2>{{place_data.name}}</h2>
             </div>
             <div class="place-img-wrapper">
                 <img :src="place_data.Image"/>
             </div>
-            <div>
-                <a :href="place_data.Url" target="_blank">바로가기</a>
+            <div class="section">
+                <recommendComment
+                    :comment="recommend_comment_sample.comment"
+                    :author="recommend_comment_sample.author"
+                    :written_at="recommend_comment_sample.written_at">
+                </recommendComment>
+            </div>
+            <div class="lumi-button-group section">
+                <button class="lumi-button lumi-button-black">좋아요 60</button>
+                <button class="lumi-button lumi-button-black">웹사이트</button>
+                <button class="lumi-button lumi-button-black">소유권 주장</button>
+                <button class="lumi-button lumi-button-black">정정신고</button>
+            </div>
+            <div class="section">
+                [ 태그 ] [ 태그 ] [ 태그 ] [ 태그 ]
+            </div>
+            <div class="lumi-tab-wrapper">
+                <div class="lumi-tab lumi-tab-liner">
+                    <span class="lumi-tab-item">추천글</span>
+                    <span class="lumi-tab-item">태그</span>
+                </div>
+                <div class="lumi-tab-contents">
+                    <div class="recommend_comment_section">
+                        <div class="section">
+                            <h3>추천글</h3>
+                            <hr>
+                        </div>
+                        <div>
+                            <div class="section">
+                                <div class="lumi-button-full">
+                                    <button class="lumi-button lumi-button-black">추천글 쓰기</button>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <form class="lumi-box" action="submit" @submit.prevent.stop>
+                                    <label>추천글</label>
+                                    <div class="lumi-text-area-wrapper">
+                                        <textarea class="lumi-input-liner"></textarea>
+                                    </div>
+                                    <div class="lumi-button-full">
+                                        <button type="submit" class="lumi-button lumi-button-black">작성</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="section">
+                                <b>내가 작성한 추천글</b>
+                                <recommendComment
+                                    :comment="recommend_comment_sample.comment"
+                                    :author="recommend_comment_sample.author"
+                                    :written_at="recommend_comment_sample.written_at">
+                                </recommendComment>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <recommendComment
+                                :comment="recommend_comment_sample.comment"
+                                :author="recommend_comment_sample.author"
+                                :written_at="recommend_comment_sample.written_at">
+                            </recommendComment>
+                        </div>
+                        <div class="section">
+                            <recommendComment
+                                :comment="recommend_comment_sample.comment"
+                                :author="recommend_comment_sample.author"
+                                :written_at="recommend_comment_sample.written_at">
+                            </recommendComment>
+                        </div>
+                        <div class="section">
+                            <recommendComment
+                                :comment="recommend_comment_sample.comment"
+                                :author="recommend_comment_sample.author"
+                                :written_at="recommend_comment_sample.written_at">
+                            </recommendComment>
+                        </div>
+                        <div class="section">
+                            <recommendComment
+                                :comment="recommend_comment_sample.comment"
+                                :author="recommend_comment_sample.author"
+                                :written_at="recommend_comment_sample.written_at">
+                            </recommendComment>
+                        </div>
+                        <div class="section">
+                            <recommendComment
+                                :comment="recommend_comment_sample.comment"
+                                :author="recommend_comment_sample.author"
+                                :written_at="recommend_comment_sample.written_at">
+                            </recommendComment>
+                        </div>
+                        <div class="section">
+                            <recommendComment
+                                :comment="recommend_comment_sample.comment"
+                                :author="recommend_comment_sample.author"
+                                :written_at="recommend_comment_sample.written_at">
+                            </recommendComment>
+                        </div>
+                    </div>
+                    <div class="recommend_comment_section">
+                        <div class="section">
+                            <h3>태그</h3>
+                            <hr>
+                        </div>
+                        <div class="section">
+                            <div class="lumi-button-full">
+                                <button class="lumi-button lumi-button-black">태깅하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -27,6 +134,14 @@
 
 <script>
 import { lumiPopupPannel } from 'vue-luminus-style'
+
+import recommendComment from './recommend_comment'
+
+let recommend_comment_sample = {
+    "comment" : "전국에서 찾아올 정도로 피팅으로 유명한 매장입니다.\n피터분이 친절하고 장비가 전문적입니다.",
+    "author" : "Moderator",
+    "written_at" : new Date('2019-11-21 12:11:21')
+}
 
 let place_detail = {
     "name": "마니또바이크",
@@ -59,12 +174,14 @@ let place_detail = {
 export default {
     name: 'place_info',
     components:{
-        lumiPopupPannel
+        lumiPopupPannel,
+        recommendComment
     },
     data(){
         return {
             showPopup: true,
             loading: false,
+            recommend_comment_sample: recommend_comment_sample,
             place_data: null,
             close_url: { name: 'Bike Infra Map' }
         }
@@ -89,10 +206,31 @@ export default {
 .place-data
     width 100%
     overflow-x hidden
+    text-align left
+    .place-title
+        text-align center
     .place-img-wrapper
         height 120px
         background-color grey
+        align-content center
+        text-align center
         img
             margin 0 auto
             height 100%
+    .section
+        padding 1em
+
+.lumi-button-full
+    .lumi-button
+        width 100%
+
+.lumi-text-area-wrapper
+    textarea
+        width 100%
+
+.lumi-box
+&.lumi-box-grey
+    border-radius 5px
+    background-color #d9d9d9
+
 </style>
