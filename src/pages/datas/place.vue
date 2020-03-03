@@ -34,16 +34,12 @@
                 [ 태그 ] [ 태그 ] [ 태그 ] [ 태그 ]
             </div>
             <div class="lumi-tab-wrapper">
-                <div class="lumi-tab lumi-tab-liner">
-                    <span class="lumi-tab-item">추천글</span>
+                <div class="lumi-tab lumi-tab-liner section">
+                    <span class="lumi-tab-item actived">추천글</span>
                     <span class="lumi-tab-item">태그</span>
                 </div>
                 <div class="lumi-tab-contents">
                     <div class="recommend_comment_section">
-                        <div class="section">
-                            <h3>추천글</h3>
-                            <hr>
-                        </div>
                         <div>
                             <div class="section">
                                 <div class="lumi-button-full">
@@ -218,7 +214,7 @@ export default {
             margin 0 auto
             height 100%
     .section
-        padding 1em
+        padding 0.5em 1em 0.5em 1em
 
 .lumi-button-full
     .lumi-button
@@ -228,9 +224,37 @@ export default {
     textarea
         width 100%
 
+.lumi-button-group
+    display flex
+    .lumi-button
+        flex 1 1 auto
+        &:not(:last-child)
+            margin-right 1rem
+
 .lumi-box
 &.lumi-box-grey
     border-radius 5px
     background-color #d9d9d9
+
+.lumi-tab-wrapper
+    line-height 2rem
+    .lumi-tab
+        display flex
+        .lumi-tab-item
+            flex 1 1 none
+            text-align center
+            padding 0 1rem 0 1rem
+            margin 0 0.5rem 0 0.5rem
+            &:first-child
+                margin-left 0
+            &:last-child
+                margin-right 0
+    .lumi-tab-liner
+        .lumi-tab-item
+            border-bottom 2px solid grey
+            &.actived
+                background-color grey
+                font-weight 700
+                color white
 
 </style>
