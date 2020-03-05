@@ -1,56 +1,16 @@
-const featured = ['maintenance','recharge','share-point','monument','supply-point']
+import Tag from '../../plugins/journey66_tag'
 
-const tags = [
-    {
-        'name' : 'maintenance',
-        'label' : '정비',
-        'icon' : 'tools',
-        'color' : '#ffcc66'
-    },
-    {
-        'name' : 'recharge',
-        'label' : '충전소',
-        'icon' : 'charging-station',
-        'color' : '#00cc7a'
-    },
-    {
-        'name' : 'share-point',
-        'label' : '공유',
-        'icon' : 'bicycle',
-        'color' : '#009900'
-    },
-    {
-        'name' : 'supply-point',
-        'label' : '보급',
-        'icon' : 'pizza-slice',
-        'color' : '#ff3300'
-    },
-    {
-        'name' : 'bike-pariking',
-        'label' : '거치',
-        'icon' : 'parking',
-        'color' : '#ff0080',
-    },
-    {
-        'name' : 'drinking',
-        'label' : '음료제공',
-        'icon' : 'glass-whiskey',
-        'color' : '#1a75ff'
-    },
-    {
-        'name' : 'monument',
-        'label' : '명소',
-        'icon' : 'monument',
-        'color' : '#6600ff'
-    },
-]
+const featured = ['maintenance','recharge','share-point','monument','supply-point']
 
 const type = ['shop', 'lockstand', 'sharing', 'convinience','monument', 'goverment']
 const brand = ['trek','bontrager','rapha','cannondale',]
 const merchant = ['cycle','minivelo' ,'mtb', 'e-mtb', 'e-bike', 'smartmobility', 'component', 'food', 'coffee', 'apparel']
 
+const tags = Tag.getDefaultTagList()
+
 const response = [
     {
+        "id" : 1,
         "name": "싸이클웍스(Cycleworks)",
         "type": "shop",
         "description": "싸이클웍스(Cycleworks)",
@@ -63,21 +23,14 @@ const response = [
         "Url": "www.cycleworks.co.kr",
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_348194?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
-            "Utility": [
-                "maintenance"
-            ],
-            "Brand": [
-                "trek"
-            ],
-            "Merchant": [
-                "cycle", "mtb"
-            ],
-            "others": [
-
-            ]
+            "Utility": Tag.getTagDetailFromArray(["maintenance"]),
+            "Brand": Tag.getTagDetailFromArray(["trek"]),
+            "Merchant": Tag.getTagDetailFromArray(["cycle", "mtb"]),
+            "others": []
         }
     },
     {
+        "id" : 2,
         "name": "마니또바이크",
         "type": "shop",
         "description": "마니또바이크",
@@ -90,21 +43,14 @@ const response = [
         "Url": "http://www.manitoubike.co.kr/",
         "Image": "https://modo-phinf.pstatic.net/20151110_11/1447154093942Ut5Vk_JPEG/mosa6YkuQl.jpeg?type=w1100",
         "Tags": {
-            "Utility": [
-                "maintenance"
-            ],
-            "Brand": [
-                "trek"
-            ],
-            "Merchant": [
-                "cycle", "mtb"
-            ],
-            "others": [
-
-            ]
+            "Utility": Tag.getTagDetailFromArray(["maintenance"]),
+            "Brand": Tag.getTagDetailFromArray(["trek"]),
+            "Merchant": Tag.getTagDetailFromArray(["cycle", "mtb"]),
+            "others": []
         }
     },
     {
+        "id" : 3,
         "name": "트렉 바이시클 분당점",
         "type": "shop",
         "description": "트렉 바이시클 분당점",
@@ -115,19 +61,14 @@ const response = [
         "Url": "https://www.trekbikes.com/kr/ko_KR/retail/bundang/",
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_390332?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
-            "Utility": [
-                "maintenance"
-            ],
-            "Brand": [
-                "trek"
-            ],
-            "Merchant": [
-                "cycle", "mtb"
-            ],
+            "Utility": Tag.getTagDetailFromArray(["maintenance"]),
+            "Brand": Tag.getTagDetailFromArray(["trek"]),
+            "Merchant": Tag.getTagDetailFromArray(["cycle", "mtb"]),
             "others": []
         }
     },
     {
+        "id" : 4,
         "name": "매디슨(송파점)",
         "type": "shop",
         "description": "매디슨(송파점)",
@@ -138,19 +79,14 @@ const response = [
         "Url": "https://www.trekbikes.com/kr/ko_KR/store/389636/",
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_389636?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
-            "Utility": [
-                "maintenance"
-            ],
-            "Brand": [
-                "trek"
-            ],
-            "Merchant": [
-                "cycle", "mtb"
-            ],
+            "Utility": Tag.getTagDetailFromArray(["maintenance"]),
+            "Brand": Tag.getTagDetailFromArray(["trek"]),
+            "Merchant": Tag.getTagDetailFromArray(["cycle", "mtb"]),
             "others": []
         }
     },
     {
+        "id" : 5,
         "name": "홍가네슈퍼",
         "type": "convinience",
         "description": "홍가네슈퍼",
@@ -161,18 +97,14 @@ const response = [
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://t1.daumcdn.net/cfile/tistory/2348FA3F57B325052E",
         "Tags": {
-            "Utility": [
-                "supply-point"
-            ],
-            "Brand": [
-            ],
-            "Merchant": [
-                "food", "apparel"
-            ],
+            "Utility": Tag.getTagDetailFromArray(["supply-point"]),
+            "Brand": Tag.getTagDetailFromArray([]),
+            "Merchant": Tag.getTagDetailFromArray(["meal", "apparel"]),
             "others": []
         }
     },
     {
+        "id" : 6,
         "name": "북악 팔각정",
         "type": "monument",
         "description": "북악 팔각정",
@@ -183,19 +115,14 @@ const response = [
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=16151&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {
-            "Utility": [
-                "monument", "supply-point", "maintenance"
-            ],
-            "Brand": [
-                "cannondale"
-            ],
-            "Merchant": [
-                "food", "apparel", "coffee", "component"
-            ],
+            "Utility": Tag.getTagDetailFromArray(["monument", "supply-point", "maintenance"]),
+            "Brand": Tag.getTagDetailFromArray(["cannondale"]),
+            "Merchant": Tag.getTagDetailFromArray(["food", "apparel", "coffee", "component"]),
             "others": []
         }
     },
     {
+        "id" : 7,
         "name": "남산",
         "type": "monument",
         "description": "남산",
@@ -206,15 +133,9 @@ const response = [
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=17972&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {
-            "Utility": [
-                "monument", "supply-point"
-            ],
-            "Brand": [
-                "cannondale"
-            ],
-            "Merchant": [
-                "food", "apparel", "coffee", "component"
-            ],
+            "Utility": Tag.getTagDetailFromArray(["monument", "supply-point"]),
+            "Brand": Tag.getTagDetailFromArray(["cannondale"]),
+            "Merchant": Tag.getTagDetailFromArray(["food", "apparel", "coffee", "component"]),
             "others": []
         },
     }

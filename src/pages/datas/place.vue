@@ -8,7 +8,6 @@
         <div v-if="loading">
             Loading...
         </div>
-
         <!-- Data Load Fisish -->
         <div v-if="place_data" class="place-data">
             <div class="place-title">
@@ -31,7 +30,7 @@
                 <button class="lumi-button lumi-button-black">정정신고</button>
             </div>
             <div class="section">
-                [ 태그 ] [ 태그 ] [ 태그 ] [ 태그 ]
+                <b> Top5 Tags :: </b> [ 태그 ] [ 태그 ] [ 태그 ] [ 태그 ]
             </div>
             <div class="lumi-tab-wrapper">
                 <div class="lumi-tab lumi-tab-liner section">
@@ -39,7 +38,7 @@
                     <span class="lumi-tab-item">태그</span>
                 </div>
                 <div class="lumi-tab-contents">
-                    <div class="recommend_comment_section">
+                    <div class="recommend-comment-section">
                         <div>
                             <div class="section">
                                 <div class="lumi-button-full">
@@ -110,14 +109,26 @@
                             </recommendComment>
                         </div>
                     </div>
-                    <div class="recommend_comment_section">
-                        <div class="section">
-                            <h3>태그</h3>
-                            <hr>
+                </div>
+                <div class="lumi-tab lumi-tab-liner section">
+                    <span class="lumi-tab-item">추천글</span>
+                    <span class="lumi-tab-item actived">태그</span>
+                </div>
+                <div class="lumi-tab-contents">
+                    <div class="tag-info-section">
+                        <div class="new-tag">
+                            <div class="section">
+                                <div class="lumi-button-full">
+                                    <button class="lumi-button lumi-button-black">태깅하기</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="section">
-                            <div class="lumi-button-full">
-                                <button class="lumi-button lumi-button-black">태깅하기</button>
+                        <div class="tag-list">
+                            <div class="section">
+                                <place-tag-card
+                                    :place_id="place_id"
+                                    :tag="td_sample">
+                                </place-tag-card>
                             </div>
                         </div>
                     </div>
@@ -130,8 +141,10 @@
 
 <script>
 import { lumiPopupPannel } from 'vue-luminus-style'
+import { response } from '../../components/apps_infra_map/sampledb'
 
-import recommendComment from './recommend_comment'
+import recommendComment from './place-recommend-comment'
+import placeTagCard from './place-tag-card'
 
 let recommend_comment_sample = {
     "comment" : "전국에서 찾아올 정도로 피팅으로 유명한 매장입니다.\n피터분이 친절하고 장비가 전문적입니다.",
@@ -139,45 +152,31 @@ let recommend_comment_sample = {
     "written_at" : new Date('2019-11-21 12:11:21')
 }
 
-let place_detail = {
-    "name": "마니또바이크",
-    "type": "shop",
-    "description": "마니또바이크",
-    "geoPoint": {
-        "latitude": 37.59279,
-        "longitude": 127.07831
-    },
-    "phone": "024912040",
-    "formattedAddress": "서울 중랑구 중랑천로 10길 98 , (면목동) 1층",
-    "Url": "http://www.manitoubike.co.kr/",
-    "Image": "https://modo-phinf.pstatic.net/20151110_11/1447154093942Ut5Vk_JPEG/mosa6YkuQl.jpeg?type=w1100",
-    "Tags": {
-        "Utility": [
-            "maintenance"
-        ],
-        "Brand": [
-            "trek"
-        ],
-        "Merchant": [
-            "cycle", "mtb"
-        ],
-        "others": [
-
-        ]
-    }
+let tag_data_sample = {
+    'index' : '1',
+    'name' : 'maintenance',
+    'label' : '정비',
+    'icon' : 'tools',
+    'color' : '#ffcc66',
+    'type' : 'Utility',
+    'description' : '자전거 정비가 가능합니다.',
+    'retagging' : '11'
 }
 
 export default {
     name: 'place_info',
     components:{
         lumiPopupPannel,
-        recommendComment
+        recommendComment,
+        'place-tag-card' : placeTagCard,
     },
     data(){
         return {
             showPopup: true,
             loading: false,
             recommend_comment_sample: recommend_comment_sample,
+            td_sample: tag_data_sample,
+            place_id: null,
             place_data: null,
             close_url: { name: 'Bike Infra Map' }
         }
@@ -187,11 +186,13 @@ export default {
             this.loading = true
             setTimeout(() => {
                 this.loading = false
-                this.place_data = place_detail
+                this.place_data = response[this.place_id]
             },800)
         }
     },
     created(){
+        this.place_id = String(this.$route.params.id - 1)
+
         this.getData()
         console.log("VueRouter => ",this.$route.params.id )
     }

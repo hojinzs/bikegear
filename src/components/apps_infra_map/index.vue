@@ -76,7 +76,7 @@
                             {{place.type}}
                             <template v-slot:expention>
                                 <button class="lumi-button-liner"
-                                @click.stop="showDetail(index)">
+                                @click.stop="showDetail(place.id)">
                                     정보 보기
                                 </button>
                             </template>
@@ -115,16 +115,17 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import axios from 'axios'
+// import axios from 'axios'
 // import Velocity from'velocity-animate'
 
 // Sample Data
-import { featured, tags } from './sampledb'
+import { featured, tags, response } from './sampledb'
 
 import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 import PlaceCard from './place_card'
 
 import geo from './geo_calc'
+import Tag from '../../plugins/journey66_tag'
 
 /**
  * vue-fontawesome
@@ -188,7 +189,7 @@ export default {
                     label : this.tags[i].label,
                     icon : this.tags[i].icon,
                     color : this.tags[i].color,
-                    count : this.countInfrasByTag(this.infraList,this.tags[i].name).length
+                    count : Tag.countInfrasByTag(this.infraList,this.tags[i].name).length
                 }
                 featured.push(item)
             });
@@ -200,7 +201,7 @@ export default {
          */
         DisplayItems(){
             if(this.filter.tags.length != 0){
-                let items = this.infraList.filter((item) => this.findTagsOnInfra(item,this.filter.tags));
+                let items = this.infraList.filter((item) => Tag.findTagsOnInfra(item,this.filter.tags));
                 return items
             }
             return this.infraList
@@ -227,23 +228,30 @@ export default {
         },
         getInfraData(){
 
-            axios({
-                method: 'GET',
-                url: process.env.VUE_APP_INFRADB_URL,
-                headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) },
-            })
-                .then((res) => {
-                    // console.log('AXIOS RESPONSE =>',res.data)
-                    this.infraList_status = 'loaded'
-                    this.infraList = res.data.Infras
+            // later
+            // axios({
+            //     method: 'GET',
+            //     url: process.env.VUE_APP_INFRADB_URL,
+            //     headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) },
+            // })
+            //     .then((res) => {
+            //         // console.log('AXIOS RESPONSE =>',res.data)
+            //         this.infraList_status = 'loaded'
+            //         this.infraList = res.data.Infras
 
-                    this.slide.setAsyncFinish()
+            //         this.slide.setAsyncFinish()
 
-                })
-                .catch((error) => {
-                    console.log('AXIOS ERROR => ',error,'preset data');
-                    this.infraList_status = 'error'
-                })
+            //     })
+            //     .catch((error) => {
+            //         console.log('AXIOS ERROR => ',error,'preset data');
+            //         this.infraList_status = 'error'
+            //     })
+
+            setTimeout(() => {
+                this.infraList_status = 'loaded'
+                this.infraList = response
+                this.slide.setAsyncFinish()
+            },400)
 
             this.infraList_status = 'loading'
         },
@@ -262,24 +270,6 @@ export default {
 
             this.doPanToPlace(0)
             this.getFocused(0)
-        },
-        findTagsOnInfra(_item,_tagArray = []){
-            let keys = Object.keys(_item.Tags)
-            let tagFind = 0
-
-            keys.forEach(key => {
-                _tagArray.forEach(searchTag => {
-                    _item.Tags[key].forEach(targetTag => {
-                        if(targetTag === searchTag) ++tagFind
-                    })
-                })
-            });
-            return tagFind > 0
-        },
-        countInfrasByTag(_itemArray,_tagName){
-            let tagArray = [_tagName],
-                newInfras = _itemArray.filter((item) => this.findTagsOnInfra(item,tagArray) > 0)
-            return newInfras
         },
         /**
          * 아이템 토글 제어
