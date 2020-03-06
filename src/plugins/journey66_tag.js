@@ -9,17 +9,22 @@ export default class Tag{
      * @param {Object} _item 태그를 탐색할 인프라(Infra) Object
      * @param {Array} _tagArray (Nullable) 찾을 태그 name (기본: 내장 태그 전체)
      */
-    static getTagsOnInfra(_item,_tagArray = null){
+    static getTagsOnInfra(_item,_returnObject = false,_tagArray = []){
         let keys = Object.keys(_item.Tags)
         let tags = []
 
-        if(_tagArray == null) defalut_tags.forEach(i => _tagArray.push(i.name))
+        if(_tagArray.length == 0) defalut_tags.forEach(i => _tagArray.push(i.name))
 
         keys.forEach(key => {
-            // console.log(_tagArray)
             _tagArray.forEach(searchTag => {
                 _item.Tags[key].forEach(targetTag => {
-                    if(targetTag.name === searchTag) tags.push(searchTag)
+                    if(targetTag.name === searchTag) {
+                        if(_returnObject){
+                            tags.push(targetTag)
+                        } else {
+                            tags.push(targetTag.name)
+                        }
+                    }
                 })
             })
         });

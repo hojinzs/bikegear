@@ -18,6 +18,7 @@ const response = [
             "latitude": 37.41742,
             "longitude": 127.1252
         },
+        "like": 122,
         "phone": "025730980",
         "formattedAddress": "경기 성남시 중원구 성남대로 997번길 49-4",
         "Url": "www.cycleworks.co.kr",
@@ -38,6 +39,7 @@ const response = [
             "latitude": 37.59279,
             "longitude": 127.07831
         },
+        "like": 122,
         "phone": "024912040",
         "formattedAddress": "서울 중랑구 중랑천로 10길 98 , (면목동) 1층",
         "Url": "http://www.manitoubike.co.kr/",
@@ -58,6 +60,7 @@ const response = [
             "latitude": 37.37081,
             "longitude": 127.1075
         },
+        "like": 122,
         "Url": "https://www.trekbikes.com/kr/ko_KR/retail/bundang/",
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_390332?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
@@ -76,6 +79,7 @@ const response = [
             "latitude": 37.4876,
             "longitude": 127.1246
         },
+        "like": 122,
         "Url": "https://www.trekbikes.com/kr/ko_KR/store/389636/",
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_389636?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
@@ -94,6 +98,7 @@ const response = [
             "latitude": 37.49065,
             "longitude": 127.39235
         },
+        "like": 122,
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://t1.daumcdn.net/cfile/tistory/2348FA3F57B325052E",
         "Tags": {
@@ -112,6 +117,7 @@ const response = [
             "latitude": 37.601575,
             "longitude": 126.980692
         },
+        "like": 122,
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=16151&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {
@@ -130,6 +136,7 @@ const response = [
             "latitude": 37.55086,
             "longitude": 126.99089
         },
+        "like": 122,
         "Url": "https://www.facebook.com/pages/%ED%99%8D%EA%B0%80%EB%84%A4-%EC%8A%88%ED%8D%BC/197049727031560",
         "Image": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=17972&fileTy=MEDIA&fileNo=1&thumbTy=L",
         "Tags": {

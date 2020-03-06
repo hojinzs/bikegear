@@ -6,9 +6,9 @@
             </slot>
             <div class="recommend-comment-info">
                 <div class="like">
-                    <font-awesome-icon :icon="'thumbs-up'" 
+                    <font-awesome-icon :icon="'heart'" 
                         @click="++like" />
-                    {{ this.like }} 명이 공감합니다.
+                    {{this.like}} 명이 공감합니다.
                 </div>
                 <div class="author">
                     by {{author}} - {{ _written_at  }}
