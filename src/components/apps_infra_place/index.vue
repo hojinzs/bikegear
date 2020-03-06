@@ -44,11 +44,13 @@
             </div>
             <div class="lumi-tab-contents">
                 <keep-alive>
-                    <component
-                        :is="tab_component" 
-                        :placeId="place_data.id"
-                        :TagList="TagList">
-                    </component>
+                    <transition name="tab-fade" mode="out-in">
+                        <component
+                            :is="tab_component" 
+                            :placeId="place_data.id"
+                            :TagList="TagList">
+                        </component>
+                    </transition>
                 </keep-alive>
             </div>
         </div>
@@ -185,5 +187,16 @@ export default {
                 background-color grey
                 font-weight 700
                 color white
+
+
+// Transition Style
+
+.tab-fade-enter-active
+,.tab-fade-leave-active
+    transition: opacity .3s ease;
+
+.tab-fade-enter
+,.tab-fade-leave-to
+    opacity 0
 
 </style>
