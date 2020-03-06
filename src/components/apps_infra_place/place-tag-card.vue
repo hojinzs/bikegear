@@ -22,7 +22,6 @@ export default {
     },
     props: {
         place_id: {
-            type: String,
             required: true
         },
         tag: {

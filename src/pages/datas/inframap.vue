@@ -1,7 +1,8 @@
 <template>
-    <InfraMap>
+    <div id="inframap">
+        <InfraMap></InfraMap>
         <router-view></router-view>
-    </InfraMap>
+    </div>
 </template>
 
 <script>
@@ -20,5 +21,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+#inframap
+    height 100%
+    width 100%
 </style>

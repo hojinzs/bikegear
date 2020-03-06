@@ -1,5 +1,5 @@
 <template>
-    <div class="infra-place lumi-box lumi-box-block-white lumi-box-border lumi-box-shadow">
+    <div class="infra-place lumi-box lumi-box-block-white lumi-box-shadow">
                             
         <div class="infra-place-section-1">
             <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">

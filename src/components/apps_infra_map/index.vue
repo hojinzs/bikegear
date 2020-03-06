@@ -102,8 +102,6 @@
                     </naver-marker>
 
         </naver-maps>
-
-        <slot></slot>
     </div>
 </template>
 

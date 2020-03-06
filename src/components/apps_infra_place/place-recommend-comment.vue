@@ -4,12 +4,23 @@
             <slot>
                 <span v-html="_comment"></span>
             </slot>
-            <div class="author">by {{author}} - {{ _written_at  }}</div>
+            <div class="recommend-comment-info">
+                <div class="like">
+                    <font-awesome-icon :icon="'thumbs-up'" 
+                        @click="++like" />
+                    {{ this.like }} 명이 공감합니다.
+                </div>
+                <div class="author">
+                    by {{author}} - {{ _written_at  }}
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 import moment from 'moment'
 import xss from 'xss'
 import hoxy from '@/plugins/hoxy'
@@ -18,6 +29,14 @@ moment.locale('ko')
 
 export default {
     name: "recommend_comment",
+    data(){
+        return {
+            like: 0
+        }
+    },
+    components:{
+        'font-awesome-icon' : FontAwesomeIcon,
+    },
     props: {
         comment: {
             type: String,
@@ -51,6 +70,14 @@ export default {
 
 .recommend-comment
     text-align left
-    .author
-        text-align right
+    .recommend-comment-info
+        user-select none
+        display flex
+        flex-direction row
+        .like
+            flex 1 1 auto
+        .author
+            flex 1 1 auto
+            text-align right
+
 </style>
