@@ -46,7 +46,6 @@ export default {
             required: true
         },
         written_at: {
-            type: Date,
             required: true
         }
     },

@@ -179,7 +179,7 @@ export default {
 
 .lumi-button-group
     display flex
-    .lumi-button
+    button
         flex 1 1 auto
         &:not(:last-child)
             margin-right 0.5rem
