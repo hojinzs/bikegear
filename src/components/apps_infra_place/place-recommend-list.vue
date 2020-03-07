@@ -92,7 +92,7 @@ export default {
             },
             post_comment: {
                 status: 'hidden', // [hidden, posting, posted]
-                text: 'defalut text abcdef',
+                text: '',
                 ajax_status: 'ready', // [ready, posting, success, fail]
                 ajax_fail_message: null,
                 user_posted: undefined
@@ -131,7 +131,8 @@ export default {
                     console.log(res)
                     this.post_comment.status = 'posted'
                     this.post_comment.ajax_status = 'success'
-                    this.post_comment.user_posted = res
+                    this.post_comment.user_posted = res,
+                    this.post_comment.text = ''
                 } else {
                     this.post_comment.ajax_status = 'fail'
                     this.post_comment.ajax_fail_message = '제대로 등록되지 않았습니다.'

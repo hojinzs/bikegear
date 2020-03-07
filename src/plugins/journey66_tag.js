@@ -40,7 +40,7 @@ export default class Tag{
     static findTagsOnInfra(_item,_tagNameArray = []){
         let tagFind = 0
         _tagNameArray.forEach(name => {
-            let find = this.getTagsOnInfra(_item,[name])
+            let find = this.getTagsOnInfra(_item,false,[name])
             if(find.length > 0) ++tagFind
         })
         return tagFind > 0

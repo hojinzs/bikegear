@@ -57,9 +57,16 @@ export default {
 
 .form
     text-align left
+    border none
 
 .lumi-container
     max-width $container_width
     margin 0 auto
 
+</style>
+
+<style lang="stylus">
+    fieldset
+        margin 0
+        border none
 </style>

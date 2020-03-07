@@ -149,6 +149,8 @@ export default {
 $footer_height = 50px
 $menu_height = ($global_inline_height * 2) + ($global_font_text / 2)
 
+html, body
+    font-size 14px
 
 #app
     font-family: 'Avenir', Helvetica, Arial, sans-serif

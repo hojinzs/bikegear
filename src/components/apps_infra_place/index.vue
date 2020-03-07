@@ -70,12 +70,12 @@ import recommendComment from './place-recommend-comment'
 import tagMini from './place-tag-mini'
 
 // tab component
-import lumiTab from './lumi-tab'
+import lumiTab from '@/components/interface/lumi-tab'
 import PlaceRecommendList from './place-recommend-list'
 import PlaceTagList from './place-tag-list'
 
 import Tag from '@/plugins/journey66_tag'
-import { recommend_comment, tags } from '../../plugins/sampledb'
+import { recommend_comment, tags } from '@/plugins/sampledb'
 
 export default {
     name: 'infra-place',

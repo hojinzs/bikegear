@@ -254,15 +254,16 @@ export default {
         },
         /**
          * 필터 컨트롤을 위한 메소드
+         * @param {Array} _tagName filter에 넣거나 뺄 태그 name
          */
-        toggleFilter(_filter){
+        toggleFilter(_tagName){
 
-            let i = this.filter.tags.indexOf(_filter)
+            let i = this.filter.tags.indexOf(_tagName)
 
             if(i !== -1){
                 this.filter.tags.splice(i,1)
             } else {
-                this.filter.tags.push(_filter)
+                this.filter.tags.push(_tagName)
             }
 
             this.doPanToPlace(0)
@@ -270,9 +271,9 @@ export default {
         },
         /**
          * 아이템 토글 제어
+         * * @param {Number} _SlideNumber 포커스할 슬라이드 번호
          */
         doSlideToggle(_SlideNumber){
-            console.log("Slider Controll => ", _SlideNumber, this.slide.slideFocused !== _SlideNumber)
             if(this.slide.slideFocused !== _SlideNumber) this.slide.doItemFocus(_SlideNumber)
         },
         doPanToPlace(_DisplayItemNumber){
@@ -288,7 +289,6 @@ export default {
          * 아이템 정보 보기 클릭시 액션
          */
         showDetail(_id){
-            // this.$router.push("/data/infra-map"+"/place/"+_id)
             this.$router.push({ name: 'place', params: { id: _id } } )
         },
     },
@@ -298,7 +298,6 @@ export default {
     watch: {
         DisplayItems_toggled(_toggledItemNumber){
             if(_toggledItemNumber !== null ){
-                console.log("Toggle Controll => ", _toggledItemNumber)
                 this.doPanToPlace(_toggledItemNumber)
                 this.doSlideToggle(_toggledItemNumber)
             }
