@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="recommend-comment-wrapper">
         <div class="recommend-comment">
             <slot>
                 <span v-html="_comment"></span>
@@ -63,10 +63,12 @@ export default {
 
 <style lang="stylus" scoped>
 
-.wrapper
-    padding 1em 2em 1em 2em
+.recommend-comment-wrapper
+    padding 1rem 2rem 1rem 2rem
     border-radius 5px
     background-color #d9d9d9
+    font-size 1rem
+    line-height 1.6rem
 
 .recommend-comment
     text-align left

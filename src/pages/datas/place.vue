@@ -18,10 +18,10 @@
 
 <script>
 import { lumiPopupPannel } from 'vue-luminus-style'
-import InfraPlace from '../../components/apps_infra_place/index'
+import InfraPlace from '@/components/apps_infra_place/index'
 
 
-import { response } from '../../components/apps_infra_map/sampledb'
+import { response } from '@/plugins/sampledb'
 
 export default {
     name: 'place_info',

@@ -1,11 +1,11 @@
 <template>
     <div class="lumi-box lumi-box-grey">
         <div class="tag">
-            <div class="tag-description">
-                <div>
-                    <font-awesome-icon :icon="tag.icon" /> <b>{{ tag.label }}</b>
+            <div class="tag-info">
+                <div class="tag-mini-list">
+                    <placeTagMini :tagObject="tag" />
                 </div>
-                <div>
+                <div class="tag-description">
                     {{ tag.description }}
                 </div>
             </div>
@@ -22,12 +22,12 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import placeTagMini from './place-tag-mini'
 
 export default {
     name: 'place-tag-card',
     components:{
-        'font-awesome-icon' : FontAwesomeIcon,
+        placeTagMini,
     },
     props: {
         place_id: {
@@ -54,8 +54,12 @@ export default {
 
 .tag
     display flex
-    .tag-description
+    .tag-info
         flex none
+        .tag-mini-list
+            line-height 2rem
+        .tag-description
+            margin-top 10px
     .tag-retaging
         user-select none
         // flex 1 1 30px

@@ -114,10 +114,9 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // import axios from 'axios'
-// import Velocity from'velocity-animate'
 
 // Sample Data
-import { featured, tags, response } from './sampledb'
+import { featured, tags, response } from '../../plugins/sampledb'
 
 import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 import PlaceCard from './place_card'

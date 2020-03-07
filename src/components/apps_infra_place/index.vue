@@ -3,55 +3,61 @@
         <div class="place-title">
             <h2>{{place_data.name}}</h2>
         </div>
-        <div class="place-img-wrapper">
-            <img :src="place_data.Image"/>
+        <div class="place-contents">
+            <div class="place-contents-block">
+                <div class="place-img-wrapper">
+                    <img :src="place_data.Image"/>
+                </div>
+            </div>
+            <div class="place-contents-block">
+                <div class="section">
+                    <recommendComment
+                        :comment="recommend_comment_sample.comment"
+                        :author="recommend_comment_sample.author"
+                        :written_at="recommend_comment_sample.written_at">
+                    </recommendComment>
+                </div>
+                <div class="section">
+                    <div>
+                        <b>Top5 Tags</b>
+                        <div class="tag-mini-list">
+                            <tagMini class="tag-item"
+                                v-for="(tag,index) in TagList"
+                                :key="index"
+                                :tagObject="tag"
+                                :label="'태그라벨 어쩌고 저쩌고'">
+                            </tagMini>
+                        </div>
+                    </div>
+                </div>
+                <div class="lumi-button-group section">
+                    <button class="lumi-button lumi-button-black">
+                        <font-awesome-icon :icon="'thumbs-up'" /> {{' '}} 좋아요 {{place_data.like}}
+                    </button>
+                    <button class="lumi-button lumi-button-black" @click="showHomepage(place_data.Url)">
+                        웹사이트
+                    </button>
+                    <router-link tag="button" class="lumi-button-liner"
+                        :to="{ name: 'iamowner', query: { placeId: place_data.id }}">소유자 등록</router-link>
+                    <button class="lumi-button-liner">정정신고</button>
+                </div>
+            </div>
         </div>
         <div class="section">
-            <recommendComment
-                :comment="recommend_comment_sample.comment"
-                :author="recommend_comment_sample.author"
-                :written_at="recommend_comment_sample.written_at">
-            </recommendComment>
-        </div>
-        <div class="lumi-button-group section">
-            <button class="lumi-button lumi-button-black">
-                <font-awesome-icon :icon="'thumbs-up'" /> {{' '}} 좋아요 {{place_data.like}}
-            </button>
-            <button class="lumi-button lumi-button-black" @click="showHomepage(place_data.Url)">
-                웹사이트
-            </button>
-            <button class="lumi-button lumi-button-black">소유권 주장</button>
-            <button class="lumi-button lumi-button-black">정정신고</button>
-        </div>
-        <div class="section">
-            <b> Top5 Tags :: </b>
-            <span class="tag-small"
-                v-for="(tag,index) in TagList"
-                :key="index">
-                {{ tag.label }}
-            </span>
+            <hr class="lumi-devider">
         </div>
         <div class="lumi-tab-wrapper">
-            <div class="lumi-tab lumi-tab-liner section">
-                <span class="lumi-tab-item"
-                    @click="toggleTab('PlaceRecommendList')">
-                    추천글
-                </span>
-                <span class="lumi-tab-item"
-                    @click="toggleTab('PlaceTagList')">
-                    태그
-                </span>
-            </div>
+            <lumiTab :tabs="tabs" @toggle="toggleTab" />
             <div class="lumi-tab-contents">
-                <keep-alive>
-                    <transition name="tab-fade" mode="out-in">
+                <transition name="tab-fade" mode="out-in">
+                    <keep-alive>
                         <component
                             :is="tab_component" 
                             :placeId="place_data.id"
                             :TagList="TagList">
                         </component>
-                    </transition>
-                </keep-alive>
+                    </keep-alive>
+                </transition>
             </div>
         </div>
     </div>
@@ -61,28 +67,15 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import recommendComment from './place-recommend-comment'
+import tagMini from './place-tag-mini'
 
+// tab component
+import lumiTab from './lumi-tab'
 import PlaceRecommendList from './place-recommend-list'
 import PlaceTagList from './place-tag-list'
 
-import Tag from '../../plugins/journey66_tag'
-
-let recommend_comment_sample = {
-    "comment" : "전국에서 찾아올 정도로 피팅으로 유명한 매장입니다.\n피터분이 친절하고 장비가 전문적입니다.",
-    "author" : "Moderator",
-    "written_at" : new Date('2019-11-21 12:11:21')
-}
-
-let tag_data_sample = {
-    'index' : '1',
-    'name' : 'maintenance',
-    'label' : '정비',
-    'icon' : 'tools',
-    'color' : '#ffcc66',
-    'type' : 'Utility',
-    'description' : '자전거 정비가 가능합니다.',
-    'retagging' : '11'
-}
+import Tag from '@/plugins/journey66_tag'
+import { recommend_comment, tags } from '../../plugins/sampledb'
 
 export default {
     name: 'infra-place',
@@ -91,6 +84,8 @@ export default {
         PlaceRecommendList,
         PlaceTagList,
         recommendComment,
+        lumiTab,
+        tagMini,
     },
     props:{
         placeData:{
@@ -107,16 +102,25 @@ export default {
         return {
             showPopup: true,
             loading: false,
-            recommend_comment_sample: recommend_comment_sample,
-            td_sample: tag_data_sample,
+            recommend_comment_sample: recommend_comment,
+            td_sample: tags[0],
             place_id: null,
             place_data: this.placeData,
-            tab_component: PlaceRecommendList
+            tabs: [
+                {
+                    label: '추천글',
+                    value: 'PlaceRecommendList'
+                },
+                {
+                    label: '태그',
+                    value: 'PlaceTagList'
+                }
+            ],
+            tab_component: PlaceRecommendList,
         }
     },
     methods: {
         showHomepage(_URL){
-            console.log("GO => ",_URL)
             window.open(_URL)
         },
         toggleTab(_component){
@@ -130,6 +134,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../../assets/variable.styl'
+@import '../../assets/luminus.styl'
+
 .place-data
     width 100%
     overflow-x hidden
@@ -137,15 +144,30 @@ export default {
     .place-title
         text-align center
     .place-img-wrapper
-        height 120px
+        height 180px
+        overflow hidden
         background-color grey
         align-content center
         text-align center
         img
             margin 0 auto
             height 100%
+    .tag-mini-list
+        line-height 2rem
+        .tag-item
+            margin-top 0.5rem
+            &:not(:last-child)
+                margin-right 0.5rem
     .section
-        padding 0.5em 1em 0.5em 1em
+        padding 0.5rem 1rem 0.5rem 1rem
+    @media (min-width: $container_width)
+        .place-contents
+            display flex
+            .place-contents-block
+                flex 1 1 50%
+        .place-img-wrapper
+            height 200px
+            margin 0.5rem 0 0.5rem 1rem
 
 .lumi-button-full
     .lumi-button
@@ -160,37 +182,18 @@ export default {
     .lumi-button
         flex 1 1 auto
         &:not(:last-child)
-            margin-right 1rem
+            margin-right 0.5rem
 
 .lumi-box
 &.lumi-box-grey
     border-radius 5px
     background-color #d9d9d9
 
-.lumi-tab-wrapper
-    line-height 2rem
-    .lumi-tab
-        display flex
-        .lumi-tab-item
-            flex 1 1 none
-            text-align center
-            padding 0 1rem 0 1rem
-            margin 0 0.5rem 0 0.5rem
-            &:first-child
-                margin-left 0
-            &:last-child
-                margin-right 0
-    .lumi-tab-liner
-        .lumi-tab-item
-            border-bottom 2px solid grey
-            &.actived
-                background-color grey
-                font-weight 700
-                color white
+.lumi-devider
+    // border none 
+    border-bottom 0.5px solid #d9d9d9
 
-
-// Transition Style
-
+// tab transition Style
 .tab-fade-enter-active
 ,.tab-fade-leave-active
     transition: opacity .3s ease;

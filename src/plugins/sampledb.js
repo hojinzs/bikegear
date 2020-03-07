@@ -1,4 +1,4 @@
-import Tag from '../../plugins/journey66_tag'
+import Tag from './journey66_tag'
 
 const featured = ['maintenance','recharge','share-point','monument','supply-point']
 
@@ -21,7 +21,7 @@ const response = [
         "like": 122,
         "phone": "025730980",
         "formattedAddress": "경기 성남시 중원구 성남대로 997번길 49-4",
-        "Url": "www.cycleworks.co.kr",
+        "Url": "http://www.cycleworks.co.kr",
         "Image": "https://trek.scene7.com/is/image/TrekBicycleProducts/store_image_348194?$responsive-pjpg$&cache=on,on&wid=480&hei=360&fit=fit,1",
         "Tags": {
             "Utility": Tag.getTagDetailFromArray(["maintenance"]),
@@ -148,5 +148,10 @@ const response = [
     }
 ]
 
+const recommend_comment = {
+    "comment" : "전국에서 찾아올 정도로 피팅으로 유명한 매장입니다.\n피터분이 친절하고 장비가 전문적입니다.",
+    "author" : "Moderator",
+    "written_at" : new Date('2019-11-21 12:11:21')
+}
 
-export { response, tags, featured, type, brand, merchant }
+export { response, tags, featured, type, brand, merchant, recommend_comment }
