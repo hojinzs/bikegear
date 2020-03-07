@@ -22,7 +22,7 @@
                 <!-- 인증됨, 등록 클릭 -->
                 <div class="section" key="posting"
                 v-if="( user_data.login == true && post_comment.status == 'posting')">
-                    <form class="lumi-box" action="submit" @submit.prevent="postRecommentPost">
+                    <form class="lumi-box lumi-box-grey" action="submit" @submit.prevent="postRecommentPost">
                         <label for="post_recomment_comment">새로운 추천글을 등록합니다.</label>
                         <div class="lumi-text-area-wrapper">
                             <vue-extended-textarea class="lumi-input-liner" id="post_recomment_comment"
@@ -57,17 +57,28 @@
         </div>
 
         <!-- 추천글 목록 -->
-        <div class="section">
+        <div v-for="(rc,index) in recommend_comment.list" :key="index" class="section">
             <recommend-comment
-                :comment="rc_sample.comment"
-                :author="rc_sample.author"
-                :written_at="rc_sample.written_at">
+                :comment="rc.comment"
+                :author="rc.author"
+                :written_at="rc.written_at">
             </recommend-comment>
         </div>
-        <div class="section">
-            <div class="load-more lumi-box lumi-box-grey">
-                더 보기
-            </div>
+        <div class="section lumi-button-full">
+            <button class="lumi-button lumi-button-clear-black" ref="scrollend" :disabled="(recommend_comment.ajax_status != 'complete')"
+            @click="getRecommendCommentList()">
+                <transition name="tab-fade" mode="out-in">
+                    <span key="loading" v-if="recommend_comment.ajax_status == 'loading'">
+                        <img class="loading" src="/images/Spinner-1s-104px.gif">
+                    </span>
+                    <span key="complete" v-if="recommend_comment.ajax_status == 'complete'" >
+                        더 보기
+                    </span>
+                    <span key="fail" class="warning" v-if="recommend_comment.ajax_status == 'fail'">
+                        [!] {{ recommend_comment.ajax_fail_message }}
+                    </span>
+                </transition>
+            </button>
         </div>
     </div>
 </template>
@@ -86,7 +97,6 @@ export default {
     },
     data(){
         return {
-            rc_sample: recommend_comment,
             user_data: {
                 login: true,
             },
@@ -96,7 +106,12 @@ export default {
                 ajax_status: 'ready', // [ready, posting, success, fail]
                 ajax_fail_message: null,
                 user_posted: undefined
-            }
+            },
+            recommend_comment: {
+                list: [],
+                ajax_status: 'complete', // [complete, loading, fail]
+                ajax_fail_message: null,
+            },
         }
     },
     computed: {
@@ -145,16 +160,48 @@ export default {
 
                 },1000)
             },1200)
+        },
+        getRecommendCommentList(){
+
+            //Before
+            this.recommend_comment.ajax_status = 'loading'
+
+            //Post
+            let ajax_success = Math.round(Math.random())
+            setTimeout(()=>{
+
+                if(ajax_success){
+                    // Success
+                    let newComment = JSON.parse(JSON.stringify(recommend_comment))
+                    for (let i = 0; i < 5; i++) {
+                        this.recommend_comment.ajax_status = 'complete'
+                        this.recommend_comment.list.push(newComment)
+                    }
+                } else {
+                    // Fail
+                    this.recommend_comment.ajax_status = 'fail'
+                    this.recommend_comment.ajax_fail_message = '목록 불러오기 실패'
+
+                    setTimeout(() => this.recommend_comment.ajax_status = 'complete',2000)
+
+                }
+
+                //Complete
+                console.log("success => ",ajax_success)
+
+            },1200)
         }
     },
     created(){
-
+        this.getRecommendCommentList()
     },
     
 }
 </script>
 
 <style lang="stylus" scoped>
+
+@import '../../assets/variable.styl'
 
 .section
     padding 0.5em 1em 0.5em 1em
@@ -164,19 +211,37 @@ export default {
         width 100%
     .warning
         color red
-
 .lumi-box
-&.lumi-box-grey
-    border-radius 5px
-    background-color #d9d9d9
+    user-select none
+    &.lumi-box-grey
+        border-radius 5px
+        background-color #d9d9d9
 
-.load-more
-    text-align center
+.lumi-button
+    &.lumi-button-clear-black
+        background none
+        transition-property background-color
+        transition-duration 0.4s
+    &:active
+        box-shadow none
+        background-color $lumi_opacity_black_level_1
+        transition-property background-color
+        transition-duration 0.4s
+    @media (hover:hover) and (pointer: fine)
+        &:hover
+            box-shadow none
+            background-color $lumi_opacity_black_level_1
+            transition-property background-color
+            transition-duration 0.4s
+
+.loading
+    width 1em
+    height auto
 
 // tab transition Style
 .tab-fade-enter-active
 ,.tab-fade-leave-active
-    transition: opacity .3s ease;
+    transition opacity .3s ease;
 
 .tab-fade-enter
 ,.tab-fade-leave-to
