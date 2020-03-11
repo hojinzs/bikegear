@@ -32,7 +32,7 @@
                 </div>
                 <div class="lumi-button-group section">
                     <button class="lumi-button lumi-button-black">
-                        <font-awesome-icon :icon="'thumbs-up'" /> {{' '}} 좋아요 {{place_data.like}}
+                        <font-awesome-icon :icon="'thumbs-up'" /> {{' '}}{{place_data.like}}
                     </button>
                     <button class="lumi-button lumi-button-black" @click="showHomepage(place_data.Url)">
                         웹사이트

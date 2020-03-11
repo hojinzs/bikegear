@@ -15,7 +15,7 @@
                 v-if="( user_data.login == true && post_comment.status == 'hidden')">
                     <div class="lumi-button-full">
                         <button class="lumi-button lumi-button-black"
-                            @click="setStatus_postRecommentPost">추천글 쓰기</button>
+                            @click="toggle_showNewCommentForm(true)">추천글 쓰기</button>
                     </div>
                 </div>
 
@@ -28,9 +28,13 @@
                             <vue-extended-textarea class="lumi-input-liner" id="post_recomment_comment"
                                 v-model="post_comment.text" />
                         </div>
-                        <div class="lumi-button-full">
+                        <div class="lumi-button-group">
+                            <button class="lumi-button lumi-button-black"
+                                @click.prevent="toggle_showNewCommentForm(false)">취소</button>
                             <button type="submit" class="lumi-button lumi-button-black"
                                 :disabled="(this.post_comment.ajax_status != 'ready')">작성</button>
+                            </div>
+                        <div>
                             <span v-show="post_comment.ajax_fail_message" class="warning"
                             >{{ post_comment.ajax_fail_message }}</span>
                         </div>
@@ -46,7 +50,7 @@
                         :author="post_comment.user_posted.author"
                         :written_at="post_comment.user_posted.written_at">
                     </recommend-comment>
-                    <a @click="setStatus_postRecommentPost">업데이트 하기</a>
+                    <a @click="toggle_showNewCommentForm(true)">업데이트 하기</a>
                 </div>
             
             </transition>
@@ -121,8 +125,21 @@ export default {
         }
     },
     methods:{
-        setStatus_postRecommentPost(){
-            this.post_comment.status = 'posting'
+        toggle_showNewCommentForm(show){
+            if(show){
+                this.post_comment.status = 'posting'
+            } else {
+                if(this.user_posted){
+                    this.post_comment.status = 'posted'
+                } else {
+                    this.post_comment.status = 'hidden'
+                }
+                this.clearTextArea()
+            }
+        },
+        clearTextArea(){
+            this.post_comment.text = ''
+            this.post_comment.ajax_fail_message = ''
         },
         postRecommentPost(){
             // Set Dummy Data
@@ -146,8 +163,8 @@ export default {
                     console.log(res)
                     this.post_comment.status = 'posted'
                     this.post_comment.ajax_status = 'success'
-                    this.post_comment.user_posted = res,
-                    this.post_comment.text = ''
+                    this.post_comment.user_posted = res
+                    this.clearTextArea()
                 } else {
                     this.post_comment.ajax_status = 'fail'
                     this.post_comment.ajax_fail_message = '제대로 등록되지 않았습니다.'
@@ -209,13 +226,22 @@ export default {
 .lumi-button-full
     .lumi-button
         width 100%
-    .warning
-        color red
+
+.warning
+    color red
+
 .lumi-box
     user-select none
     &.lumi-box-grey
         border-radius 5px
         background-color #d9d9d9
+
+.lumi-button-group
+    display flex
+    button
+        flex 1 1 auto
+        &:not(:last-child)
+            margin-right 0.5rem
 
 .lumi-button
     &.lumi-button-clear-black
