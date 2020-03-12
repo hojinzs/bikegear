@@ -1,49 +1,56 @@
 <template>
     <div class="tag-info-section">
         
-        <div class="new-tag">
+        <div class="new-tag section">
 
-            <transition name="tab-fade" mode="out-in">
+            <div class="lumi-box lumi-box-grey">
+                <transition name="tab-fade" mode="out-in">
 
-                <!-- 인증되지 않았을 경우 -->
-                <div v-if="false" class="section" key="loginRequire">
-                    로그인이 필요합니다.
-                </div>
-
-                <!-- 인증됨, 사용자 인증됨 -->
-                <div class="section" key="ready"
-                v-if="( user_data.login == true && post_tag.status == 'hidden')">
-                    <div class="lumi-button-full">
-                        <button class="lumi-button lumi-button-black" @click="toggle_newTaggingForm(true)">
-                            태깅하기
-                        </button>
+                    <!-- 인증되지 않았을 경우 -->
+                    <div v-if="false" key="loginRequire">
+                        로그인이 필요합니다.
                     </div>
-                </div>
 
-                <!-- 인증됨, 등록 클릭 -->
-                <div class="section" key="posting"
-                v-if="( user_data.login == true && post_tag.status == 'posting')">
-                    <form class="lumi-box lumi-box-grey" action="submit">
-                        <label for="post_recomment_comment">새로운 태그를 등록합니다.</label>
-                        <div class="lumi-text-area-wrapper">
-                            <lumi-select-box
-                                :select_list="unTaggedList"
-                            />
+                    <!-- 인증됨, 사용자 인증됨 -->
+                    <div key="ready"
+                    v-if="( user_data.login == true && post_tag.status == 'hidden')">
+                        <div class="lumi-button-full">
+                            <button class="lumi-button lumi-button-black" @click="toggle_newTaggingForm(true)">
+                                태깅하기
+                            </button>
                         </div>
-                        <div class="lumi-button-group">
-                            <button class="lumi-button lumi-button-black"
-                                @click.prevent="toggle_newTaggingForm(false)">취소</button>
-                            <button type="submit" class="lumi-button lumi-button-black"
-                                :disabled="(this.post_tag.ajax_status != 'ready')">작성</button>
+                    </div>
+
+                    <!-- 인증됨, 등록 클릭 -->
+                    <div v-if="( user_data.login == true && post_tag.status == 'posting')" key="posting">
+                        <form action="submit" @submit.prevent >
+                            <label for="post_recomment_comment">새로운 태그를 등록합니다.</label>
+                            <div class="lumi-text-area-wrapper">
+                                <lumi-select-box
+                                    v-model="post_tag.tag_selected"
+                                    :select_list="unTaggedList"
+                                    :label="'태그 선택'"
+                                    :hint_text="'등록테스트가 어쩌고 저쩌고'" />
+                                <lumi-textarea-liner
+                                    v-model="post_tag.text"
+                                    :label="'태깅 메시지'"
+                                    :hint_text="'태깅을 하는 이유에 대해 알려주세요.'" />
                             </div>
-                        <div>
-                            <span v-show="post_tag.ajax_fail_message" class="warning"
-                            >{{ post_tag.ajax_fail_message }}</span>
-                        </div>
-                    </form>
-                </div>
-            
-            </transition>
+                            <div class="lumi-button-group">
+                                <button class="lumi-button lumi-button-flat-dark"
+                                    @click.prevent="toggle_newTaggingForm(false)">취소</button>
+                                <button type="submit" class="lumi-button lumi-button-black"
+                                    :disabled="(this.post_tag.ajax_status != 'ready')">작성</button>
+                                </div>
+                            <div>
+                                <span v-show="post_tag.ajax_fail_message" class="warning"
+                                >{{ post_tag.ajax_fail_message }}</span>
+                            </div>
+                        </form>
+                    </div>
+
+                </transition>
+            </div>
 
         </div>
         <div class="tag-list">
@@ -61,14 +68,17 @@
 
 <script>
 import placeTagCard from './place-tag-card'
-import lumiSelectBox from './lumi-select-box'
+import lumiSelectBox from '@/components/interface/lumi-select-box'
+import lumiTextareaLiner from '@/components/interface/lumi-textarea-liner'
+
 import { tags } from '@/plugins/sampledb'
 
 export default {
     name: 'place-tag-list',
     components: {
         'place-tag-card': placeTagCard,
-        'lumi-select-box': lumiSelectBox
+        'lumi-select-box': lumiSelectBox,
+        'lumi-textarea-liner' : lumiTextareaLiner
     },
     props: ['placeId','TagList'],
     data(){

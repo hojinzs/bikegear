@@ -4,23 +4,23 @@
         <div class="input-list">
 
             <div class="input-group"
-            v-for="(item, index) in list"
-            v-bind:key="index">
+                v-for="(item, index) in list"
+                v-bind:key="index">
 
                 <input class="lumi-input-liner input-item"
-                v-if="type == 'number'"
-                v-model.lazy.number="list[index]"
-                :name="'item_'+index"
-                :placeholder="placeholder">
+                    v-if="type == 'number'"
+                    v-model.lazy.number="list[index]"
+                    :name="'item_'+index"
+                    :placeholder="placeholder">
                 <input class="lumi-input-liner"
-                v-else
-                v-model.lazy="list[index]"
-                :name="'item_'+index"
-                :placeholder="placeholder">
+                    v-else
+                    v-model.lazy="list[index]"
+                    :name="'item_'+index"
+                    :placeholder="placeholder">
 
                 <button class="lumi-button lumi-button-black"
-                :disabled="!DelStatus" 
-                v-on:click="itemDelete(index)"> - </button>
+                    :disabled="!DelStatus" 
+                    v-on:click="itemDelete(index)"> - </button>
 
             </div>
         </div>
@@ -28,11 +28,11 @@
         <div class="button-group">
 
             <button class="lumi-button lumi-button-black"
-            :disabled="!AddStatus"
-            v-on:click="itemInsert()"> + </button>
+                :disabled="!AddStatus"
+                v-on:click="itemInsert()"> + </button>
 
             <button class="lumi-button lumi-button-black"
-            v-on:click="sorting(list)"> sort </button>
+                v-on:click="sorting(list)"> sort </button>
 
         </div>
 
@@ -103,25 +103,23 @@ export default {
 <style lang="stylus" scoped>
 
 .input-list
+    padding-top 0.5em
     .input-group
         width 100%
         display flex
         padding-top 0.5em
         padding-bottom 0.5em
-        // &:first-child
-        //     padding-top 0px
-        // $:last-child
-        //     padding-bottom 0px
-
         input
-            width 100%
-            left 0
+            flex 1 1 auto
             text-align center
             margin-right 0.5em
-
+            margin-top auto
         button
-            flex 1
-            right  0
+            flex-basis 10px
+            text-align center
+            margin-top auto
+            padding-left 0
+            padding-right 0
 
 .button-group
     display flex

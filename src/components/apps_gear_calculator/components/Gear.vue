@@ -22,16 +22,10 @@
             <h3>1. Crank</h3>
 
             <div class="lumi-select">
-                <select name="crank_select" class="lumi-input-liner"
-                    v-model="crank_select">
-                    <option value="" disabled selected>crank select</option>
-                    <option
-                        v-for="(crank,index) in preset.cranks"
-                        v-bind:key="index"
-                        v-bind:value="crank.chainring">
-                        {{crank.name}}
-                    </option>
-                </select>
+                <lumi-select-box
+                    v-model="crank_select"
+                    :select_list="crankOptions"
+                    placeholer="select crank" />
             </div>
 
             <ListController class="input-list"
@@ -46,16 +40,10 @@
             <h3>2. sprocket</h3>
 
             <div class="lumi-select">
-                <select name="sprocket_select" class="lumi-input-liner"
-                    v-model="sprocket_select">
-                    <option value="none"  disabled selected>select sprocket</option>
-                    <option
-                        v-for="(spr,index) in preset.sprockets"
-                        :key="index"
-                        :value="spr.cog">
-                        {{spr.name}}
-                    </option>
-                </select>
+                <lumi-select-box
+                    v-model="sprocket_select"
+                    :select_list="sprocketOptions"
+                    placeholer="select sprocket" />
             </div>
 
             <ListController
@@ -97,10 +85,12 @@ import Calc from '@/plugins/calc'
 
 // import components
 import list_controller from '@/components/interface/input-list'
+import lumiSelectBox from '@/components/interface/lumi-select-box'
 
 export default {
     components: {
         'ListController' : list_controller,
+        'lumi-select-box': lumiSelectBox,
     },
     props: [
         'setting_number',
@@ -111,10 +101,33 @@ export default {
     data(){
         return {
             calc: new Calc,
-            crank: this.settings.crank.filter((i)=> {return i}),
-            sprocket: this.settings.sprocket.filter((i)=> {return i}),
+            crank: this.settings.crank.filter(i => i),
+            sprocket: this.settings.sprocket.filter( i => i),
             crank_select : null,
             sprocket_select : null,
+        }
+    },
+    computed: {
+        sprocketOptions(){
+            let options = this.preset.sprockets.map((spr,i) => {
+                return {
+                    'key': i,
+                    'value': i,
+                    'label': spr.name
+                }
+            })
+            return options
+        },
+        crankOptions(){
+            let options = this.preset.cranks.map((crank,i) => {
+                console.log(crank)
+                return {
+                    'key': i,
+                    'value': i,
+                    'label': crank.name
+                }
+            })
+            return options
         }
     },
     methods: {
@@ -152,11 +165,11 @@ export default {
         sprocket(newSprocket){
             this.settings.sprocket = newSprocket;
         },
-        crank_select(_value){
-            this.crank = _value.filter(x => x);
+        crank_select(_key){
+            this.crank = this.preset.cranks[_key].chainring.filter(x => x);
         },
-        sprocket_select(_value){
-            this.sprocket = _value.filter(x => x);
+        sprocket_select(_key){
+            this.sprocket = this.preset.sprockets[_key].cog.filter(x => x)
         }
     },
 }
@@ -168,20 +181,18 @@ export default {
 
 select
     width 100%
-
+    
 #gears
-    text-align: center
-
+    text-align center
     .header
         h3
             margin: 0px
         .input-wrapper
-            width: 90%
-            margin: auto
+            width 90%
+            margin auto
             input
-                width: 100%
-                text-align: center
-                font-size: 100%
+                width 100%
+                text-align center
 
 table
     width 100%

@@ -69,7 +69,7 @@
             </recommend-comment>
         </div>
         <div class="section lumi-button-full">
-            <button class="lumi-button lumi-button-clear-black" ref="scrollend" :disabled="(recommend_comment.ajax_status != 'complete')"
+            <button class="lumi-button lumi-button-flat-dark" ref="scrollend" :disabled="(recommend_comment.ajax_status != 'complete')"
             @click="getRecommendCommentList()">
                 <transition name="tab-fade" mode="out-in">
                     <span key="loading" v-if="recommend_comment.ajax_status == 'loading'">
@@ -242,23 +242,6 @@ export default {
         flex 1 1 auto
         &:not(:last-child)
             margin-right 0.5rem
-
-.lumi-button
-    &.lumi-button-clear-black
-        background none
-        transition-property background-color
-        transition-duration 0.4s
-    &:active
-        box-shadow none
-        background-color $lumi_opacity_black_level_1
-        transition-property background-color
-        transition-duration 0.4s
-    @media (hover:hover) and (pointer: fine)
-        &:hover
-            box-shadow none
-            background-color $lumi_opacity_black_level_1
-            transition-property background-color
-            transition-duration 0.4s
 
 .loading
     width 1em

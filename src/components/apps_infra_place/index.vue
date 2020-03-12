@@ -37,9 +37,11 @@
                     <button class="lumi-button lumi-button-black" @click="showHomepage(place_data.Url)">
                         웹사이트
                     </button>
-                    <router-link tag="button" class="lumi-button-liner"
-                        :to="{ name: 'iamowner', query: { placeId: place_data.id }}">소유자 등록</router-link>
-                    <button class="lumi-button-liner">정정신고</button>
+                    <router-link tag="button" class="lumi-button-flat-dark"
+                        :to="{ name: 'iamowner', query: { placeId: place_data.id }}">
+                        소유자 등록
+                    </router-link>
+                    <button class="lumi-button-flat-dark">정정신고</button>
                 </div>
             </div>
         </div>
