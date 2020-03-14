@@ -1,14 +1,14 @@
 <template>
-    <div class="recommend-comment-wrapper">
+    <div class="lumi-box lumi-box-block-grey">
         <div class="recommend-comment">
             <slot>
                 <span v-html="_comment"></span>
             </slot>
             <div class="recommend-comment-info">
                 <div class="like">
-                    <font-awesome-icon :icon="'heart'" 
-                        @click="++like" />
-                    {{this.like}} 명이 공감합니다.
+                    <a class="a-flat a-flat-red" href="" @click.prevent="++like">
+                        <font-awesome-icon :icon="'heart'" />  {{this.like}}
+                    </a>  명이 공감합니다.
                 </div>
                 <div class="author">
                     by {{author}} - {{ _written_at  }}
@@ -61,24 +61,21 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-.recommend-comment-wrapper
-    padding 1rem 2rem 1rem 2rem
-    border-radius 5px
-    background-color #d9d9d9
-    font-size 1rem
-    line-height 1.6rem
+@import '../../assets/luminus.styl'
 
 .recommend-comment
+    margin 0.5rem
+    font-size 1rem
+    line-height 1.6rem
     text-align left
     .recommend-comment-info
         user-select none
         display flex
         flex-direction row
+        font-size 0.9rem
         .like
             flex 1 1 auto
         .author
             flex 1 1 auto
             text-align right
-
 </style>

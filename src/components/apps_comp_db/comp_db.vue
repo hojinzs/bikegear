@@ -7,52 +7,34 @@
             <div class="flex-wrapper">
 
                 <!-- Mobile Selector -->
-                <div v-if="isMobile" id="CompSelect_Mobile" class="lumi-flex-slider-wrapper">
+                <div v-if="isMobile">
                     <b>Component</b>
-                    <ul class="lumi-flex-slider">
-                        <!-- Before Loading -->
-                        <li class="lumi-flex-slider-item"
-                            v-if="component_list.length == 0">
-                            <div class="lumi-box">
-                                Loading...
-                            </div>
-                        </li>
-                        <!-- Before Loading End -->
-
-                        <li class="lumi-flex-slider-item"
-                            v-for="(component,index) in component_list" 
-                            :key="index">
-                            <button class="lumi-button"
-                                :class="{'selected': (component == item_selected.name)}"
-                                @click="comp_select(component)">
-                                {{component}}
-                            </button>
-                        </li>
-
-                        <li class="lumi-flex-slider-item">
-                            <button class="lumi-button">
-                                TEST DUMMY
-                            </button>
-                        </li>
-
-                        <li class="lumi-flex-slider-item">
-                            <button class="lumi-button">
-                                TEST DUMMY
-                            </button>
-                        </li>
-
-                        <li class="lumi-flex-slider-item">
-                            <button class="lumi-button">
-                                TEST DUMMY
-                            </button>
-                        </li>
-
-                    </ul>
+                    <div id="CompSelect_Mobile" class="lumi-flex-slider-wrapper scroll-free">
+                        <ul class="lumi-flex-slider">
+                            <!-- Before Loading -->
+                            <li class="lumi-flex-slider-item"
+                                v-if="component_list.length == 0">
+                                <button class="lumi-button">
+                                    Loading...
+                                </button>
+                            </li>
+                            <!-- Before Loading End -->
+                            <li class="lumi-flex-slider-item"
+                                v-for="(component,index) in component_list" 
+                                :key="index">
+                                <button class="lumi-button"
+                                    :class="{'selected': (component == item_selected.name)}"
+                                    @click="comp_select(component)">
+                                    {{component}}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- PC Selector -->
                 <div v-if="!isMobile" id="CompSelect_PC" class="flex-sidemenu">
-                    <div class="lumi-box">
+                    <div class="lumi-box lumi-box-blur">
                         <b>Component</b>
                         
                         <ul class="lumi-list-select-group">
@@ -80,7 +62,7 @@
                         <li class="items"
                             v-for="(item,index) in item_selected.items"
                             :key="index">
-                            <div class="lumi-box lumi-box-block-white lumi-box-shadow">
+                            <div class="lumi-box lumi-box-blur lumi-box-shadow">
                                 <div class="name">{{item.name}}</div>
                                 <ul>
                                     <li v-for="prop in Object.keys(item)" :key="prop">

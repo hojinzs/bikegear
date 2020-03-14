@@ -37,11 +37,11 @@
                     <button class="lumi-button lumi-button-black" @click="showHomepage(place_data.Url)">
                         웹사이트
                     </button>
-                    <router-link tag="button" class="lumi-button-flat-dark"
+                    <router-link tag="button" class="lumi-button lumi-button-flat-dark"
                         :to="{ name: 'iamowner', query: { placeId: place_data.id }}">
                         소유자 등록
                     </router-link>
-                    <button class="lumi-button-flat-dark">정정신고</button>
+                    <button class="lumi-button lumi-button-flat-dark">정정신고</button>
                 </div>
             </div>
         </div>
@@ -171,28 +171,7 @@ export default {
             height 200px
             margin 0.5rem 0 0.5rem 1rem
 
-.lumi-button-full
-    .lumi-button
-        width 100%
-
-.lumi-text-area-wrapper
-    textarea
-        width 100%
-
-.lumi-button-group
-    display flex
-    button
-        flex 1 1 auto
-        &:not(:last-child)
-            margin-right 0.5rem
-
-.lumi-box
-&.lumi-box-grey
-    border-radius 5px
-    background-color #d9d9d9
-
 .lumi-devider
-    // border none 
     border-bottom 0.5px solid #d9d9d9
 
 // tab transition Style

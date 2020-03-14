@@ -57,6 +57,7 @@ export default {
 .lumi-tab-liner
     .lumi-tab-item
         border-bottom 2px solid grey
+        cursor pointer
         &.actived
             background-color grey
             font-weight 700

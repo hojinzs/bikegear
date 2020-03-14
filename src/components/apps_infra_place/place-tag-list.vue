@@ -3,7 +3,7 @@
         
         <div class="new-tag section">
 
-            <div class="lumi-box lumi-box-grey">
+            <div class="lumi-box lumi-box-block-grey">
                 <transition name="tab-fade" mode="out-in">
 
                     <!-- 인증되지 않았을 경우 -->
@@ -15,11 +15,17 @@
                     <div key="ready"
                     v-if="( user_data.login == true)">
                         <b>내가 이 곳에 등록한 태그 </b>
-                        <div v-for="(uc, index) in user_taging" :key="index" class="my-tag">
+                        <div v-if="user_taging.length == 0" class="tagpost_description">
+                            등록된 태그가 없습니다.<br>
+                            이곳을 태깅해 나만의 지도를 만들어보세요.
+                        </div>
+                        <div v-else v-for="(uc, index) in user_taging" :key="index" class="my-tag">
                             <place-tag-mini :tagObject="uc.tag" />
                             {{ uc.comment }}
                             <div class="option">
-                                <font-awesome-icon icon="heart" /> {{ uc.like }} | {{ _written_at(uc.written_at) }} | <font-awesome-icon icon="trash-alt" />
+                                <font-awesome-icon icon="heart" /> {{ uc.like }}
+                                  | {{ _written_at(uc.written_at) }}
+                                  | <a class="a-flat" href="" @click.prevent><font-awesome-icon icon="trash-alt" /></a>
                             </div>
                         </div>
 
@@ -28,12 +34,15 @@
                         <transition name="tab-fade" mode="out-in">
 
                             <!-- 등록 폼 숨기기  -->
-                            <div v-if="post_tag.status == 'hidden'" class="lumi-button-full" key="hidden">
-                                태깅한 장소를 마이페이지에서 모아볼 수 있습니다.
-
-                                <button class="lumi-button lumi-button-black" @click="toggle_newTaggingForm(true)">
-                                    태깅하기
-                                </button>
+                            <div v-if="post_tag.status == 'hidden'" key="hidden">
+                                <div class="tagpost_description">
+                                    태깅한 장소를 마이페이지에서 모아볼 수 있습니다.
+                                </div>
+                                <div class="lumi-button-full">
+                                    <button class="lumi-button lumi-button-black" @click="toggle_newTaggingForm(true)">
+                                        태깅하기
+                                    </button>
+                                </div>
                             </div>
 
                             <!-- 등록 클릭 -->
@@ -165,6 +174,9 @@ export default {
                 return comment
             })
             this.user_taging = userTag
+
+            // userTag = null
+            // this.user_tagging = userTag
         },
         getTagsOnPlace(){
 
@@ -206,16 +218,16 @@ export default {
     textarea
         width 100%
 
-.lumi-box
-&.lumi-box-grey
-    border-radius 5px
-    background-color #d9d9d9
-
 .my-tag
     line-height 2rem
     margin-top 8px
     .option
         font-size 0.9rem
+
+.tagpost_description
+    text-align center
+    font-size 0.9rem
+    margin 10px 0 10px 0
 
 .tag-description
     margin-bottom 1rem

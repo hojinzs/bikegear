@@ -22,14 +22,14 @@
                 <!-- 인증됨, 등록 클릭 -->
                 <div class="section" key="posting"
                 v-if="( user_data.login == true && post_comment.status == 'posting')">
-                    <form class="lumi-box lumi-box-grey" action="submit" @submit.prevent="postRecommentPost">
+                    <form class="lumi-box lumi-box-block-grey" action="submit" @submit.prevent="postRecommentPost">
                         <label for="post_recomment_comment">새로운 추천글을 등록합니다.</label>
                         <div class="lumi-text-area-wrapper">
                             <vue-extended-textarea class="lumi-input-liner" id="post_recomment_comment"
                                 v-model="post_comment.text" />
                         </div>
                         <div class="lumi-button-group">
-                            <button class="lumi-button lumi-button-black"
+                            <button class="lumi-button lumi-button-flat-dark"
                                 @click.prevent="toggle_showNewCommentForm(false)">취소</button>
                             <button type="submit" class="lumi-button lumi-button-black"
                                 :disabled="(this.post_comment.ajax_status != 'ready')">작성</button>
@@ -217,31 +217,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-@import '../../assets/variable.styl'
+@import '../../assets/luminus.styl'
 
 .section
     padding 0.5em 1em 0.5em 1em
 
-.lumi-button-full
-    .lumi-button
-        width 100%
-
 .warning
     color red
-
-.lumi-box
-    user-select none
-    &.lumi-box-grey
-        border-radius 5px
-        background-color #d9d9d9
-
-.lumi-button-group
-    display flex
-    button
-        flex 1 1 auto
-        &:not(:last-child)
-            margin-right 0.5rem
 
 .loading
     width 1em

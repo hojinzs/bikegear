@@ -1,6 +1,6 @@
 <template>
     <div class="lumi-select-box-wrapper">
-        <label v-if="label" :for="id" class="lumi-select-label">
+        <label v-if="label" :for="id" class="lumi-component-label">
             {{label}}
         </label>
         <div class="lumi-select-box">
@@ -106,8 +106,6 @@ select:invalid
 .lumi-select-box-wrapper
     margin-top 1em
     margin-bottom 1em
-    .lumi-select-label
-        font-weight bolder
     .lumi-select-box
         position relative
         display flex
@@ -123,9 +121,9 @@ select:invalid
             right 0
             height 90%
             width 8%
+            max-width 2.5rem
             display flex
             align-items center
             justify-content center
-    .lumi-component-hint
-        font-size 0.6em
+
 </style>

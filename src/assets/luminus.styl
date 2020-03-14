@@ -47,6 +47,17 @@ input, textarea, select
                 border-bottom-color: white
 
 /**
+* a Tag Style
+*/
+a.a-flat
+    text-decoration none
+    color inherit
+    &.a-flat-red
+        &:active
+            color red
+        
+
+/**
 * Button Style
 */
 button
@@ -55,6 +66,7 @@ button
     padding-left ($global_font_text * 0.7)
     padding-right ($global_font_text * 0.7)
     white-space pre
+    cursor pointer
     &.lumi-button
         min-width ($global_font_text * 2)
         border-radius ( ($global_font_text / 2) + ($global_font_text / 4) )
@@ -117,7 +129,6 @@ button
                     // transition
                     transition-property background-color
                     transition-duration 0.3s
-
     &.lumi-button-liner
         font-size: $global_font_text
         line-height: $global_inline_height
@@ -146,7 +157,23 @@ button
             &:focus
                 border-bottom-color: white
 
+.lumi-button-full
+    .lumi-button
+        width 100%
 
+.lumi-button
+    &.lumi-button-full
+        width 100%
+
+/**
+* Button Group
+*/
+.lumi-button-group
+    display flex
+    .lumi-button
+        flex 1 1 auto
+        &:not(:last-child)
+            margin-right 0.5rem
 
 /**
 * Border Style
@@ -187,11 +214,9 @@ button
     padding-bottom ($global_font_text/2)
     padding-left ps = $global_font_text
     padding-right $global_font_text
-    line-height: $global_inline_height
-    background rgba(255,255,255,0.45)
-    overflow: hidden
-    // &.lumi-box-border
-    //     border: 1px solid $light_grey
+    line-height $global_inline_height
+    background $lumi_opacity_black_level_1
+    overflow hidden
     .lumi-box-header
         margin-top -(t)
         margin-left -(ps)
@@ -199,25 +224,19 @@ button
         padding-top t
         padding-bottom ps
         margin-bottom ps
-
-.lumi-box
     &.lumi-box-block-white
         text-shadow none
-        background white
+        background-color white
         color $light_black
-        &.lumi-box-shadow
-            box-shadow 0px 0px 5px rgba(0,0,0,0.7)
-
-/**
-* Table Styles
-*/
-table.lumi-table
-    th
-        font-weight: strong
-        border-bottom: 2px solid $light_grey
-    tr
-        td
-            border-bottom: 2px solid $light_grey
+    &.lumi-box-block-grey
+        border-radius 5px
+        background-color $lumi_block_grey_level_1
+    &.lumi-box-shadow
+        box-shadow 0px 0px 5px $lumi_opacity_black_level_1
+    &.lumi-box-border
+        border: 1px solid $light_grey
+    &.lumi-box-blur
+        backdrop-filter blur(5px)
 
 /**
 * Select List Group
@@ -231,21 +250,32 @@ table.lumi-table
         li.lumi-list-select-item
             padding-top 10px
             padding-bottom 10px
-            border-bottom solid $light_grey 1px
+            border-bottom solid $lumi_opacity_white_level_2 1px
             // :hover transition
-            transition-property: background color
-            transition-duration: 0.5s
+            transition-property background
+            transition-duration 0.5s
             &.selected
-                background rgba(255,255,255,0.6)
+                background $lumi_opacity_white_level_2
             &:first-child
-                border-top solid $light_grey 1px
+                border-top solid $lumi_opacity_white_level_2 1px
             &:hover
-                background rgba(255,255,255,0.9)
-                color $light_grey_focused
+                background $lumi_opacity_white_level_3
                 cursor pointer
                 // transition
-                transition-property: background color
-                transition-duration: 0.5s
+                transition-property background
+                transition-duration 0.5s
+
+
+/**
+* Table Styles
+*/
+table.lumi-table
+    th
+        font-weight: strong
+        border-bottom: 2px solid $light_grey
+    tr
+        td
+            border-bottom: 2px solid $light_grey
 
 /**
 * Tab Group
@@ -260,3 +290,12 @@ hr.lumi-horizon
     border-color grey
     border-style solid
     border-width 0.5px
+
+/**
+* Component Util Style
+*/
+.lumi-component-label
+    font-weight 600
+
+.lumi-component-hint
+    font-size 0.8em

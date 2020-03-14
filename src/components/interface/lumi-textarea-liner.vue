@@ -68,6 +68,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../../assets/luminus.styl'
+
 textarea
     width 100%
     overflow-y hidden
@@ -76,10 +78,4 @@ textarea
     padding-right  0.5em
     padding-top 0.5em
     box-sizing border-box
-
-.lumi-component-label
-    font-weight bolder
-
-.lumi-component-hint
-    font-size 0.6em
 </style>

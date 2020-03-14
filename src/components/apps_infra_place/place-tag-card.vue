@@ -1,5 +1,5 @@
 <template>
-    <div class="lumi-box lumi-box-grey">
+    <div class="tag-card lumi-box lumi-box-block-grey">
         <div class="tag">
             <div class="tag-info">
                 <div class="tag-mini-list">
@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="tag-retaging" @click="show_comments = !show_comments">
-                <button class="tag-retaging-wrapper">
+                <button class="tag-retaging-wrapper lumi-button lumi-button-flat-dark">
                     <div class="tag-retaging-count">
                         13
                     </div>
@@ -20,21 +20,22 @@
                 </button>
             </div>
         </div>
-        <div v-if="show_comments" class="tag-recommends">
-            <hr class="lumi-horizon">
-            <div class="tag-comment" v-for="(cmt, index) in comments" :key="index">
-                <div class="tag-comment-row">
-                    <div class="tag-comment-text">
-                        " {{ cmt.comment }}
+        <div class="tag-recommends">
+            <div v-if="show_comments">
+                <hr class="lumi-horizon">
+                <div class="tag-comment" v-for="(cmt, index) in comments" :key="index">
+                    <div class="tag-comment-row">
+                        <div class="tag-comment-text">
+                            {{ cmt.comment }}
+                        </div>
                     </div>
-                </div>
-                <div class="tag-comment-row">
-                    <div class="tag-author tag-comment-row-item">
-                        <font-awesome-icon icon="heart" /> {{ cmt.like }} | {{ cmt.author }} | {{ _written_at(cmt.written_at) }}
+                    <div class="tag-comment-row">
+                        <div class="tag-author tag-comment-row-item">
+                            <a class="a-flat a-flat-red" href="" @click.prevent><font-awesome-icon icon="heart" /> {{ cmt.like }}</a>
+                            | {{ cmt.author }}
+                            | {{ _written_at(cmt.written_at) }}
+                        </div>
                     </div>
-                    <!-- <div class="tag-comment-posted tag-comment-row-item">
-                        {{ _written_at(cmt.written_at) }}
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -88,51 +89,54 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.lumi-box
-&.lumi-box-grey
-    border-radius 5px
-    background-color #d9d9d9
+@import '../../assets/variable.styl'
 
-.tag
-    display flex
-    .tag-info
-        flex-grow 1
-        .tag-mini-list
-            line-height 2rem
-        .tag-description
-            margin-top 10px
-    .tag-retaging
-        flex-basis 15px
-        user-select none
-        margin-left auto
-        .tag-retaging-wrapper
-            display flex
-            height 4.5rem
-            flex-direction column
-            border-radius 5px
-            background-color grey
-            .tag-retaging-count
-                flex 1 1 auto
-                width 100%
-                display flex
-                justify-content center
-                align-items center
-                font-size 1.4rem
-            .tag-retaging-label
-                flex none
-                flex-basis 1rem
-                width 100%
-                font-size 0.5rem
-.tag-comment
-    line-height 2em
-    .tag-comment-row
+.tag-card
+    .tag
         display flex
-        .tag-comment-row-item
-            flex 1 1 50%
-        .tag-comment-posted
-            text-align right
-        .tag-author
-            font-size 0.8rem
+        .tag-info
+            flex-grow 1
+            .tag-mini-list
+                line-height 2rem
+            .tag-description
+                margin-top 10px
+        .tag-retaging
+            flex-basis 15px
+            user-select none
+            margin-left auto
+            .tag-retaging-wrapper
+                display flex
+                height 4.5rem
+                flex-direction column
+                border-radius 5px
+                // background-color grey
+                .tag-retaging-count
+                    flex 1 1 auto
+                    width 100%
+                    display flex
+                    justify-content center
+                    align-items center
+                    font-size 1.4rem
+                .tag-retaging-label
+                    flex none
+                    flex-basis 0.5rem
+                    width 100%
+                    font-size 0.5rem
+    .tag-recommends
+        .tag-comment
+            line-height 1.6rem
+            margin-bottom 1rem
+            background-color $lumi_opacity_white_level_2
+            border-radius 6px
+            padding 0.5rem
+            .tag-comment-row
+                display flex
+                .tag-comment-row-item
+                    flex 1 1 50%
+                .tag-comment-posted
+                    text-align right
+                .tag-author
+                    font-size 0.9rem
 
 
 
