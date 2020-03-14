@@ -9,24 +9,50 @@
                     {{ tag.description }}
                 </div>
             </div>
-            <div class="tag-retaging" @click="show_recommend = !show_recommend">
-                <div class="tag-retaging-tags">
-                    리태깅 수 : 13
-                </div>
+            <div class="tag-retaging" @click="show_comments = !show_comments">
+                <button class="tag-retaging-wrapper">
+                    <div class="tag-retaging-count">
+                        13
+                    </div>
+                    <div class="tag-retaging-label">
+                        태깅 수
+                    </div>
+                </button>
             </div>
         </div>
-        <div v-if="show_recommend" class="tag-recommends">
-            asdfasdf
+        <div v-if="show_comments" class="tag-recommends">
+            <hr class="lumi-horizon">
+            <div class="tag-comment" v-for="(cmt, index) in comments" :key="index">
+                <div class="tag-comment-row">
+                    <div class="tag-comment-text">
+                        " {{ cmt.comment }}
+                    </div>
+                </div>
+                <div class="tag-comment-row">
+                    <div class="tag-author tag-comment-row-item">
+                        <font-awesome-icon icon="heart" /> {{ cmt.like }} | {{ cmt.author }} | {{ _written_at(cmt.written_at) }}
+                    </div>
+                    <!-- <div class="tag-comment-posted tag-comment-row-item">
+                        {{ _written_at(cmt.written_at) }}
+                    </div> -->
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import moment from 'moment'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 import placeTagMini from './place-tag-mini'
+
+import { tag_comment } from '@/plugins/sampledb'
 
 export default {
     name: 'place-tag-card',
     components:{
+        'font-awesome-icon' : FontAwesomeIcon,
         placeTagMini,
     },
     props: {
@@ -40,8 +66,23 @@ export default {
     },
     data(){
         return {
-            show_recommend : false
+            show_comments : false,
+            comments: []
         }
+    },
+    methods: {
+        getTagComments(){
+            let comment = JSON.parse(JSON.stringify(tag_comment))
+            for (let i = 0; i < 5; i++) {
+                this.comments.push(comment)
+            }
+        },
+        _written_at(date){
+            return moment(date).fromNow()
+        }
+    },
+    mounted() {
+        this.getTagComments()
     }
 }
 </script>
@@ -55,22 +96,44 @@ export default {
 .tag
     display flex
     .tag-info
-        flex none
+        flex-grow 1
         .tag-mini-list
             line-height 2rem
         .tag-description
             margin-top 10px
     .tag-retaging
+        flex-basis 15px
         user-select none
-        // flex 1 1 30px
-        // flex-basis 30px
         margin-left auto
-        // vertical-align middle
+        .tag-retaging-wrapper
+            display flex
+            height 4.5rem
+            flex-direction column
+            border-radius 5px
+            background-color grey
+            .tag-retaging-count
+                flex 1 1 auto
+                width 100%
+                display flex
+                justify-content center
+                align-items center
+                font-size 1.4rem
+            .tag-retaging-label
+                flex none
+                flex-basis 1rem
+                width 100%
+                font-size 0.5rem
+.tag-comment
+    line-height 2em
+    .tag-comment-row
         display flex
-        border-left 1px solid grey
-        .tag-retaging-tags
-            flex 1 1 auto
-            padding-left 1rem
-            margin auto 0
+        .tag-comment-row-item
+            flex 1 1 50%
+        .tag-comment-posted
+            text-align right
+        .tag-author
+            font-size 0.8rem
+
+
 
 </style>

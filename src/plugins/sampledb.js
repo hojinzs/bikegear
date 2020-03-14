@@ -149,9 +149,21 @@ const response = [
 ]
 
 const recommend_comment = {
+    "place" : 1,
     "comment" : "전국에서 찾아올 정도로 피팅으로 유명한 매장입니다.\n피터분이 친절하고 장비가 전문적입니다.",
+    "like" : Math.abs((Math.random() * 100)),
     "author" : "Moderator",
     "written_at" : new Date('2019-11-21 12:11:21')
 }
 
-export { response, tags, featured, type, brand, merchant, recommend_comment }
+const tag_comment = {
+    "place" : 1,
+    "tag": null,
+    "tag_name" : "meal",
+    "comment" : "맛있는 음식을 팝니다.",
+    "like" : Math.round((Math.random() * 100)),
+    "author" : "Moderator",
+    "written_at" : new Date()
+}
+
+export { response, tags, featured, type, brand, merchant, recommend_comment, tag_comment}
