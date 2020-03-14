@@ -1,13 +1,13 @@
 <template>
     <div id="main">
-        <div id="chart" class="boxing lumi-box lumi-box-border">
+        <div id="chart" class="boxing lumi-box lumi-box-block-white lumi-box-border">
             <RatioChart
                 :Gears="GearSettings">
             </RatioChart>
         </div>
 
         <h2>DATA INPUT</h2>
-        <div class="lumi-box lumi-box-border section">
+        <div class="lumi-box lumi-box-block-white lumi-box-border section">
             <SetBike
                 :wheelset="wheelset"
                 :cadence="cadence">
@@ -38,7 +38,7 @@
         </div>
 
         <div class="gear_settings section">
-            <div class="set_gear boxing lumi-box lumi-box-border"
+            <div class="set_gear boxing lumi-box lumi-box-block-white lumi-box-border"
             v-for="(Setting, index) in GearSettings"
             :key='index'>
                 <SetGear

@@ -61,21 +61,22 @@ a.a-flat
 * Button Style
 */
 button
-    font-weight 500
+    font-weight 600
     text-align center
     padding-left ($global_font_text * 0.7)
     padding-right ($global_font_text * 0.7)
+    font-size $global_font_text
+    line-height $global_inline_height
+    height $global_component_height
     white-space pre
     cursor pointer
+    overflow hidden
+    user-select none
     &.lumi-button
-        min-width ($global_font_text * 2)
         border-radius ( ($global_font_text / 2) + ($global_font_text / 4) )
         padding-top ($global_font_text / 2)
         padding-bottom ($global_font_text / 2)
-        line-height $global_inline_height
         background rgba(255,255,255,0.45)
-        overflow hidden
-        user-select none
         // transition
         transition-property: box-shadow
         transition-duration: 0.3s
@@ -215,7 +216,7 @@ button
     padding-left ps = $global_font_text
     padding-right $global_font_text
     line-height $global_inline_height
-    background $lumi_opacity_black_level_1
+    background-color $lumi_opacity_black_level_1
     overflow hidden
     .lumi-box-header
         margin-top -(t)
@@ -234,7 +235,7 @@ button
     &.lumi-box-shadow
         box-shadow 0px 0px 5px $lumi_opacity_black_level_1
     &.lumi-box-border
-        border: 1px solid $light_grey
+        border 1px solid $light_grey
     &.lumi-box-blur
         backdrop-filter blur(5px)
 
