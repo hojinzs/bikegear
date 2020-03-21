@@ -19,9 +19,11 @@
 <script>
 import { lumiPopupPannel } from 'vue-luminus-style'
 import InfraPlace from '@/components/apps_infra_place/index'
+import Tag from '../../plugins/journey66_tag'
 
+import axios from 'axios'
 
-import { response } from '@/plugins/sampledb'
+// import { response } from '@/plugins/sampledb'
 
 export default {
     name: 'place_info',
@@ -30,8 +32,14 @@ export default {
         lumiPopupPannel,
     },
     data(){
+        let ajax_url = '//'+process.env.VUE_APP_API_HOST
+            +'/v1/places/'
+
         return {
             showPopup: true,
+            load_place: {
+                url: ajax_url,
+            },
             loading: false,
             place_data: null,
             close_url: { name: 'Bike Infra Map' },
@@ -40,18 +48,37 @@ export default {
     methods: {
         getData(){
             this.loading = true
-            setTimeout(() => {
+
+            axios({
+                method: 'GET',
+                url: this.load_place.url+this.place_id,
+                headers: {
+                    // 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY),
+                },
+            })
+            .then((res) => {
+                console.log("get Place Data => ", res.data);
+                let place = res.data.data
+                place.Tags = {
+                        "Utility" : Tag.filterTagObjectByType(place.tags,'Utility'),
+                        "Brand" : Tag.filterTagObjectByType(place.tags,'Brand'),
+                        "Merchant" : Tag.filterTagObjectByType(place.tags,'Merchant'),
+                        "others" : Tag.filterTagObjectByType(place.tags,'others'),
+                }
+                this.place_data = place
                 this.loading = false
-                this.place_data = response[this.place_id]
-            },800)
+
+            })
+            .catch((error) => {
+                console.log('AXIOS ERROR => ',error,'preset data');
+            })
         }
     },
     created(){
-        this.place_id = String(this.$route.params.id - 1)
-
-        this.getData()
         console.log("VueRouter => ",this.$route.params.id )
-    }
+        this.place_id = this.$route.params.id
+        this.getData()
+    },
 }
 </script>
 

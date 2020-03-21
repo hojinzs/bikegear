@@ -2,6 +2,9 @@ const path = require('path');
 
 module.exports = {
     configureWebpack: {
+        devServer: {
+            host: 'bikegear.test'
+        },
         resolve: {
             alias: {
                 '@': path.join(__dirname, 'src/'),

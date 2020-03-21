@@ -113,10 +113,11 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-// import axios from 'axios'
+import axios from 'axios'
 
 // Sample Data
-import { featured, tags, response } from '../../plugins/sampledb'
+import { featured, tags } from '../../plugins/sampledb'
+// import { featured, tags, response } from '../../plugins/sampledb'
 
 import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 import PlaceCard from './place_card'
@@ -149,6 +150,8 @@ export default {
         PlaceCard,
     },
     data(){
+        let place_load_url = '//'+process.env.VUE_APP_API_HOST+'/v1/places'
+        
         return {
             // 샘플 데이터
             geo,
@@ -156,7 +159,11 @@ export default {
             // 샘플 데이터 edn
             tags,
             infraList: [],
-            infraList_status : 'loading',
+            infraList_ajax: {
+                url: place_load_url,
+                status: 'loading',
+            },
+            infraList_status: 'loading',
             DisplayItems_toggled : 0,
             filter: {
                 tags: []
@@ -225,30 +232,44 @@ export default {
         },
         getInfraData(){
 
-            // later
-            // axios({
-            //     method: 'GET',
-            //     url: process.env.VUE_APP_INFRADB_URL,
-            //     headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) },
-            // })
-            //     .then((res) => {
-            //         // console.log('AXIOS RESPONSE =>',res.data)
-            //         this.infraList_status = 'loaded'
-            //         this.infraList = res.data.Infras
+            axios({
+                method: 'GET',
+                url: this.infraList_ajax.url,
+                headers: {
+                    // 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY),
+                },
+            })
+                .then((res) => {
+                    // console.log('AXIOS RESPONSE =>',res.data)
+                    this.infraList_status = 'loaded'
 
-            //         this.slide.setAsyncFinish()
+                    let list = res.data.data.map(data => {
+                        data.Tags = {
+                            "Utility" : Tag.filterTagObjectByType(data.tags,'Utility'),
+                            "Brand" : Tag.filterTagObjectByType(data.tags,'Brand'),
+                            "Merchant" : Tag.filterTagObjectByType(data.tags,'Merchant'),
+                            "others" : Tag.filterTagObjectByType(data.tags,'others'),
+                        }
+                        return data;
+                    })
 
-            //     })
-            //     .catch((error) => {
-            //         console.log('AXIOS ERROR => ',error,'preset data');
-            //         this.infraList_status = 'error'
-            //     })
+                    this.infraList = list
 
-            setTimeout(() => {
-                this.infraList_status = 'loaded'
-                this.infraList = response
-                this.slide.setAsyncFinish()
-            },400)
+                    console.log(res.data.data)
+
+                    this.slide.setAsyncFinish()
+
+                })
+                .catch((error) => {
+                    console.log('AXIOS ERROR => ',error,'preset data');
+                    this.infraList_status = 'error'
+                })
+
+            // setTimeout(() => {
+            //     this.infraList_status = 'loaded'
+            //     this.infraList = response
+            //     this.slide.setAsyncFinish()
+            // },400)
 
             this.infraList_status = 'loading'
         },

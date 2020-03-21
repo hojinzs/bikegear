@@ -59,6 +59,7 @@ export default class Tag{
      * 태그 배열에서 태그 Object를 반환한다.
      * @param {Array} _tagArray 태그 name의 배열
      * @param {Array} _defaltTags [Nullable] 태그 Obejct의 배열. (기본: 내장 태그 목록)
+     * 
      * @returns {Object} 태그 Object
      */
     static getTagDetailFromArray(_tagArray,_defaltTags = defalut_tags){
@@ -71,6 +72,17 @@ export default class Tag{
         })
 
         return tags
+    }
+
+    /**
+     * 태그 배열에서 입력된 타입이 있는 태그 Object를 반환한다.
+     * @param {Array} _tagArray 태그 배열
+     * @param {String} _type 타입 이름
+     * 
+     * @returns {Objects} 태그 Object
+     */
+    static filterTagObjectByType(_tagArray = [],_type){
+        return _tagArray.filter(tag => tag.type == _type)
     }
 
 }

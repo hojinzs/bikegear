@@ -12,7 +12,7 @@
             <div class="tag-retaging" @click="show_comments = !show_comments">
                 <button class="tag-retaging-wrapper lumi-button lumi-button-flat-dark">
                     <div class="tag-retaging-count">
-                        13
+                        {{ tag.pivot.tagging_counts }}
                     </div>
                     <div class="tag-retaging-label">
                         태깅 수
@@ -66,9 +66,18 @@ export default {
         }
     },
     data(){
+        let ajax_url = '//'+process.env.VUE_APP_API_HOST+'/v1/places/'
+            +this.place_id
+            +'/tags/'
+            +this.tag.id
+
         return {
             show_comments : false,
-            comments: []
+            comments: [],
+            comments_load: {
+                url: ajax_url,
+                status: 'none' // [none, loading, success, fail]
+            }
         }
     },
     methods: {

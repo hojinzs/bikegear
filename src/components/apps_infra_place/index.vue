@@ -55,6 +55,7 @@
                     <keep-alive>
                         <component
                             :is="tab_component" 
+                            :place="place_data"
                             :placeId="place_data.id"
                             :TagList="TagList">
                         </component>
@@ -76,7 +77,6 @@ import lumiTab from '@/components/interface/lumi-tab'
 import PlaceRecommendList from './place-recommend-list'
 import PlaceTagList from './place-tag-list'
 
-import Tag from '@/plugins/journey66_tag'
 import { recommend_comment, tags } from '@/plugins/sampledb'
 
 export default {
@@ -97,7 +97,7 @@ export default {
     },
     computed:{
         TagList(){
-            return Tag.getTagsOnInfra(this.place_data,true)
+            return this.placeData.tags
         },
     },
     data(){

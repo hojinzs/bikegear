@@ -63,6 +63,7 @@
         <!-- 추천글 목록 -->
         <div v-for="(rc,index) in recommend_comment.list" :key="index" class="section">
             <recommend-comment
+                :id="rc.id"
                 :comment="rc.comment"
                 :author="rc.author"
                 :written_at="rc.written_at">
@@ -78,6 +79,9 @@
                     <span key="complete" v-if="recommend_comment.ajax_status == 'complete'" >
                         더 보기
                     </span>
+                    <span key="complete" v-if="recommend_comment.ajax_status == 'nomore'" >
+                        없습니다
+                    </span>
                     <span key="fail" class="warning" v-if="recommend_comment.ajax_status == 'fail'">
                         [!] {{ recommend_comment.ajax_fail_message }}
                     </span>
@@ -88,18 +92,29 @@
 </template>
 
 <script>
-import { recommend_comment } from '@/plugins/sampledb'
+import axios from 'axios'
+// import { recommend_comment } from '@/plugins/sampledb'
 
 import recommendComment from './place-recommend-comment'
 import vueExtendedTextarea from '@/components/interface/vue-extended-textarea'
 
 export default {
     name: 'place-recommend-list',
+    props: {
+        place: {
+            type: Object,
+            required: true,
+        }
+    },
     components: {
         'recommend-comment': recommendComment,
         'vue-extended-textarea' : vueExtendedTextarea
     },
     data(){
+        let ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/places/'
+            +this.place.id
+            +'/recommends'
+
         return {
             user_data: {
                 login: true,
@@ -113,7 +128,8 @@ export default {
             },
             recommend_comment: {
                 list: [],
-                ajax_status: 'complete', // [complete, loading, fail]
+                ajax_address: ajax_address,
+                ajax_status: 'complete', // [complete, loading, fail, nomore]
                 ajax_fail_message: null,
             },
         }
@@ -180,33 +196,38 @@ export default {
         },
         getRecommendCommentList(){
 
+            //get data
+            axios({
+                method: 'GET',
+                url: this.recommend_comment.ajax_address
+            })
+            .then(res => {
+                console.log("get Recommend Data => ",res)
+
+                // 코멘트 배열에 데이터 넣기
+                let comments = res.data.data
+                comments.forEach(comment => {
+                    let newComment = {
+                        id: comment.id,
+                        comment: comment.comment,
+                        author: comment.author.name,
+                        written_at: comment.written_at,                        
+                    }
+                    this.recommend_comment.list.push(newComment)
+                })
+
+                // 페이징 처리
+                if(res.data.links.next != null){
+                    this.recommend_comment.ajax_address = res.data.links.next
+                    this.recommend_comment.ajax_status = 'complete'
+                } else {
+                    this.recommend_comment.ajax_status = 'nomore'
+                }
+            })
+
             //Before
             this.recommend_comment.ajax_status = 'loading'
 
-            //Post
-            let ajax_success = Math.round(Math.random())
-            setTimeout(()=>{
-
-                if(ajax_success){
-                    // Success
-                    let newComment = JSON.parse(JSON.stringify(recommend_comment))
-                    for (let i = 0; i < 5; i++) {
-                        this.recommend_comment.ajax_status = 'complete'
-                        this.recommend_comment.list.push(newComment)
-                    }
-                } else {
-                    // Fail
-                    this.recommend_comment.ajax_status = 'fail'
-                    this.recommend_comment.ajax_fail_message = '목록 불러오기 실패'
-
-                    setTimeout(() => this.recommend_comment.ajax_status = 'complete',2000)
-
-                }
-
-                //Complete
-                console.log("success => ",ajax_success)
-
-            },1200)
         }
     },
     created(){
