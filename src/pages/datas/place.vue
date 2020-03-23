@@ -49,6 +49,8 @@ export default {
         getData(){
             this.loading = true
 
+            axios.defaults.withCredentials = true
+
             axios({
                 method: 'GET',
                 url: this.load_place.url+this.place_id,

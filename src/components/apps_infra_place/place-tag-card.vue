@@ -23,7 +23,7 @@
         <div class="tag-recommends">
             <div v-if="show_comments">
                 <hr class="lumi-horizon">
-                <div class="tag-comment" v-for="(cmt, index) in comments" :key="index">
+                <div class="tag-comment" v-for="cmt in tag_comments.list" :key="cmt.id">
                     <div class="tag-comment-row">
                         <div class="tag-comment-text">
                             {{ cmt.comment }}
@@ -31,7 +31,7 @@
                     </div>
                     <div class="tag-comment-row">
                         <div class="tag-author tag-comment-row-item">
-                            <a class="a-flat a-flat-red" href="" @click.prevent><font-awesome-icon icon="heart" /> {{ cmt.like }}</a>
+                            <a class="a-flat a-flat-red" href="" @click.prevent><font-awesome-icon icon="heart" /> {{ cmt.likes }}</a>
                             | {{ cmt.author }}
                             | {{ _written_at(cmt.written_at) }}
                         </div>
@@ -48,7 +48,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import placeTagMini from './place-tag-mini'
 
-import { tag_comment } from '@/plugins/sampledb'
+import axios from 'axios'
+
+// import { tag_comment } from '@/plugins/sampledb'
 
 export default {
     name: 'place-tag-card',
@@ -63,29 +65,55 @@ export default {
         tag: {
             type: Object,
             required: true
-        }
+        },
     },
     data(){
         let ajax_url = '//'+process.env.VUE_APP_API_HOST+'/v1/places/'
             +this.place_id
             +'/tags/'
             +this.tag.id
+            +'/comments'
 
         return {
             show_comments : false,
             comments: [],
-            comments_load: {
-                url: ajax_url,
-                status: 'none' // [none, loading, success, fail]
+            tag_comments: {
+                ajax_url: ajax_url,
+                ajax_status: 'standby', //[stanby, loading, success, fail, nomore]
+                ajax_fail_message: null,
+                list: [],
             }
         }
     },
     methods: {
         getTagComments(){
-            let comment = JSON.parse(JSON.stringify(tag_comment))
-            for (let i = 0; i < 5; i++) {
-                this.comments.push(comment)
-            }
+
+            //get data
+            axios({
+                method: 'GET',
+                url: this.tag_comments.ajax_url
+            })
+            .then(res => {
+                console.log("get Tag Comment Data => ",res)
+
+                //코멘트 배열에 데이터 넣기
+                let comments = res.data.data
+                comments.forEach(comment => {
+                    let newComment = {
+                        id: comment.id,
+                        comment: comment.comment,
+                        likes: comment.likes,
+                        author: comment.author.name,
+                        written_at: comment.written_at,
+                    }
+                    this.tag_comments.list.push(newComment);
+                })
+
+                this.tag_comments.ajax_status = 'success'
+            })
+
+            // Before
+            this.tag_comments.ajax_status = 'complete'
         },
         _written_at(date){
             return moment(date).fromNow()

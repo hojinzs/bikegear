@@ -45,11 +45,7 @@
                 <div class="section" key="done"
                 v-if="( user_data.login == true && post_comment.status == 'posted' && post_comment.user_posted != null)">
                     <b>내가 작성한 추천글</b>
-                    <recommend-comment
-                        :comment="post_comment.user_posted.comment"
-                        :author="post_comment.user_posted.author"
-                        :written_at="post_comment.user_posted.written_at">
-                    </recommend-comment>
+                    <recommend-comment :recommend="post_comment.user_posted" />
                     <a @click="toggle_showNewCommentForm(true)">업데이트 하기</a>
                 </div>
             
@@ -62,12 +58,7 @@
 
         <!-- 추천글 목록 -->
         <div v-for="(rc,index) in recommend_comment.list" :key="index" class="section">
-            <recommend-comment
-                :id="rc.id"
-                :comment="rc.comment"
-                :author="rc.author"
-                :written_at="rc.written_at">
-            </recommend-comment>
+            <recommend-comment :recommend="rc" />
         </div>
         <div class="section lumi-button-full">
             <button class="lumi-button lumi-button-flat-dark" ref="scrollend" :disabled="(recommend_comment.ajax_status != 'complete')"
@@ -210,6 +201,7 @@ export default {
                     let newComment = {
                         id: comment.id,
                         comment: comment.comment,
+                        likes: comment.likes,
                         author: comment.author.name,
                         written_at: comment.written_at,                        
                     }

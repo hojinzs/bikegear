@@ -6,12 +6,12 @@
             </slot>
             <div class="recommend-comment-info">
                 <div class="like">
-                    <a class="a-flat a-flat-red" href="" @click.prevent="++like">
-                        <font-awesome-icon :icon="'heart'" />  {{this.like}}
+                    <a class="a-flat a-flat-red" href="" @click.prevent="++recommend.like">
+                        <font-awesome-icon :icon="'heart'" />  {{ recommend.likes }}
                     </a>  명이 공감합니다.
                 </div>
                 <div class="author">
-                    by {{author}} - {{ _written_at  }}
+                    by {{ _author_name }} - {{ _written_at  }}
                 </div>
             </div>
         </div>
@@ -38,23 +38,20 @@ export default {
         'font-awesome-icon' : FontAwesomeIcon,
     },
     props: {
-        comment: {
-            type: String,
+        recommend: {
+            type: Object,
+            require: true,
         },
-        author: {
-            type: String,
-            required: true
-        },
-        written_at: {
-            required: true
-        }
     },
     computed: {
         _written_at(){
-            return moment(this.written_at).fromNow()
+            return moment(this.recommend.written_at).fromNow()
         },
         _comment(){
-            return xss(hoxy.bl2r(this.comment))
+            return xss(hoxy.bl2r(this.recommend.comment))
+        },
+        _author_name(){
+            return this.recommend.author.name
         }
     }
 }

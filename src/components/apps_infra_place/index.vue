@@ -11,11 +11,7 @@
             </div>
             <div class="place-contents-block">
                 <div class="section">
-                    <recommendComment
-                        :comment="recommend_comment_sample.comment"
-                        :author="recommend_comment_sample.author"
-                        :written_at="recommend_comment_sample.written_at">
-                    </recommendComment>
+                    <recommendComment :recommend="recommend_comment_sample" />
                 </div>
                 <div class="section">
                     <div>
