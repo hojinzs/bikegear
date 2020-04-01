@@ -46,6 +46,14 @@
 
                     <div class="flex_wrapper">
 
+                        <div v-if="isMobile">
+                            <a @click="$store.dispatch('user/loginByStrava')">
+                                <button>
+                                    <font-awesome-icon class="showmenu" :icon="['fab', 'strava']" /> Login With Strava
+                                </button>
+                            </a>
+                        </div>
+
                         <ul v-for="(First,i1) in MenuRight"
                             v-bind:key="i1">
 
@@ -111,9 +119,10 @@ import StyleVariable from '@/assets/variable.styl'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBars,faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faStrava } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faBars,faTimes)
+library.add(faBars,faTimes,faStrava)
 
 export default {
     components:{
@@ -147,8 +156,16 @@ export default {
         }
     },
     computed:{
-        isMobile(){ return this.window.width < Number(this.StyleVariable.containerWidth.replace("px","")) },
-        isClear(){ return this.scrollLimit > this.scroll }
+        isMobile(){
+            return this.window.width < Number(this.StyleVariable.containerWidth.replace("px","")) 
+        },
+        isClear(){
+            return this.scrollLimit > this.scroll
+        },
+        stravaLogin(){
+            return "//auth.bikegear.test/strava/signup?"
+                +"&return_url="+window.location.href
+        }
     },
     created(){
         window.addEventListener('resize',this.handleResize)

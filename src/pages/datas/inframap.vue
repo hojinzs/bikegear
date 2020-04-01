@@ -13,9 +13,9 @@ export default {
         InfraMap,
     },
     created(){
-        this.$store.commit('cover_style_change','none');
-        this.$store.commit('cover_title_change','');
-        this.$store.commit('background_change','');
+        this.$store.commit('page/cover_style_change','none');
+        this.$store.commit('page/cover_title_change','');
+        this.$store.commit('page/background_change','');
     }
 }
 </script>

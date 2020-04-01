@@ -10,6 +10,10 @@ import infra_map from './pages/datas/inframap'
 import place_info from './pages/datas/place'
 import place_owner_form from './pages/extra/place-owner-form'
 
+import login from './pages/login.vue'
+import signup from './pages/signup.vue'
+import user from './pages/account/user.vue'
+
 import test from './pages/test.vue'
 
 Vue.use(VueRouter)
@@ -24,6 +28,21 @@ export const router = new VueRouter({
                 default: home,
                 cover: home_cover
             },
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: login,
+        },
+        {
+            path: '/signup',
+            name: 'SignUp',
+            component: signup,
+        },
+        {
+            path: '/user',
+            name: "User",
+            component: user,
         },
         {
             path: '/data/components',

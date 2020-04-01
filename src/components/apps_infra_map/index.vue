@@ -232,6 +232,7 @@ export default {
         },
         getInfraData(){
 
+            // axios.defaults.withCredentials = true;
             axios({
                 method: 'GET',
                 url: this.infraList_ajax.url,

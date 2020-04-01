@@ -1,31 +1,31 @@
 <template>
-    <div id="app" :class="{blocked: (this.$store.state.cover_style == 'none') }">
+    <div id="app" :class="{blocked: (this.$store.state.page.cover_style == 'none') }">
 
         <TopMenuBar
-            :Blocked="(this.$store.state.cover_style == 'none')"
+            :Blocked="(this.store_cover_style == 'none')"
             :TitleText="'Journey66'"
             :MenuLeft="ShotLinks"
             :MenuRight="GlobalMenu"></TopMenuBar>
 
         <div id="FullCover"
-            v-if="this.$store.state.cover_style == 'full'"
+            v-if="this.store_cover_style == 'full'"
             :style="[FullCover]"></div>
 
         <div id="TitleCover"
-            v-if="this.$store.state.cover_style == 'cover'"
+            v-if="this.store_cover_style == 'cover'"
             :style="[Background]">
             
-            <h2>{{ this.$store.state.cover_title }}</h2>
+            <h2>{{ this.$store.state.page.cover_title }}</h2>
             <div class="container_wrapper cover_contents">
                 <router-view name="cover"></router-view>
             </div>
         </div>
 
-        <div id="contents" :class="{scrolled: (this.$store.state.cover_style != 'none') }">
+        <div id="contents" :class="{scrolled: (this.store_cover_style != 'none') }">
             <router-view></router-view>
         </div>
 
-        <div id="footer" v-if="(this.$store.state.cover_style != 'none')">
+        <div id="footer" v-if="(this.store_cover_style != 'none')">
             <Footer></Footer>
         </div>
         
@@ -50,11 +50,6 @@ let GlobalMenu = [
         url: '/route',
         use: false,
     },
-    // {
-    //     name: "Community",
-    //     url: '/community',
-    //     use: false,
-    // },
     {
         name: "Database",
         url: '/data',
@@ -109,17 +104,20 @@ export default {
         }
     },
     computed:{
-        username(){
-            return this.$route.params.username
+        store_bacground(){
+            return this.$store.state.page.cover_background
+        },
+        store_cover_style(){
+            return this.$store.state.page.cover_style
         },
         Background(){
             return {
-                backgroundImage: "linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2),rgba(0,0,0,0.2),rgba(0,0,0,0.5)), url(" + this.$store.state.cover_background + ")",
+                backgroundImage: "linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2),rgba(0,0,0,0.2),rgba(0,0,0,0.5)), url(" + this.store_bacground + ")",
             }
         },
         FullCover(){
             return {
-                backgroundImage: "linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.4)), url(" + this.$store.state.cover_background + ")",
+                backgroundImage: "linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.4)), url(" + this.store_bacground + ")",
             }
         }
     },

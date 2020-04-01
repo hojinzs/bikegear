@@ -1,8 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-export const store = new Vuex.Store({
+const page = {
+    namespaced: true,
     state: {
         cover_title: 'default title',
         cover_style: 'cover',
@@ -44,4 +41,6 @@ export const store = new Vuex.Store({
             state.cover_background = _url
         },
     }
-})
+}
+
+export default page
