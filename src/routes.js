@@ -16,6 +16,8 @@ import user from './pages/account/user.vue'
 
 import test from './pages/test.vue'
 
+import { store } from './store/index'
+
 Vue.use(VueRouter)
 
 export const router = new VueRouter({
@@ -93,4 +95,9 @@ export const router = new VueRouter({
             }
         }
     },
+})
+router.beforeEach((to, from, next) => {
+    store.commit('ui/show_menu',false)
+
+    next()
 })

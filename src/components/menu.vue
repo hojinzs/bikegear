@@ -12,7 +12,7 @@
                 <ul>
                     <router-link 
                     to="/"
-                    @click.native="mobile_show_menu = false">
+                    @click.native="toggleMobileMenu">
                         <div class="logo_item">
                             <span><b>{{TitleText}}</b></span>
                         </div>
@@ -33,7 +33,7 @@
 
             <template v-if="isMobile">
                 <div id="MobileMenu">
-                    <ul v-on:click="mobile_show_menu = !mobile_show_menu">
+                    <ul v-on:click="toggleMobileMenu">
                         <font-awesome-icon v-if="!mobile_show_menu" class="showmenu" icon="bars" />
                         <font-awesome-icon v-if="mobile_show_menu" class="showmenu" icon="times" />
                     </ul>
@@ -46,12 +46,10 @@
 
                     <div class="flex_wrapper">
 
-                        <div v-if="isMobile">
-                            <a @click="$store.dispatch('user/loginByStrava')">
-                                <button>
-                                    <font-awesome-icon class="showmenu" :icon="['fab', 'strava']" /> Login With Strava
-                                </button>
-                            </a>
+                        <div class="menu-section-wrapper">
+                            <div class="menu-section">
+                                <menu-user-profile v-if="isMobile" />
+                            </div>
                         </div>
 
                         <ul v-for="(First,i1) in MenuRight"
@@ -119,14 +117,16 @@ import StyleVariable from '@/assets/variable.styl'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBars,faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faStrava } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faBars,faTimes,faStrava)
+library.add(faBars,faTimes)
+
+import menuUserProfile from './menu-user-profile.vue'
 
 export default {
     components:{
-        'font-awesome-icon' : FontAwesomeIcon
+        'font-awesome-icon': FontAwesomeIcon,
+        'menu-user-profile': menuUserProfile,
     },
     props: {
         TitleText: String,
@@ -152,7 +152,7 @@ export default {
                 height: 0,
             },
             menu_hover: false,
-            mobile_show_menu: false,
+            // mobile_show_menu: false,
         }
     },
     computed:{
@@ -165,6 +165,9 @@ export default {
         stravaLogin(){
             return "//auth.bikegear.test/strava/signup?"
                 +"&return_url="+window.location.href
+        },
+        mobile_show_menu(){
+            return this.$store.state.ui.show_menu;
         }
     },
     created(){
@@ -194,9 +197,12 @@ export default {
             this.menu_hover = false;
         },
         doCloseMenu(){
-            this.mobile_show_menu = false;
+            this.$store.commit('ui/show_menu',false)
             this.MenuRight_expaneded = false;
             this.menu_hover = false;
+        },
+        toggleMobileMenu(){
+            this.$store.commit('ui/show_menu',!this.$store.state.ui.show_menu)
         }
     },
     mounted(){
@@ -334,6 +340,13 @@ $shadow_color = #595959
                 hr
                     width 60%
                     border: solid 1px $link_color_disabled
+            .menu-section-wrapper
+                display flex
+                .menu-section
+                    width 80%
+                    margin 0 auto
+                    margin-top 8px
+                    margin-bottom 8px
 /**
 * Animation Styles
 */

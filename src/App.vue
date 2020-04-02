@@ -35,6 +35,7 @@
 <script>
 import TopMenuBar from '@/components/menu'
 import Footer from '@/components/footer'
+import axios from 'axios'
 
 let ShotLinks = [
     {
@@ -128,9 +129,11 @@ export default {
                 : this.$route.push('/')
         }
     },
-    mounted(){
-        
-    }
+    created(){
+        if(axios.defaults.headers.common['Authorization']){
+            this.$store.dispatch('user/loginByApiToken')
+        }
+    },
 }
 </script>
 

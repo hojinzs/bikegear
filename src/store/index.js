@@ -4,10 +4,12 @@ Vue.use(Vuex)
 
 import page from './modules/page'
 import user from './modules/user'
+import ui from './modules/ui'
 
 export const store = new Vuex.Store({
   modules: {
     page: page,
     user: user,
+    ui: ui,
   }
 })

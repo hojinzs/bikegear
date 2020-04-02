@@ -4,12 +4,10 @@
             Who Am I?
         </div>
         <div v-if="userData">
-            {{ userData.user }}
-
             <div>
-                <a :href="stravaLoginURL">integrate Strava</a>
+                {{ userData }}
             </div>
-
+            <button @click="$store.dispatch('user/logout')">Logout</button>
         </div>
 
         <div v-else>
@@ -20,40 +18,20 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
     name: 'userInformation',
-    data()
-    {
-        let url = '//'+process.env.VUE_APP_API_HOST+'/v1/user'
-        return {
-            ajax_url: url,
-            userData: null,
-        }
-    },
     computed: {
-        stravaLoginURL(){
-            return "//auth.bikegear.test/strava/signin?"
-                +"api_token="+this.userData.api_token
-                +"&return_url="+window.location.href
+        userData(){
+            return this.$store.state.user.user_data
         }
     },
     created()
     {
-        axios({
-            method: 'GET',
-            url: this.ajax_url,
-            withCredentials: true,
-        })
-            .then(res => {
-                console.log('Get User Data =>',res.data)
-                this.userData = res.data
-                console.log(this.stravaLoginURL);
-            })
-            .catch(Err => {
-                console.log("Error => ",Err)
-            })
+        this.$store.commit('page/cover_style_change','cover');
+        this.$store.commit('page/cover_title_change',"My Page");
+        this.$store.commit('page/background_change','/images/bw-bike01.jpg');
     }
 }
 </script>
