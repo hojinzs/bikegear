@@ -5,14 +5,25 @@
             <div v-if="userData">
                 <menu-user-profile :logout="false" />
                 <lumi-tab ref="tab" :tabs="tabs" @toggle="toggleTab" :default="tabSelected.index" />
-                <router-view v-if="!(tabSelected.value == 'information')" ></router-view>
+
+                <!-- default page -->
                 <information v-if="(tabSelected.value == 'information')"/>
+
+                <!-- user sub pages -->
+                <router-view v-else />
             </div>
 
             <!-- if user auth failed -->
             <div v-else>
-                Cannot Find user Data
-                <router-link to="Login">Login First</router-link> 
+                <div v-if="(dataLoaded == 'loading' || initialLoading == true)">
+                    Loading User Data
+                </div>
+                <div v-else>
+                    Cannot Find user Data {{ dataLoaded }}
+                    <br/>
+                    <br/>
+                    <menu-user-profile :logout="false" />
+                </div>
             </div>
         </div>
     </div>
@@ -31,12 +42,6 @@ export default {
         'menu-user-profile': meneUserProfile,
         'lumi-tab': lumiTab,
         'information' : information,
-    },
-    computed:
-    {
-        userData(){
-            return this.$store.state.user.user_data
-        }
     },
     data(){
         let tabs = [
@@ -63,7 +68,8 @@ export default {
 
         return {
             tabs: tabs,
-            tabSelected: tabSelected
+            tabSelected: tabSelected,
+            initialLoading: true,
         }
     },
     methods:
@@ -71,6 +77,15 @@ export default {
         toggleTab(value){
             this.tabSelected = this.tabs.find( item => item.value == value )
         },
+    },
+    computed:
+    {
+        dataLoaded(){
+            return this.$store.state.user.loading
+        },
+        userData(){
+            return this.$store.state.user.user_data
+        }
     },
     created()
     {
@@ -82,12 +97,20 @@ export default {
         // set default tab
         this.tabSelected = this.tabs.find( tab => tab.route.name == this.$router.currentRoute.name )
     },
+    mounted()
+    {
+        if(this.userData == null){
+            setTimeout(() => {
+                this.initialLoading = false
+            }, 1000)
+        }
+    },
     watch:{
         tabSelected(tab){
             if(tab.route.name != this.$router.currentRoute.name){
                 this.$router.push(tab.route)
             }
-        }
+        },
     }
 }
 </script>

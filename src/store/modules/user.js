@@ -9,10 +9,14 @@ let strava_signup_address = '//'+process.env.VUE_APP_AUTH_HOST+'/strava/signup?'
 const user = {
     namespaced: true,
     state: {
+        status: 'ready', // [ready, loading]
         access_token: null,
         user_data: null,
     },
     mutations:{
+        loading(state, data){
+            state.loading = data
+        },
         login(state, data){
             state.access_token = data.token;
             state.user_data = data.user;
@@ -34,6 +38,8 @@ const user = {
     },
     actions:{
         loginByEmail({commit}, {email, password}){
+            commit('loading','loading')
+
             return axios({
                 method: 'POST',
                 url: email_login_ajax_address,
@@ -47,10 +53,15 @@ const user = {
                 .catch(error => {
                     throw Error(error)
                 })
+                .finally(() => {
+                    commit('loading','ready')
+                })
         },
         loginByApiToken({commit}){
             axios.get('//'+process.env.VUE_APP_API_HOST+'/sanctum/csrf-cookie')
                 .then(() => {
+                    commit('loading','loading')
+
                     return axios({
                         method: 'POST',
                         url: token_login_ajax_address,
@@ -62,6 +73,9 @@ const user = {
                         })
                         .catch(error => {
                             throw Error(error)
+                        })
+                        .finally(() => {
+                            commit('loading','ready')
                         })
                 })
         },

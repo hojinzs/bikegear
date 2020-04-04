@@ -128,8 +128,6 @@ export const router = new VueRouter({
         }
     },
 })
-router.beforeEach((to, from, next) => {
+router.afterEach(() => {
     store.commit('ui/show_menu',false)
-
-    next()
 })
