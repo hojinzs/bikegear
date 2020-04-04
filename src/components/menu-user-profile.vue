@@ -17,7 +17,7 @@
                     <router-link :to="{ name:'User' }">{{ userData.name }}</router-link>
                 </div>
             </div>
-            <div class="logout">
+            <div v-if="logout" class="logout">
                 <button class="logout-button"  @click="$store.dispatch('user/logout')">
                     <font-awesome-icon class="showmenu" :icon="['fas', 'sign-out-alt']" /> Logout
                 </button>
@@ -36,6 +36,12 @@ export default {
     name: 'menu-user-profile',
     components: {
         'font-awesome-icon' : FontAwesomeIcon
+    },
+    props: {
+        logout: {
+            type: Boolean,
+            default: true,
+        }
     },
     computed: {
         userData() {

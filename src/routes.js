@@ -1,21 +1,41 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+/**
+ * Home
+ */
 import home from './pages/home'
 import home_cover from './components/home/cover.vue'
+
+/**
+ * Apps
+ */
 import apps from './pages/apps/index'
 import gear_calculator from './pages/apps/gears'
 import component_database from './pages/datas/components'
 import infra_map from './pages/datas/inframap'
-import place_info from './pages/datas/place'
-import place_owner_form from './pages/extra/place-owner-form'
+    import place_info from './pages/datas/place'
 
 import login from './pages/login.vue'
 import signup from './pages/signup.vue'
-import user from './pages/account/user.vue'
 
+/**
+ * /User
+ */
+import user from './pages/user/index.vue'
+import userPlaces from './pages/user/user-places.vue'
+import userTags from './pages/user/user-tags.vue'
+
+
+/**
+ * Extra
+ */
 import test from './pages/test.vue'
+import place_owner_form from './pages/extra/place-owner-form'
 
+/**
+ * Vuex Store
+ */
 import { store } from './store/index'
 
 Vue.use(VueRouter)
@@ -45,6 +65,18 @@ export const router = new VueRouter({
             path: '/user',
             name: "User",
             component: user,
+            children: [
+                {
+                    path: 'places',
+                    name: 'UserPlaces',
+                    component: userPlaces,
+                },
+                {
+                    path: 'tags',
+                    name: 'UserTags',
+                    component: userTags,
+                }
+            ]
         },
         {
             path: '/data/components',
@@ -68,16 +100,16 @@ export const router = new VueRouter({
             name: 'Apps',
             component: apps,
         },
-        {
-            path: '/app/gears',
-            name: 'Gear Calculator',
-            component: gear_calculator,
-        },
-        {
-            path: '/test',
-            name: 'test page',
-            component: test,
-        },
+            {
+                path: '/app/gears',
+                name: 'Gear Calculator',
+                component: gear_calculator,
+            },
+            {
+                path: '/test',
+                name: 'test page',
+                component: test,
+            },
         {
             path: '/extra/iam-owner',
             name: 'iamowner',

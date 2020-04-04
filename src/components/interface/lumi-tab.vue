@@ -14,10 +14,15 @@
 <script>
 export default {
     name: "lumi-tab",
-    props: {
+    props:
+    {
         tabs: {
             type: Array,
             required: true,
+        },
+        default: {
+            type: Number,
+            default: 0,
         }
     },
     data(){
@@ -25,12 +30,20 @@ export default {
             tabToggled: this.tabs[0]
         }
     },
-    methods: {
+    methods:
+    {
         toggleTab(_index = 0){
             this.tabToggled = this.tabs[_index]
         }
     },
-    watch: {
+    created()
+    {
+        if(this.default){
+            this.toggleTab(this.default)
+        }
+    },
+    watch:
+    {
         tabToggled(){
             this.$emit('toggle',this.tabToggled.value)
         }
