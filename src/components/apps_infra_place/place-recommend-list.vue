@@ -87,7 +87,8 @@ export default {
                         id: comment.id,
                         comment: comment.comment,
                         likes: comment.likes,
-                        author: comment.author.name,
+                        user_like: comment.user_like,
+                        author: comment.author,
                         written_at: comment.written_at,                        
                     }
                     this.recommend_comment.list.push(newComment)

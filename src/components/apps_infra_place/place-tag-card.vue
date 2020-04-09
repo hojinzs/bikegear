@@ -31,7 +31,8 @@
                     </div>
                     <div class="tag-comment-row">
                         <div class="tag-author tag-comment-row-item">
-                            <a class="a-flat a-flat-red" href="" @click.prevent><font-awesome-icon icon="heart" /> {{ cmt.likes }}</a>
+                            <a class="a-flat a-flat-red" href="" @click.prevent="toggleCommentLike(cmt)">
+                                <font-awesome-icon class="thumbs-up" :class="{ 'active' : cmt.user_like == true }" icon="heart" /> {{ cmt.likes }}</a>
                             | {{ cmt.author }}
                             | {{ _written_at(cmt.written_at) }}
                         </div>
@@ -103,6 +104,7 @@ export default {
                         id: comment.id,
                         comment: comment.comment,
                         likes: comment.likes,
+                        user_like: comment.user_like,
                         author: comment.author.name,
                         written_at: comment.written_at,
                     }
@@ -117,7 +119,25 @@ export default {
         },
         _written_at(date){
             return moment(date).fromNow()
+        },
+        toggleCommentLike(comment){
+            axios.post('//'+process.env.VUE_APP_API_HOST+'/v1/places/tags/comments/'+comment.id+'/like')
+                .then(res => {
+                    switch (res.data) {
+                        case 'stored':
+                            ++comment.likes
+                            comment.user_like = true
+                            break;
+                        case 'destroyed':
+                            --comment.likes
+                            comment.user_like = false
+                            break;                    
+                        default:
+                            break;
+                    }
+                })
         }
+
     },
     mounted() {
         this.getTagComments()
@@ -127,6 +147,9 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../assets/variable.styl'
+
+.thumbs-up.active
+    color red
 
 .tag-card
     .tag

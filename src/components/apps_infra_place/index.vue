@@ -28,7 +28,9 @@
                 </div>
                 <div class="lumi-button-group section">
                     <button class="lumi-button lumi-button-black">
-                        <font-awesome-icon :icon="'thumbs-up'" /> {{' '}}{{place_data.like}}
+                        <a @click="togglePlaceLike()">
+                            <font-awesome-icon class="thumbs-up" :class="{'active': place_data.user_like == true }" :icon="'thumbs-up'" /> {{' '}}{{place_data.likes_count}}
+                        </a>
                     </button>
                     <button class="lumi-button lumi-button-black" @click="showHomepage(place_data.Url)">
                         웹사이트
@@ -74,6 +76,8 @@ import PlaceRecommendList from './place-recommend-list'
 import PlaceTagList from './place-tag-list'
 
 import { recommend_comment, tags } from '@/plugins/sampledb'
+
+import axios from 'axios'
 
 export default {
     name: 'infra-place',
@@ -123,6 +127,23 @@ export default {
         },
         toggleTab(_component){
             this.tab_component = _component
+        },
+        togglePlaceLike(){
+            axios.post('//'+process.env.VUE_APP_API_HOST+'/v1/places/'+this.placeData.id+'/like')
+                .then(res => {
+                    switch (res.data) {
+                        case 'stored':
+                            ++this.place_data.likes_count
+                            this.place_data.user_like = true
+                            break;
+                        case 'destroyed':
+                            --this.place_data.likes_count
+                            this.place_data.user_like = false
+                            break;                    
+                        default:
+                            break;
+                    }
+                })
         }
     },
     created(){
@@ -134,6 +155,8 @@ export default {
 <style lang="stylus" scoped>
 @import '../../assets/variable.styl'
 @import '../../assets/luminus.styl'
+.thumbs-up.active
+    color red
 
 .place-data
     width 100%
