@@ -26,9 +26,9 @@ export default {
         'vue-form-generator' : VueFormGenerator.component
     },
     created(){
-        this.$store.commit('cover_style_change','cover');
-        this.$store.commit('cover_title_change',"장소 / 매장 소유자 등록");
-        this.$store.commit('background_change','/images/w-cycling.jpg');
+        this.$store.commit('page/cover_style_change','cover');
+        this.$store.commit('page/cover_title_change',"장소 / 매장 소유자 등록");
+        this.$store.commit('page/background_change','/images/w-cycling.jpg');
     },
     data(){
         return {

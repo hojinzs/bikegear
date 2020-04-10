@@ -15,7 +15,7 @@ export default {
     },
     created(){
         this.$store.commit('page/cover_style_change','cover');
-        this.$store.commit('page/.cover_title_change',"Gear Ratio Calculator");
+        this.$store.commit('page/cover_title_change',"Gear Ratio Calculator");
         this.$store.commit('page/background_change','/images/w-cycling.jpg');
     }
 }

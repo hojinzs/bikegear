@@ -7,7 +7,7 @@
 
                     <!-- Loading -->
                     <li class="lumi-flex-slider-item"
-                    v-if="infraList_status == 'loading'">
+                    v-if="infraList_status === 'loading'">
                         <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow">
                             <img class="loading" src="/images/Spinner-1s-104px.gif">
                                 <!-- :style="{color: item.color}"/> -->
@@ -17,7 +17,7 @@
 
                     <!-- Load Error -->
                     <li class="lumi-flex-slider-item"
-                    v-if="infraList_status == 'error'">
+                    v-if="infraList_status === 'error'">
                         <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
                             :style="{color: 'red'}">
                             <font-awesome-icon class="infra-icon"
@@ -33,7 +33,7 @@
                         <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
                         @click="toggleFilter(item.name)">
                             <span class="dot infra-indicator-item"
-                                :class="{'active' : (filter.tags.indexOf(item.name) != -1) }">
+                                :class="{'active' : (filter.tags.indexOf(item.name) !== -1) }">
                             </span>
                             <font-awesome-icon class="infra-icon infra-indicator-item"
                                 :icon="item.icon"
@@ -72,7 +72,7 @@
                         <PlaceCard
                             :title="place.name"
                             :thumbnail_img_url="place.Image"
-                            :extention_toggled="(DisplayItems_toggled == index)">
+                            :extention_toggled="(DisplayItems_toggled === index)">
                             {{place.type}}
                             <template v-slot:expention>
                                 <button class="lumi-button-liner"

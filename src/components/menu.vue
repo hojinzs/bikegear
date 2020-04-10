@@ -11,8 +11,7 @@
             <div id="MenuLeft">
                 <ul>
                     <router-link 
-                    to="/"
-                    @click.native="toggleMobileMenu">
+                    to="/">
                         <div class="logo_item">
                             <span><b>{{TitleText}}</b></span>
                         </div>
@@ -46,11 +45,11 @@
 
                     <div class="flex_wrapper">
 
-                        <div class="menu-section-wrapper">
+                        <ul class="menu-section-wrapper" v-if="isMobile">
                             <div class="menu-section">
-                                <menu-user-profile v-if="isMobile" />
+                                <menu-user-profile />
                             </div>
-                        </div>
+                        </ul>
 
                         <ul v-for="(First,i1) in MenuRight"
                             v-bind:key="i1">
@@ -58,7 +57,7 @@
                             <template v-if="First.use">
                                 <router-link 
                                     :to="First.url"
-                                    @click.native="mobile_show_menu = false;">
+                                    @click.native="mobile_show_menu = false">
 
                                     <span class="first_menu">{{First.name}}</span>
 
@@ -70,7 +69,7 @@
 
                             <hr v-show="isMobile">
 
-                            <transition name="menu-fade">
+<!--                            <transition name="menu-fade">-->
 
                             <menuitem v-show="(MenuRight_expaneded || isMobile)">
 
@@ -95,9 +94,29 @@
 
                             </menuitem>
 
-                            </transition>
+<!--                            </transition>-->
 
                         </ul>
+
+                        <ul v-if="(!isMobile)">
+                            <menu-user-profile-mini class="user-info"/>
+
+                            <menuitem v-if="$store.getters['user/signed']" v-show="(MenuRight_expaneded || isMobile)">
+                                <li class="item">
+                                    <router-link :to="{ name: 'User' }">
+                                        <span class="second_menu">
+                                            MyPage
+                                        </span>
+                                    </router-link>
+                                </li>
+                                <li class="item">
+                                    <a href="" @click.prevent="$store.dispatch('user/logout')">
+                                        Logout
+                                    </a>
+                                </li>
+                            </menuitem>
+                        </ul>
+
 
                     </div>
 
@@ -122,11 +141,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faBars,faTimes)
 
 import menuUserProfile from './menu-user-profile.vue'
+import menuUserProfileMini from './menu-user-profile-mini.vue'
 
 export default {
     components:{
         'font-awesome-icon': FontAwesomeIcon,
         'menu-user-profile': menuUserProfile,
+        'menu-user-profile-mini': menuUserProfileMini
     },
     props: {
         TitleText: String,
@@ -211,7 +232,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import "../assets/variable.styl"
 
@@ -288,7 +309,6 @@ $shadow_color = #595959
             .showmenu
                 height 1em
                 margin-right 1em
-
         #MenuRight
             .flex_wrapper
                 display flex
@@ -300,6 +320,8 @@ $shadow_color = #595959
                         display block
                         font-size 90%
                         overflow hidden
+            .user-info
+                margin-top -0.2em
 
 .mobile-bg
     position absolute

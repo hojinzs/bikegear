@@ -1,5 +1,5 @@
 <template>
-    <div class="profile">
+    <div id="profile">
         <div class="user-profile" v-if="this.userData">
             <div class="profile-img">
                 <img class="img-round" :src="userData.profile" />
@@ -53,6 +53,8 @@ export default {
 
 <style lang="stylus">
 .user-profile
+    margin 0 auto
+    max-width 400px
     display flex
     height 40px
     padding 8px
@@ -60,45 +62,47 @@ export default {
     border-radius 6px
 </style>
 <style lang="stylus" scoped>
-.user-profile
-    display flex
-    height 40px
-    padding 8px
-    background-color #f2f2f2
-    border-radius 6px
-    .profile-img
-        flex auto
-        max-width 50px
-        margin-right 20px
-        flex-basis 40px
-        .img-round
-            height 40px
-            border-radius 50%
-    .profile-text
-        flex auto
-        flex-basis 100%
-        text-align left 
-        .profile-text-provider
-            flex auto
-            font-size 0.8em
-            color #a6a6a6
-        .profile-text-name
-            flex auto
-            color #595959
-            a
-                text-decoration none
-                &:visited
-                    color #595959
-    .logout
-        border-left 1px solid #e6e6e6
-        flex 1 1 auto
+#profile
+    .user-profile
+        margin 0 auto
+        max-width 400px
         display flex
-        flex-direction column
-        .logout-button
+        height 40px
+        padding 8px
+        background-color #f2f2f2
+        border-radius 6px
+        .profile-img
+            flex 1 1 40px
+            max-width 50px
+            margin-right 20px
+            flex-basis 40px
+            .img-round
+                height 40px
+                border-radius 50%
+        .profile-text
+            flex 1 1 100%
+            text-align left
+            .profile-text-provider
+                flex auto
+                font-size 0.8em
+                color #a6a6a6
+            .profile-text-name
+                flex auto
+                color #595959
+                a
+                    text-decoration none
+                    &:visited
+                        color #595959
+        .logout
+            border-left 1px solid #e6e6e6
             flex 1 1 auto
-            background none
-            font-weight 200
-            color #595959
+            display flex
+            flex-direction column
+            .logout-button
+                flex 1 1 auto
+                background none
+                font-weight 200
+                color #595959
 
 
 </style>

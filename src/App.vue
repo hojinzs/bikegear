@@ -1,18 +1,18 @@
 <template>
-    <div id="app" :class="{blocked: (this.$store.state.page.cover_style == 'none') }">
+    <div id="app" :class="{blocked: (this.$store.state.page.cover_style === 'none') }">
 
         <TopMenuBar
-            :Blocked="(this.store_cover_style == 'none')"
+            :Blocked="(this.store_cover_style === 'none')"
             :TitleText="'Journey66'"
             :MenuLeft="ShotLinks"
             :MenuRight="GlobalMenu"></TopMenuBar>
 
         <div id="FullCover"
-            v-if="this.store_cover_style == 'full'"
+            v-if="this.store_cover_style === 'full'"
             :style="[FullCover]"></div>
 
         <div id="TitleCover"
-            v-if="this.store_cover_style == 'cover'"
+            v-if="this.store_cover_style === 'cover'"
             :style="[Background]">
             
             <h2>{{ this.$store.state.page.cover_title }}</h2>
@@ -21,11 +21,11 @@
             </div>
         </div>
 
-        <div id="contents" :class="{scrolled: (this.store_cover_style != 'none') }">
+        <div id="contents" :class="{scrolled: (this.store_cover_style !== 'none') }">
             <router-view></router-view>
         </div>
 
-        <div id="footer" v-if="(this.store_cover_style != 'none')">
+        <div id="footer" v-if="(this.store_cover_style !== 'none')">
             <Footer></Footer>
         </div>
         
