@@ -235,7 +235,7 @@ export default {
     },
     mounted()
     {
-        this.getUserTaggindData()
+        this.$store.dispatch('user/checkOrAfterLogin', () => this.getUserTaggindData())
         this.$store.dispatch('tags/setTags')
     }
 }

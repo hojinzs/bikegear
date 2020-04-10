@@ -201,7 +201,8 @@ export default {
     },
     mounted()
     {
-        this.getUserPost()
+        // this.$store.dispatch('user/checkOrAfterLogin',this.getUserPost())
+        this.$store.dispatch('user/checkOrAfterLogin', () => this.getUserPost() )
     }
 }
 </script>

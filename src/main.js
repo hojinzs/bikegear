@@ -16,6 +16,16 @@ import { store } from './store/index' // Vuex Store Setting
 import { router } from './routes' // Vue Router Setting
 
 /**
+ * use fontawesome global
+ */
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+
+library.add(fas, fab)
+
+
+/**
  * Set XSRF-TOKEN
  */
 import axios from 'axios'

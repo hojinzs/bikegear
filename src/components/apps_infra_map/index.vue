@@ -109,27 +109,18 @@
 import Vue from 'vue'
 import naver from 'vue-naver-maps'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import axios from 'axios'
 
 // Sample Data
 import { featured, tags } from '../../plugins/sampledb'
-// import { featured, tags, response } from '../../plugins/sampledb'
 
 import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 import PlaceCard from './place_card'
 
 import geo from './geo_calc'
 import Tag from '../../plugins/journey66_tag'
-
-/**
- * vue-fontawesome
- * doc: https://www.npmjs.com/package/@fortawesome/vue-fontawesome
- */
-library.add(fas)
 
 /**
  * vue-naver-maps

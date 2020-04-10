@@ -1,7 +1,7 @@
 <template>
     <div class="tag-mini" >
         <span class="dot"></span>
-        <font-awesome-icon :icon=" getTagIcon() " />
+        <font-awesome-icon :icon="[getIconPrefix(),getIconName()]" />
         <span :title="getDescription()"> {{ getTagLabel() }} </span>
     </div>
 </template>
@@ -22,7 +22,11 @@ export default {
             type: String,
             default: '(이름 없음)'
         },
-        icon: {
+        icon_prefix: {
+            type: String,
+            default: 'fas'
+        },
+        icon_name: {
             type: String,
             default: 'tag'
         },
@@ -39,11 +43,18 @@ export default {
                 return this.tagObject.label
             }
         },
-        getTagIcon(){
+        getIconPrefix(){
             if(typeof this.tagObject == 'undefined'){
-                return this.icon
+                return this.icon_prefix
             } else {
-                return this.tagObject.icon
+                return this.tagObject.icon_prefix
+            }
+        },
+        getIconName(){
+            if(typeof this.tagObject == 'undefined'){
+                return this.icon_name
+            } else {
+                return this.tagObject.icon_name
             }
         },
         getDescription(){
