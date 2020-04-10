@@ -35,7 +35,7 @@
                             태깅한 장소를 마이페이지에서 모아볼 수 있습니다.
                         </div>
                         <div class="lumi-button-full">
-                            <button class="lumi-button lumi-button-black" @click="toggle_newTaggingForm(true)">
+                            <button class="lumi-button lumi-button-black" @click="toggle_newTaggingForm(true)" :disabled="!(tags)">
                                 태깅하기
                             </button>
                         </div>
@@ -54,7 +54,7 @@
 
                                 <div class="tag-description">
                                     <span v-if="post_tag.tag_selected">
-                                        <font-awesome-icon :icon="getSelectedTag.icon" />  {{ getSelectedTag.description }}
+                                        <font-awesome-icon :icon="[getSelectedTag.icon_prefix,getSelectedTag.icon_name]" />  {{ getSelectedTag.description }}
                                     </span>
                                     <span v-else>
                                         태그를 선택해주세요.
@@ -240,3 +240,14 @@ export default {
     }
 }
 </script>
+
+<style lang="stylus">
+// tab transition Style
+.tab-fade-enter-active
+,.tab-fade-leave-active
+    transition opacity .3s ease;
+
+.tab-fade-enter
+,.tab-fade-leave-to
+    opacity 0
+</style>

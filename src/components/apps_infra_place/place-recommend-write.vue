@@ -1,74 +1,69 @@
 <template>
-    <transition name="tab-fade" mode="out-in">
+    <div class="lumi-box lumi-box-block-grey">
+        <transition name="tab-fade" mode="out-in">
+            <!-- 인증됨 -->
+            <div v-if="userData" key="loginComplete">
+                <transition name="tab-fade" mode="out-in">
 
-        <!-- 인증되지 않았을 경우 -->
-        <div v-if="userData == null"
-        class="section" key="loginRequire">
-
-            로그인이 필요합니다.
-
-        </div>
-
-        <!-- 인증됨, 로딩중 -->
-        <div v-if="( userData && post_comment.status == 'loading' )"
-        class="section" key="loading">
-
-            사용자의 글을 가져오고 있습니다.
-
-        </div>
-
-        <!-- 인증됨, 새로운 글을 등록하거나, 등록된 글 없음 -->
-        <div v-if="( userData && post_comment.user_posted == null && post_comment.status == 'ready' )"
-        class="section" key="ready">
-
-            <div class="lumi-button-full">
-                <button class="lumi-button lumi-button-black"
-                    @click="toggle_showNewCommentForm(true)">추천글 쓰기</button>
-            </div>
-
-        </div>
-
-        <!-- 인증됨, 등록 클릭 -->
-        <div v-if="( userData && post_comment.status == 'posting' )"
-        class="section" key="posting">
-
-            <form class="lumi-box lumi-box-block-grey" action="submit" @submit.prevent="postRecommentPost">
-                <label for="post_recomment_comment">새로운 추천글을 등록합니다.</label>
-                <div class="lumi-text-area-wrapper">
-                    <vue-extended-textarea class="lumi-input-liner" id="post_recomment_comment"
-                        v-model="post_comment.text" />
-                </div>
-                <div class="lumi-button-group">
-                    <button class="lumi-button lumi-button-flat-dark"
-                        @click.prevent="toggle_showNewCommentForm(false)">취소</button>
-                    <button type="submit" class="lumi-button lumi-button-black"
-                        :disabled="(this.post_comment.ajax_status != 'ready')">작성</button>
+                    <!-- 글 로딩 중 -->
+                    <div v-if="showStatus == 'loading'" key="loading">
+                        사용자의 글을 가져오고 있습니다.
                     </div>
-                <div>
-                    <span v-show="post_comment.ajax_fail_message" class="warning"
-                    >{{ post_comment.ajax_fail_message }}</span>
-                </div>
-            </form>
-        </div>
 
-        <!-- 인증됨, 내가 작성한 추천글 -->
-        <div v-if="( userData && post_comment.user_posted )"
-        class="section" key="done">
+                    <!-- 등록된 글이 없거나, 글 등록 폼을 보여주는 상태가 아님 -->
+                    <div v-if="showStatus == 'ready'" key="ready">
+                        이곳에 대해 알고계신가요?
+                        <div class="lumi-button-full">
+                            <button class="lumi-button lumi-button-black"
+                                @click="toggle_showNewCommentForm(true)">추천글 쓰기</button>
+                        </div>
+                    </div>
 
-            <b>내가 작성한 추천글</b>
-            <recommend-comment :recommend="post_comment.user_posted" />
-            <div>
-                <div>
-                    <a @click="toggle_showNewCommentForm(true)">업데이트 하기</a>
-                </div>
-                <div>
-                    <a @click="destroyRecommentPost()">삭제하기</a>
-                </div>
+                    <!-- 등록된 글이 있음 -->
+                    <div v-if="showStatus == 'posted'" key="posted">
+                        <b>내가 작성한 추천글</b>
+                        <recommend-comment :boxing="false" :recommend="post_comment.user_posted" />
+                        <div>
+                            <div>
+                                <a @click="toggle_showNewCommentForm(true)">업데이트 하기</a>
+                            </div>
+                            <div>
+                                <a @click="destroyRecommentPost()">삭제하기</a>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <!-- 글 등록 폼을 표시함 -->
+                    <div v-if="showStatus == 'posting'" key="posting">
+                        <form action="submit" @submit.prevent="postRecommentPost">
+                            <label for="post_recomment_comment">새로운 추천글을 등록합니다.</label>
+                            <div class="lumi-text-area-wrapper">
+                                <vue-extended-textarea class="lumi-input-liner" id="post_recomment_comment"
+                                    v-model="post_comment.text" />
+                            </div>
+                            <div class="lumi-button-group">
+                                <button class="lumi-button lumi-button-flat-dark"
+                                    @click.prevent="toggle_showNewCommentForm(false)">취소</button>
+                                <button type="submit" class="lumi-button lumi-button-black"
+                                    :disabled="(this.post_comment.ajax_status != 'ready')">작성</button>
+                                </div>
+                            <div>
+                                <span v-show="post_comment.ajax_fail_message" class="warning"
+                                >{{ post_comment.ajax_fail_message }}</span>
+                            </div>
+                        </form>
+                    </div>
+
+                </transition>
             </div>
 
-        </div>
-    
-    </transition>
+            <!-- 인증 되지 않았을 경우 -->
+            <div v-else key="loginRequire">
+                로그인이 필요합니다.
+            </div>
+        </transition>
+    </div>
+
 </template>
 
 <script>
@@ -103,6 +98,7 @@ export default {
         return {
             user_comment_ajax_address,
             post_comment: {
+                show_input_form: false,
                 status: 'ready', // [ready, posting]
                 text: '',
                 ajax_address: post_comment_ajax_address,
@@ -117,15 +113,38 @@ export default {
     {
         userData() {
             return this.$store.state.user.user_data
+        },
+        showStatus(){
+            if(this.userData){
+                if(this.post_comment.user_posted == null){
+                    if(this.post_comment.status == 'loading'){
+                        return 'loading'
+                    } else {
+                        if(this.post_comment.show_input_form == false){
+                            return 'ready'
+                        } else {
+                            return 'posting'
+                        }
+                    }
+                } else {
+                    if(this.post_comment.show_input_form == false){
+                        return 'posted'
+                    } else {
+                        return 'posting'
+                    }
+                }
+            } else {
+                return 'none'
+            }
         }
     },
     methods: 
     {
-        toggle_showNewCommentForm(show){
+        toggle_showNewCommentForm(show = !this.post_comment.show_input_form){
             if(show){
-                this.post_comment.status = 'posting'
+                this.post_comment.show_input_form = true
             } else {
-                this.post_comment.status = 'ready'
+                this.post_comment.show_input_form = false
                 this.clearTextArea()
             }
         },
@@ -149,26 +168,16 @@ export default {
                 })
         },
         postRecommentPost(){
-            // Set Dummy Data
-            let newPost = {
-                "comment" : this.post_comment.text,
-                "author" : "Moderator",
-                "written_at" : new Date()
-            }
-            let form = JSON.stringify(newPost)
-
             //Before
             this.post_comment.ajax_status = 'posting'
-            console.log("set form => ", form)
 
             axios.post(this.post_comment.ajax_address,{
                 'content' : this.post_comment.text
             })
                 .then(res => {
-                    this.post_comment.status = 'posted'
                     this.post_comment.ajax_status = 'success'
                     this.post_comment.user_posted = res.data.data
-                    this.clearTextArea()
+                    this.toggle_showNewCommentForm(false)
                 })
                 .catch(() => {
                     this.post_comment.ajax_status = 'fail'
@@ -208,5 +217,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+// tab transition Style
+.tab-fade-enter-active
+,.tab-fade-leave-active
+    transition opacity .3s ease;
+
+.tab-fade-enter
+,.tab-fade-leave-to
+    opacity 0
 
 </style>

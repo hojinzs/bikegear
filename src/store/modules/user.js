@@ -23,7 +23,7 @@ const user = {
         }
     },
     mutations:{
-        loading(state, data){
+        status(state, data){
             state.status = data
         },
         login(state, data){
@@ -47,7 +47,7 @@ const user = {
     },
     actions:{
         loginByEmail({commit}, {email, password}){
-            commit('loading','loading')
+            commit('status','loading')
 
             return axios({
                 method: 'POST',
@@ -63,11 +63,11 @@ const user = {
                     throw Error(error)
                 })
                 .finally(() => {
-                    commit('loading','ready')
+                    commit('status','ready')
                 })
         },
         loginByApiToken({commit}){
-            commit('loading','loading')
+            commit('status','loading')
             axios.get('//'+process.env.VUE_APP_API_HOST+'/sanctum/csrf-cookie')
                 .then(() => {
 
@@ -90,7 +90,7 @@ const user = {
                         .finally(() => {
                             let event = new CustomEvent('user.login.finish', { detail: {'status': status} })
                             window.dispatchEvent(event)
-                            commit('loading','ready')
+                            commit('status','ready')
                         })
                 })
         },
@@ -106,7 +106,13 @@ const user = {
         {
             commit('logout');
         },
-        async checkOrAfterLogin({state}, callbackFn)
+        /**
+         * 로그인 상태이거나, 로그인이 진행 중이라면 로그인 성공 후 콜백을 실행한다.
+         * 
+         * @param {vuex} param0 
+         * @param {Function} callbackFn 
+         */
+        checkOrAfterLogin({state}, callbackFn)
         {
             // 로그인 여부를 체크
             console.log("LoginCallback 0 =>",state.user_data != null)
@@ -124,8 +130,8 @@ const user = {
 
                     // 로그인 완료 이벤트가 감지되었고 로그인에 성공했다면 콜백을 실행하는 이벤트를 등록
                     window.addEventListener('user.login.finish', e => {
-                        console.log('LoginCallback 3 =>',e)
-                        if(e.detail == 'success') {
+                        // console.log('LoginCallback 3 =>',e)
+                        if(e.detail.status == 'success') {
                             console.log("LoginCallback Result => Excute After Login")
                             return callbackFn()
                         } else {
@@ -138,7 +144,7 @@ const user = {
                 } else {
 
                     // 로그인 진행중이 아니라면 false를 호출
-                    console.log("LoginCallback Result => not pending")
+                    // console.log("LoginCallback Result => not pending")
                     callbackFn = null
                     return false
                 }

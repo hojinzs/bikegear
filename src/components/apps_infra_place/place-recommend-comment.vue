@@ -1,6 +1,6 @@
 <template>
-    <div class="lumi-box lumi-box-block-grey">
-        <div class="recommend-comment">
+    <div :class="{'lumi-box lumi-box-block-grey': boxing}">
+        <div class="recommend-comment" :class="{'boxing': boxing} ">
             <slot>
                 <span v-html="_comment"></span>
             </slot>
@@ -43,6 +43,10 @@ export default {
             type: Object,
             require: true,
         },
+        boxing: {
+            type: Boolean,
+            default: true
+        }
     },
     computed:
     {
@@ -86,10 +90,11 @@ export default {
     color red
 
 .recommend-comment
-    margin 0.5rem
     font-size 1rem
     line-height 1.6rem
     text-align left
+    &.boxing
+        margin 0.5rem
     .recommend-comment-info
         user-select none
         display flex

@@ -2,10 +2,8 @@
     <div class="recommend-comment-section">
         <!-- 내가 작성한 추천 글 -->
         <div class="my-comment">
-
-            <place-recommend-write :place="place"/>
-
             <div class="section">
+                <place-recommend-write :place="place"/>
                 <hr>
             </div>
         </div>
