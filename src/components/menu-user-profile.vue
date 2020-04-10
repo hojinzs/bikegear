@@ -1,10 +1,5 @@
 <template>
-    <div>
-        <div v-if="this.userData == null">
-            <a @click="$store.dispatch('user/loginByStrava')">
-                <font-awesome-icon class="showmenu" :icon="['fab', 'strava']" /> Login With Strava
-            </a>
-        </div>
+    <div class="profile">
         <div v-if="this.userData" class="menu-user-profile">
             <div class="profile-img">
                 <img class="img-round" :src="userData.profile" />
@@ -22,6 +17,11 @@
                     <font-awesome-icon class="showmenu" :icon="['fas', 'sign-out-alt']" /> Logout
                 </button>
             </div>
+        </div>
+        <div v-else>
+            <a @click="$store.dispatch('user/loginByStrava')">
+                <font-awesome-icon class="showmenu" :icon="['fab', 'strava']" /> Login With Strava
+            </a>
         </div>
     </div>
 </template>
@@ -52,12 +52,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+
 .menu-user-profile
     display flex
     height 40px
     padding 8px
     background-color #f2f2f2
     border-radius 6px
+    
+.menu-user-profile
     .profile-img
         flex auto
         max-width 50px
@@ -81,7 +84,6 @@ export default {
                 text-decoration none
                 &:visited
                     color #595959
-
     .logout
         border-left 1px solid #e6e6e6
         flex auto
