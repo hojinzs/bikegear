@@ -51,15 +51,16 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-
+<style lang="stylus">
 .menu-user-profile
     display flex
     height 40px
     padding 8px
     background-color #f2f2f2
     border-radius 6px
-    
+</style>
+
+<style lang="stylus" scoped>
 .menu-user-profile
     .profile-img
         flex auto
