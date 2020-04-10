@@ -50,16 +50,6 @@ export default {
     }
 }
 </script>
-
-<style lang="stylus">
-.user-profile
-    display flex
-    height 40px
-    padding 8px
-    background-color #f2f2f2
-    border-radius 6px
-</style>
-
 <style lang="stylus" scoped>
 .user-profile
     display flex
@@ -70,14 +60,14 @@ export default {
     .profile-img
         flex auto
         max-width 50px
-        margin-right 10px
+        margin-right 20px
         flex-basis 40px
         .img-round
-            height 100%
+            height 40px
             border-radius 50%
     .profile-text
         flex auto
-        flex-basis 40%
+        flex-basis 100%
         text-align left 
         .profile-text-provider
             flex auto
@@ -92,8 +82,7 @@ export default {
                     color #595959
     .logout
         border-left 1px solid #e6e6e6
-        flex auto
-        flex-basis 20%
+        flex 1 1 auto
         display flex
         flex-direction column
         .logout-button
