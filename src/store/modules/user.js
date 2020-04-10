@@ -97,7 +97,7 @@ const user = {
         loginByStrava()
         {
             let address = strava_signup_address
-                +"return_url=http://bikegear.test:8080/user"
+                +`return_url=${process.env.VUE_APP_URL}/user`
                 // +"&scope=activity_read"  //추후 권한 추가승인이 필요할 때 (자출 로그) 사용
             console.log(address)
             location.replace(address)
