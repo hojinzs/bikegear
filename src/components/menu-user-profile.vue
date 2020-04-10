@@ -19,7 +19,7 @@
             </div>
         </div>
         <div v-else>
-            <a @click="$store.dispatch('user/loginByStrava')">
+            <a @click="$store.dispatch('user/loginByStrava')" href="#">
                 <font-awesome-icon class="showmenu" :icon="['fab', 'strava']" /> Login With Strava
             </a>
         </div>
