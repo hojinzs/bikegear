@@ -1,6 +1,6 @@
 <template>
     <div class="profile">
-        <div v-if="this.userData" class="user-profile">
+        <div class="user-profile" v-if="this.userData">
             <div class="profile-img">
                 <img class="img-round" :src="userData.profile" />
             </div>
@@ -50,6 +50,15 @@ export default {
     }
 }
 </script>
+
+<style lang="stylus">
+.user-profile
+    display flex
+    height 40px
+    padding 8px
+    background-color #f2f2f2
+    border-radius 6px
+</style>
 <style lang="stylus" scoped>
 .user-profile
     display flex
