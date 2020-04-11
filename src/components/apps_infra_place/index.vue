@@ -29,14 +29,14 @@
                 <div class="lumi-button-group section">
                     <button class="lumi-button lumi-button-black">
                         <a @click="togglePlaceLike()">
-                            <font-awesome-icon class="thumbs-up" :class="{'active': place_data.user_like == true }" :icon="'thumbs-up'" /> {{' '}}{{place_data.likes_count}}
+                            <font-awesome-icon class="thumbs-up" :class="{'active': place_data.user_like === true }" :icon="'thumbs-up'" /> {{' '}}{{place_data.likes_count}}
                         </a>
                     </button>
                     <button class="lumi-button lumi-button-black" @click="showHomepage(place_data.Url)">
                         웹사이트
                     </button>
                     <router-link tag="button" class="lumi-button lumi-button-flat-dark"
-                        :to="{ name: 'iamowner', query: { placeId: place_data.id }}">
+                        :to="{ name: 'IamOwner', query: { placeId: place_data.id }}">
                         소유자 등록
                     </router-link>
                     <button class="lumi-button lumi-button-flat-dark">정정신고</button>

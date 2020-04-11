@@ -23,8 +23,6 @@ import Tag from '../../plugins/journey66_tag'
 
 import axios from 'axios'
 
-// import { response } from '@/plugins/sampledb'
-
 export default {
     name: 'place_info',
     components:{
@@ -42,7 +40,7 @@ export default {
             },
             loading: false,
             place_data: null,
-            close_url: { name: 'Bike Infra Map' },
+            close_url: { name: 'PlaceMap' },
         }
     },
     methods: {
