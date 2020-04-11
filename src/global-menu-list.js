@@ -46,7 +46,7 @@ const GlobalMenu = [
         children: [
             {
                 name: "Gear Calculator",
-                route: { name : "Apps" },
+                route: { name : "GearCalculator" },
                 use: true,
             },
         ]
