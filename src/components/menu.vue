@@ -99,7 +99,7 @@
                         </ul>
 
                         <ul v-if="(!isMobile)">
-                            <menu-user-profile-mini class="user-info"/>
+                            <menu-user-profile-mini class="user-info transition-border"/>
 
                             <menuitem v-if="$store.getters['user/signed']" v-show="(MenuRight_expaneded || isMobile)">
                                 <li class="item">
@@ -259,6 +259,10 @@ $shadow_color = #595959
             color: $link_color
         &:hover
             font-weight bolder
+    .transition-border
+        border-radius 5px
+        border-style solid
+        border-width 1px
     &.menu_blocked
         background white
         border-bottom 1px solid $link_color_disabled
@@ -271,6 +275,8 @@ $shadow_color = #595959
                 color: $link_color
             &:hover
                 font-weight bolder
+        .transition-border
+            border-color $link_color
     &.menu_clear
         background: none //linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0))
         text-shadow 1px 1px 2px $shadow_color
@@ -284,6 +290,8 @@ $shadow_color = #595959
             text-shadow none
         .showmenu
             color $is_clear_link_color
+        .transition-border
+            border-color $is_clear_link_color
     &.mobile_menu_show
         background white
     ul
@@ -321,7 +329,7 @@ $shadow_color = #595959
                         font-size 90%
                         overflow hidden
             .user-info
-                margin-top -0.2em
+                margin-top -0.4em
 
 .mobile-bg
     position absolute

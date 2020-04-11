@@ -44,16 +44,15 @@ export default {
 .profile
     font-size 0.6em
     color inherit
-    padding 0.2em
+    padding 0.4em
     padding-left 6px
     padding-right 6px
-    border-radius 6px
-    border-color white
-    border-style solid
-    border-width 1px
+    /*border-radius 6px*/
+    /*border-color white*/
+    /*border-style solid*/
+    /*border-width 1px*/
     .profile-mini
         display flex
-        ///*justify-content space-between*/
         height 20px
         .profile-img
             flex 1 1 20px
