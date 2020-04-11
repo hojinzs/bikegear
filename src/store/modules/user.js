@@ -4,7 +4,6 @@ import Cookies from 'js-cookie'
 let email_login_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/user/login/email?'
 let token_login_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/user/login/token?'
 let strava_signup_address = '//'+process.env.VUE_APP_AUTH_HOST+'/strava/signup?'
-// let get_user_data_address = '//'+process.env.VUE_APP_API_HOST+'/v1/user'
 
 const user = {
     namespaced: true,
@@ -17,6 +16,13 @@ const user = {
         signed: state => {
             if(state.user_data){
                 return true
+            } else {
+                return false
+            }
+        },
+        userdata: state => {
+            if(state.user_data){
+                return state.user_data
             } else {
                 return false
             }
@@ -106,49 +112,22 @@ const user = {
         {
             commit('logout');
         },
-        /**
-         * 로그인 상태이거나, 로그인이 진행 중이라면 로그인 성공 후 콜백을 실행한다.
-         * 
-         * @param {vuex} param0 
-         * @param {Function} callbackFn 
-         */
         checkOrAfterLogin({state}, callbackFn)
         {
-            // 로그인 여부를 체크
-            console.log("LoginCallback 0 =>",state.user_data != null)
-            if(state.user_data){
-
-                // 로그인 되었다면, 콜백을 바로 실행
-                console.log("LoginCallback Result => Loggined")
-                return callbackFn()
+            if(state.user_data){ // 로그인 여부를 체크
+                return callbackFn(state.user_data) // 로그인 되었다면, 콜백을 바로 실행, 유저 데이터를 넘겨준다.
             } else {
-
-                // 로그인 진행중이라면, 콜백 스택에 추가
-                console.log('LoginCallback 1 =>',state.status)
-                if(state.status == 'loading'){
-                    console.log('LoginCallback 2 => add Event Listner')
-
-                    // 로그인 완료 이벤트가 감지되었고 로그인에 성공했다면 콜백을 실행하는 이벤트를 등록
+                if(state.status === 'loading'){ // 로그인 진행중이라면, 콜백 스택에 추가
                     window.addEventListener('user.login.finish', e => {
-                        // console.log('LoginCallback 3 =>',e)
-                        if(e.detail.status == 'success') {
-                            console.log("LoginCallback Result => Excute After Login")
-                            return callbackFn()
+                        if(e.detail.status === 'success') {
+                            return callbackFn(state.user_data) //로그인에 성공했다면 콜백을 실행하는 이벤트를 등록
                         } else {
-                            console.log("LoginCallback Result => Login Failed")
-                            callbackFn = null
-                            return false
+                            return false //로그인에 실패 했다면 콜백 실행 안함
                         }
                     },{once: true})
-
-                } else {
-
-                    // 로그인 진행중이 아니라면 false를 호출
-                    // console.log("LoginCallback Result => not pending")
-                    callbackFn = null
+                } else {  // 로그인 진행중이 아니라면 false를 호출
                     return false
                 }
-
             }
         }
     }

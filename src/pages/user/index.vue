@@ -2,12 +2,12 @@
     <div class="container">
         <div class="container_wrapper">
             <!-- find user data -->
-            <div v-if="userData">
+            <div v-if="signin">
                 <menu-user-profile :logout="false" />
                 <lumi-tab ref="tab" :tabs="tabs" @toggle="toggleTab" :default="tabSelected.index" />
 
                 <!-- default page -->
-                <information v-if="(tabSelected.value == 'information')"/>
+                <information v-if="(tabSelected.value === 'information' && $store.getters['user/signed'] )" :userdata="userData" />
 
                 <!-- user sub pages -->
                 <router-view v-else />
@@ -15,7 +15,7 @@
 
             <!-- if user auth failed -->
             <div v-else>
-                <div v-if="(dataLoaded == 'loading' || initialLoading == true)">
+                <div v-if="(dataLoaded === 'loading' || initialLoading === true)">
                     Loading User Data
                 </div>
                 <div v-else>
@@ -32,8 +32,7 @@
 <script>
 import lumiTab from '@/components/interface/lumi-tab'
 import meneUserProfile from '@/components/menu-user-profile'
-
-import information from './information'
+import information from '@/components/page_user/information'
 
 export default {
     name: 'userInformation',
@@ -75,16 +74,19 @@ export default {
     methods:
     {
         toggleTab(value){
-            this.tabSelected = this.tabs.find( item => item.value == value )
+            this.tabSelected = this.tabs.find( item => item.value === value )
         },
     },
     computed:
     {
+        signin(){
+            return this.$store.getters['user/signed']
+        },
         dataLoaded(){
-            return this.$store.state.user.loading
+            return this.$store.state.user.status
         },
         userData(){
-            return this.$store.state.user.user_data
+            return this.$store.state.user.user_data || null
         }
     },
     created()
@@ -95,7 +97,7 @@ export default {
         this.$store.commit('page/background_change','/images/bw-bike01.jpg');
 
         // set default tab
-        this.tabSelected = this.tabs.find( tab => tab.route.name == this.$router.currentRoute.name )
+        this.tabSelected = this.tabs.find( tab => tab.route.name === this.$router.currentRoute.name )
     },
     mounted()
     {
@@ -107,7 +109,7 @@ export default {
     },
     watch:{
         tabSelected(tab){
-            if(tab.route.name != this.$router.currentRoute.name){
+            if(tab.route.name !== this.$router.currentRoute.name){
                 this.$router.push(tab.route)
             }
         },
