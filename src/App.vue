@@ -35,62 +35,9 @@
 <script>
 import TopMenuBar from '@/components/menu'
 import Footer from '@/components/footer'
+import { GlobalMenu, ShotLinks } from "./global-menu-list"
+
 import axios from 'axios'
-
-let ShotLinks = [
-    {
-        name: 'old',
-        url: 'https://www.journey66.cc',
-        target: '_blank',
-    }
-]
-
-let GlobalMenu = [
-    {
-        name: "Route",
-        url: '/route',
-        use: false,
-    },
-    {
-        name: "Database",
-        url: '/data',
-        use: false,
-        children: [
-            {
-                name: "Components",
-                url: "/components",
-                use: true,
-            },
-            {
-                name: "Infra-Map",
-                url: "/infra-map",
-                use: true,
-            },
-            {
-                name: "Events",
-                url: "/events",
-                use: false,
-            },
-        ]
-    },
-    {
-        name: "Apps",
-        url: "/app",
-        use: false,
-        children: [
-            {
-                name: "Gear Calculator",
-                url: "/gears",
-                use: true,
-            },
-            {
-                name: "Route Map",
-                url: "/gears",
-                use: false,
-            }
-        ]
-    }
-]
 
 export default {
     name: 'app',

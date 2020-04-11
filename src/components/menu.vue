@@ -11,7 +11,7 @@
             <div id="MenuLeft">
                 <ul>
                     <router-link 
-                    to="/">
+                    :to="{ name: 'Home' }">
                         <div class="logo_item">
                             <span><b>{{TitleText}}</b></span>
                         </div>
@@ -55,12 +55,8 @@
                             v-bind:key="i1">
 
                             <template v-if="First.use">
-                                <router-link 
-                                    :to="First.url"
-                                    @click.native="mobile_show_menu = false">
-
+                                <router-link :to="First.route">
                                     <span class="first_menu">{{First.name}}</span>
-
                                 </router-link>
                             </template>
                             <template v-else>
@@ -78,12 +74,8 @@
                                 v-bind:key="i2">
 
                                     <template v-if="Second.use">
-                                        <router-link
-                                            :to="First.url+Second.url"
-                                            @click.native="doCloseMenu()">
-
+                                        <router-link :to="Second.route">
                                             <span class="second_menu">{{Second.name}}</span>
-
                                         </router-link>
                                     </template>
                                     <template v-else>

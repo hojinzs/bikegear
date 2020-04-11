@@ -80,12 +80,12 @@ export const router = new VueRouter({
         },
         {
             path: '/data/components',
-            name: 'Component Database',
+            name: 'Components',
             component: component_database,
         },
         {
             path: '/data/infra-map',
-            name: 'Bike Infra Map',
+            name: 'PlaceMap',
             component: infra_map,
             children: [
                 {
@@ -102,17 +102,17 @@ export const router = new VueRouter({
         },
             {
                 path: '/app/gears',
-                name: 'Gear Calculator',
+                name: 'GearCalculator',
                 component: gear_calculator,
             },
             {
                 path: '/test',
-                name: 'test page',
+                name: 'TestPage',
                 component: test,
             },
         {
             path: '/extra/iam-owner',
-            name: 'iamowner',
+            name: 'IamOwner',
             component: place_owner_form,
             props: true
         }
