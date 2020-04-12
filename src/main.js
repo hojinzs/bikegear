@@ -30,6 +30,7 @@ library.add(fas, fab)
  */
 import axios from 'axios'
 axios.defaults.withCredentials = true
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.get('//'+process.env.VUE_APP_API_HOST+'/sanctum/csrf-cookie')
 
 /**
@@ -41,7 +42,7 @@ if(Cookies.get('Authorization')){
     Cookies.remove('Authorization')
 }
 if(window.localStorage.getItem('Authorization')){
-    axios.defaults.headers.common = {'Authorization': `Bearer ${window.localStorage.getItem('Authorization')}`}
+    axios.defaults.headers.common['Authorization'] = `Bearer ${window.localStorage.getItem('Authorization')}`
 }
 
 new Vue({
