@@ -1,48 +1,63 @@
 <template>
     <div id="app">
 
+<!--        <div>-->
+<!--            <div id="mapLeftSection">-->
+
+<!--            </div>-->
+<!--            <div id="mapRightSection">-->
+<!--                <div id="mapOverMenu">-->
+
+<!--                </div>-->
+<!--                <div id="Map">-->
+
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
+
         <div id="MenuTop">
             <div class="lumi-flex-slider-wrapper scroll-free">
                 <ul class="lumi-flex-slider" style="padding-left: 1em">
 
                     <!-- Loading -->
                     <li class="lumi-flex-slider-item"
-                    v-if="infraList_status === 'loading'">
+                        v-if="infraList_status === 'loading'">
                         <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow">
                             <img class="loading" src="/images/Spinner-1s-104px.gif">
-                                <!-- :style="{color: item.color}"/> -->
+                            <!-- :style="{color: item.color}"/> -->
                             Loading
                         </button>
                     </li>
 
                     <!-- Load Error -->
                     <li class="lumi-flex-slider-item"
-                    v-if="infraList_status === 'error'">
+                        v-if="infraList_status === 'error'">
                         <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
-                            :style="{color: 'red'}">
+                                :style="{color: 'red'}">
                             <font-awesome-icon class="infra-icon"
-                                :icon="'exclamation-triangle'" />
+                                               :icon="'exclamation-triangle'" />
                             Error
                         </button>
                     </li>
 
                     <!-- LOOP START -->
                     <li class="lumi-flex-slider-item"
-                    v-for="(item,index) in FeaturedItems"
-                    :key="index">
+                        v-for="(item,index) in FeaturedItems"
+                        :key="index">
                         <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
-                        @click="toggleFilter(item.name)">
+                                @click="toggleFilter(item.name)">
                             <span class="dot infra-indicator-item"
-                                :class="{'active' : (filter.tags.indexOf(item.name) !== -1) }">
+                                  :class="{'active' : (filter.tags.indexOf(item.name) !== -1) }">
                             </span>
                             <font-awesome-icon class="infra-icon infra-indicator-item"
-                                :icon="item.icon"
-                                :style="{color: item.color}"/>
+                                               :icon="item.icon"
+                                               :style="{color: item.color}"/>
                             <span class="infra-indicator-item">
                                 {{item.label}}
                             </span>
                             <span class="infra-count-int infra-indicator-item"
-                                :style="{backgroundColor: item.color}">
+                                  :style="{backgroundColor: item.color}">
                                 {{item.count}}
                             </span>
                         </button>
@@ -58,48 +73,59 @@
 
         <div id="MenuBottom">
             <lumiCaroucel
-                :speedStiky="700"
-                :positionStiky="'center'"
-                :async="true"
-                @loaded="setCaroucel"
-                @focused="getFocused">
-                
-                <lumiCaroucelSlide
-                    v-for="(place,index) in DisplayItems"
-                    :key="index"
-                    @onClick="getFocused(index)">
+                    :speedStiky="700"
+                    :positionStiky="'center'"
+                    :async="true"
+                    @loaded="setCaroucel"
+                    @focused="getFocused">
 
-                        <PlaceCard
+                <lumiCaroucelSlide
+                        v-for="(place,index) in DisplayItems"
+                        :key="index"
+                        @onClick="getFocused(index)">
+
+                    <PlaceCard
                             :title="place.name"
                             :thumbnail_img_url="place.Image"
                             :extention_toggled="(DisplayItems_toggled === index)">
-                            {{place.type}}
-                            <template v-slot:expention>
-                                <button class="lumi-button-liner"
-                                @click.stop="showDetail(place.id)">
-                                    정보 보기
-                                </button>
-                            </template>
-                        </PlaceCard>
+                        {{place.type}}
+                        <template v-slot:expention>
+                            <button class="lumi-button-liner"
+                                    @click.stop="showDetail(place.id)">
+                                정보 보기
+                            </button>
+                        </template>
+                    </PlaceCard>
 
                 </lumiCaroucelSlide>
 
             </lumiCaroucel>
         </div>
 
-        <naver-maps class="maps" style="width: 100%; height: 100%;"
+        <naver-maps
+            class="maps"
+            style="width: 100%; height: 100%;"
             :width="100"
             :height="100"
             :mapOptions="mapOptions"
-            @load="onLoad">
+            @load="onLoad"
+        >
 
-                    <naver-marker
-                        v-for="(item, index) in DisplayItems"
-                        :key="index"
-                        :lat="item.geoPoint.latitude"
-                        :lng="item.geoPoint.longitude"
-                        @click="getFocused(index)">
-                    </naver-marker>
+            <naver-circle
+                ref="currentPosition"
+                v-if="currentPosition.status === 'display'"
+                :lat="currentPosition.latitude"
+                :lng="currentPosition.longitude"
+                :radius="100"
+                fillColor="#ff0000"
+            />
+
+            <naver-marker
+                v-for="(item, index) in DisplayItems"
+                :key="index" :lat="item.geoPoint.latitude"
+                :lng="item.geoPoint.longitude"
+                @click="getFocused(index)"
+            />
 
         </naver-maps>
     </div>
@@ -168,6 +194,11 @@ export default {
                 lng: 127.1246,
                 zoom: 11,
             },
+            currentPosition: {
+                status: 'hidden', // ['hidden','loading','display']
+                latitude: null,
+                longitude: null,
+            }
         }
     },
     computed: {
@@ -178,7 +209,7 @@ export default {
             let featured = []
 
             this.featured.forEach(name => {
-                let i = this.tags.findIndex((e) => e.name == name)
+                let i = this.tags.findIndex((e) => e.name === name)
                 let item = {
                     name : this.tags[i].name,
                     label : this.tags[i].label,
@@ -195,7 +226,7 @@ export default {
          * 마커 목록을 보여주는 Getter
          */
         DisplayItems(){
-            if(this.filter.tags.length != 0){
+            if(this.filter.tags.length !== 0){
                 let items = this.infraList.filter((item) => Tag.findTagsOnInfra(item,this.filter.tags));
                 return items
             }
@@ -208,9 +239,18 @@ export default {
          */
         onLoad(_map){
             this.map = _map
+            this.getCurrentPosition()
+        },
+        getCurrentPosition(){
+            this.currentPosition.status = 'loading'
+            navigator.geolocation.getCurrentPosition(position => {
+                this.currentPosition.status = 'display'
+                this.currentPosition.latitude = position.coords.latitude
+                this.currentPosition.longitude = position.coords.longitude
 
-            navigator.geolocation.getCurrentPosition((_position) => {
-                this.map.setCenter(_position.coords.latitude,_position.coords.longitude)
+                this.map.setCenter(this.currentPosition.latitude,this.currentPosition.longitude)
+            },() => {
+                this.currentPosition.status = 'hidden'
             })
 
         },
@@ -290,7 +330,7 @@ export default {
             if(this.slide.slideFocused !== _SlideNumber) this.slide.doItemFocus(_SlideNumber)
         },
         doPanToPlace(_DisplayItemNumber){
-            if(this.DisplayItems[_DisplayItemNumber] != undefined){
+            if(this.DisplayItems[_DisplayItemNumber] !== undefined){
                 let target = this.DisplayItems[_DisplayItemNumber],
                     lat = target.geoPoint.latitude,
                     lng = target.geoPoint.longitude
