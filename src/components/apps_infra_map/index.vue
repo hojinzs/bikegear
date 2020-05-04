@@ -12,7 +12,10 @@
                     placeholder="명칭"
                     v-model="placeFilter.keyword"
                 />
-                <button class="lumi-button-liner">
+                <button
+                    class="lumi-button-liner"
+                    @click="getPlaceDatas()"
+                >
                     Search
                 </button>
                 <div>
@@ -25,7 +28,17 @@
                     </a>
                 </div>
                 <hr>
-                    [ === 거리 슬라이더 === ]
+                    [ = 슬라이더 UI로 develop = ]
+                    <select v-model="placeFilter.distance">
+                        <option selected>5</option>
+                        <option>15</option>
+                        <option>30</option>
+                        <option>50</option>
+                        <option>100</option>
+                        <option>150</option>
+                        <option>300</option>
+                    </select>
+                    km
                 <hr>
                 <div v-if="tagList.ajax_status === 'finish'" >
                     <b>Select Tag</b>
@@ -184,6 +197,14 @@
                     :initLayers="initLayers"
                     @load="onLoad"
                 >
+                    <naver-circle
+                        v-if="placeFilter.position.latitude"
+                        :lat="placeFilter.position.latitude"
+                        :lng="placeFilter.position.longitude"
+                        :radius="placeFilter.distance * 1000"
+                        fillColor="#ff0000"
+                        @load="setCircle"
+                    />
 
                     <naver-marker
                         ref="currentPosition"
@@ -275,6 +296,7 @@ export default {
             // 지도 오브젝트
             map: null,
             naverMap: null,
+            testCircle : null,
             mapOptions: {
                 lat: 37.4876,
                 lng: 127.1246,
@@ -291,6 +313,7 @@ export default {
                     latitude: '',
                     longitude: '',
                 },
+                distance: 5,
                 keyword: '',
                 tags: [],
             }
@@ -369,8 +392,16 @@ export default {
 
             this.naverMap.Event.addListener(_map.map,'dragend', point => {
                 console.log("DragEnd", point)
-                this.setPlaceFilterLatLng(point.latlng.x, point.latlng.y)
+
+                let center = this.map.getCenterPoint()
+
+                console.log("map Center Point =>", center);
+
+                this.setPlaceFilterLatLng(point.latlng.y, point.latlng.x)
             })
+        },
+        setCircle(circle){
+            this.testCircle = circle
         },
         toggleLeftMenu(show = !this.showLeftMenu){
             this.showLeftMenu = show;
@@ -417,8 +448,40 @@ export default {
         },
         setPlaceFilterLatLng(latitude, longitude){
             console.log("set Place Filter => ", latitude, longitude)
+
             this.placeFilter.position.latitude = latitude
             this.placeFilter.position.longitude = longitude
+
+            this.testCircle.setCenter({
+                lat: latitude,
+                lng: longitude,
+            })
+        },
+        getPlaceDatas(){
+            this.infraList_status = 'loading'
+
+            axios.get(this.infraList_ajax.url,{
+                params: {
+                    latitude: this.placeFilter.position.latitude,
+                    longitude: this.placeFilter.position.longitude,
+                    distance: this.placeFilter.distance,
+                }
+            })
+                .then( res => {
+                    this.infraList_status = 'finish'
+
+                    let list = res.data.data.map(data => {
+                        data.Tags = {
+                            "Utility" : Tag.filterTagObjectByType(data.tags,'Utility'),
+                            "Brand" : Tag.filterTagObjectByType(data.tags,'Brand'),
+                            "Merchant" : Tag.filterTagObjectByType(data.tags,'Merchant'),
+                            "others" : Tag.filterTagObjectByType(data.tags,'others'),
+                        }
+                        return data;
+                    })
+                    this.infraList = list
+                    this.slide.setAsyncFinish()
+                })
         },
         setCaroucel($slide){
             this.slide = $slide
