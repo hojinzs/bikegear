@@ -7,17 +7,24 @@
             }"
         >
             <div class="left-section-box">
-                <input
-                    class="lumi-input-liner"
-                    placeholder="명칭"
-                    v-model="placeFilter.name"
-                />
-                <button
-                    class="lumi-button-liner"
-                    @click="getPlaceData()"
-                >
-                    Search
-                </button>
+                <div>
+                    <input
+                            class="lumi-input-liner"
+                            placeholder="명칭"
+                            v-model="placeFilter.name"
+                    />
+                    <button
+                            class="lumi-button-liner"
+                            @click="getPlaceData()"
+                    >
+                        Search
+                    </button>
+                    <button
+                        @click="toggleLeftMenu()"
+                    >
+                        X
+                    </button>
+                </div>
                 <div>
                     <a
                         v-for="tag in placeFilter.tags"
@@ -32,13 +39,13 @@
                     <select
                         v-model="placeFilter.distance"
                     >
-                        <option>5</option>
-                        <option>15</option>
-                        <option selected>30</option>
-                        <option>50</option>
-                        <option>100</option>
-                        <option>150</option>
-                        <option>300</option>
+                        <option
+                            v-for="distance in distanceZoomOptions"
+                            :key="distance.distance"
+                            :value="distance.distance"
+                        >
+                            {{ distance.distance }}
+                        </option>
                     </select>
                     km
                 <hr>
@@ -318,6 +325,13 @@ export default {
                 latitude: null,
                 longitude: null,
             },
+            distanceZoomOptions: [
+                {zoom: 13, distance: 15},
+                {zoom: 12, distance: 30},
+                {zoom: 11, distance: 50},
+                {zoom: 10, distance: 150},
+                {zoom: 9, distance: 300},
+            ],
             placeFilter: {
                 position: {
                     latitude: 37.4876,
@@ -404,39 +418,41 @@ export default {
             this.map = _map
             this.naverMap = window.naver.maps
 
-            let center = this.map.map.getCenter();
-            this.testCircle = new this.naverMap.Circle({
-                map: _map.map,
-                center: {
-                    lat: center.y,
-                    lng: center.x
-                },
-                radius: Number(this.placeFilter.distance * 1000)
-            })
+            // // Debug Circle
+            // let center = this.map.map.getCenter();
+            // this.testCircle = new this.naverMap.Circle({
+            //     map: _map.map,
+            //     center: {
+            //         lat: center.y,
+            //         lng: center.x
+            //     },
+            //     radius: Number(this.placeFilter.distance * 1000)
+            // })
 
             this.getCurrentPosition()
 
-            // this.naverMap.Event.addListener(_map.map,'bounds_changed', () => {
-            //     let center = this.map.map.getCenter()
-            //     let zoomLevel = this.map.map.getZoom()
-            //
-            //     console.log("Drag End => ", center, "\nZoomLevel => ", zoomLevel)
-            //
-            //     this.setPlaceFilterLatLng(center.y, center.x)
-            // })
-        },
-        setTestCircle(){
-            console.log("change Filter => ",this.placeFilter)
+            this.naverMap.Event.addListener(_map.map,'bounds_changed', () => {
+                let center = this.map.map.getCenter()
+                let zoomLevel = this.map.map.getZoom()
 
-            console.log("Circle => ",this.testCircle)
+                console.log("Drag End => ", center, "\nZoomLevel => ", zoomLevel)
 
-            this.testCircle.setCenter({
-                lat: this.placeFilter.position.latitude,
-                lng: this.placeFilter.position.longitude,
+                // this.setPlaceFilterLatLng(center.y, center.x)
             })
-
-            this.testCircle.setRadius(Number(this.placeFilter.distance * 1000))
         },
+        // // use when to debug
+        // setTestCircle(){
+        //     console.log("change Filter => ",this.placeFilter)
+        //
+        //     console.log("Circle => ",this.testCircle)
+        //
+        //     this.testCircle.setCenter({
+        //         lat: this.placeFilter.position.latitude,
+        //         lng: this.placeFilter.position.longitude,
+        //     })
+        //
+        //     this.testCircle.setRadius(Number(this.placeFilter.distance * 1000))
+        // },
         toggleLeftMenu(show = !this.showLeftMenu){
             this.showLeftMenu = show;
 
@@ -627,9 +643,15 @@ export default {
                 this.doSlideToggle(_toggledItemNumber)
             }
         },
-        placeFilter:{
-            deep: true,
-            handler: 'setTestCircle',
+        // // use this observer when enable debug circle
+        // placeFilter:{
+        //     deep: true,
+        //     handler: 'setTestCircle',
+        // },
+        'placeFilter.distance': function (newDistance) {
+            console.log("new Distance => ", newDistance);
+            let distanceZoomLevel = this.distanceZoomOptions.find( option => option.distance === newDistance)
+            this.map.map.setZoom(distanceZoomLevel.zoom)
         }
     }
 }
@@ -674,9 +696,15 @@ export default {
                 width 30%
                 min-width 200px
                 max-width: 350px
+                transition-property width
+                transition-duration 1s
+                transition-timing-function ease-out
                 &.hidden
                     width 0%
                     min-width 0px
+                    transition-property width
+                    transition-duration 1s
+                    transition-timing-function ease-in
             #mapRightSection
                 flex 1 1 auto
                 overflow hidden
@@ -685,11 +713,22 @@ export default {
         #app
             #mapLeftSection
                 position absolute
-                background-color white
+                /*background-color white*/
+                backdrop-filter blur(5px)
                 transform translateX(0%)
+                width 100%
                 z-index 180
+                transition-property backdrop-filter
+                transition-duration 0.5s
+                transition-timing-function linear
                 &.hidden
                     transform translateX(-100%)
+                    backdrop-filter blur(0px)
+                    transition-property backdrop-filter
+                    transition-duration 0.5s
+                    transition-timing-function linear
+                    @media screen and (-ms-high-contrast: none), (-ms-high-contrast: active)
+                        background-color rgba(255,255,255,0.6)
 
     #mapLeftSection
         border-left 1px solid grey
