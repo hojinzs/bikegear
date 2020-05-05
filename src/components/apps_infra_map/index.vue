@@ -10,11 +10,11 @@
                 <input
                     class="lumi-input-liner"
                     placeholder="명칭"
-                    v-model="placeFilter.keyword"
+                    v-model="placeFilter.name"
                 />
                 <button
                     class="lumi-button-liner"
-                    @click="getPlaceDatas()"
+                    @click="getPlaceData()"
                 >
                     Search
                 </button>
@@ -24,15 +24,17 @@
                         :key="tag.id"
                         @click="addTagInPlaceFilter(tag, true)"
                     >
-                        {{ tag.name }} | [X]
+                        {{ tag.label }} | [X]
                     </a>
                 </div>
                 <hr>
                     [ = 슬라이더 UI로 develop = ]
-                    <select v-model="placeFilter.distance">
-                        <option selected>5</option>
+                    <select
+                        v-model="placeFilter.distance"
+                    >
+                        <option>5</option>
                         <option>15</option>
-                        <option>30</option>
+                        <option selected>30</option>
                         <option>50</option>
                         <option>100</option>
                         <option>150</option>
@@ -46,7 +48,7 @@
                             v-for="tagType in TagTree"
                             :key="tagType.id"
                     >
-                        <b>{{ tagType.name }}</b>
+                        <b>{{ tagType.label }}</b>
                         <div>
                             <a
                                 v-for="tag in tagType.tags"
@@ -56,7 +58,7 @@
                                 }"
                                 @click="addTagInPlaceFilter(tag, tag.selected)"
                             >
-                                {{ tag.name }}
+                                {{ tag.label }}
                                 <span v-if="tag.selected">[X]</span>
                             </a>
                         </div>
@@ -75,7 +77,12 @@
                                     class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
                                     @click="toggleLeftMenu()"
                             >
-                                A
+                                <span v-if="infraList">
+                                    {{ infraList.length }}
+                                </span>
+                                <span v-else>
+                                    0
+                                </span>
                             </button>
                         </li>
 
@@ -159,6 +166,7 @@
                         :speedStiky="700"
                         :positionStiky="'center'"
                         :async="true"
+                        :autofocus="false"
                         @loaded="setCaroucel"
                         @focused="getFocused">
 
@@ -182,6 +190,16 @@
 
                     </lumiCaroucelSlide>
 
+                    <lumiCaroucelSlide
+                        v-if="placePaging.last_page > placePaging.current_page"
+                    >
+                        <button
+                            @click="getPlaceData(false)"
+                        >
+                            Load More
+                        </button>
+                    </lumiCaroucelSlide>
+
                 </lumiCaroucel>
             </div>
 
@@ -197,14 +215,6 @@
                     :initLayers="initLayers"
                     @load="onLoad"
                 >
-                    <naver-circle
-                        v-if="placeFilter.position.latitude"
-                        :lat="placeFilter.position.latitude"
-                        :lng="placeFilter.position.longitude"
-                        :radius="placeFilter.distance * 1000"
-                        fillColor="#ff0000"
-                        @load="setCircle"
-                    />
 
                     <naver-marker
                         ref="currentPosition"
@@ -310,12 +320,18 @@ export default {
             },
             placeFilter: {
                 position: {
-                    latitude: '',
-                    longitude: '',
+                    latitude: 37.4876,
+                    longitude: 127.1246,
                 },
                 distance: 5,
-                keyword: '',
+                name: '',
                 tags: [],
+            },
+            placePaging: {
+                current_page: 1,
+                last_page: 1,
+                per_page: 10,
+                total: 0,
             }
         }
     },
@@ -388,20 +404,38 @@ export default {
             this.map = _map
             this.naverMap = window.naver.maps
 
+            let center = this.map.map.getCenter();
+            this.testCircle = new this.naverMap.Circle({
+                map: _map.map,
+                center: {
+                    lat: center.y,
+                    lng: center.x
+                },
+                radius: Number(this.placeFilter.distance * 1000)
+            })
+
             this.getCurrentPosition()
 
-            this.naverMap.Event.addListener(_map.map,'dragend', point => {
-                console.log("DragEnd", point)
-
-                let center = this.map.getCenterPoint()
-
-                console.log("map Center Point =>", center);
-
-                this.setPlaceFilterLatLng(point.latlng.y, point.latlng.x)
-            })
+            // this.naverMap.Event.addListener(_map.map,'bounds_changed', () => {
+            //     let center = this.map.map.getCenter()
+            //     let zoomLevel = this.map.map.getZoom()
+            //
+            //     console.log("Drag End => ", center, "\nZoomLevel => ", zoomLevel)
+            //
+            //     this.setPlaceFilterLatLng(center.y, center.x)
+            // })
         },
-        setCircle(circle){
-            this.testCircle = circle
+        setTestCircle(){
+            console.log("change Filter => ",this.placeFilter)
+
+            console.log("Circle => ",this.testCircle)
+
+            this.testCircle.setCenter({
+                lat: this.placeFilter.position.latitude,
+                lng: this.placeFilter.position.longitude,
+            })
+
+            this.testCircle.setRadius(Number(this.placeFilter.distance * 1000))
         },
         toggleLeftMenu(show = !this.showLeftMenu){
             this.showLeftMenu = show;
@@ -447,28 +481,43 @@ export default {
             console.log(this.placeFilter)
         },
         setPlaceFilterLatLng(latitude, longitude){
-            console.log("set Place Filter => ", latitude, longitude)
-
             this.placeFilter.position.latitude = latitude
             this.placeFilter.position.longitude = longitude
-
-            this.testCircle.setCenter({
-                lat: latitude,
-                lng: longitude,
-            })
         },
-        getPlaceDatas(){
+        async getPlaceData(setNewList = true){
+
+            let targetPage = 1;
+            if(setNewList === true){
+                let center = this.map.map.getCenter()
+                this.setPlaceFilterLatLng(center.y, center.x)
+            } else {
+                if (this.placePaging.last_page > this.placePaging.current_page) {
+                    targetPage = this.placePaging.current_page + 1
+                } else {
+                    return
+                }
+            }
+
             this.infraList_status = 'loading'
 
-            axios.get(this.infraList_ajax.url,{
+            let tags = this.placeFilter.tags.map( tag => tag.name)
+
+            return axios.get(this.infraList_ajax.url,{
                 params: {
                     latitude: this.placeFilter.position.latitude,
                     longitude: this.placeFilter.position.longitude,
                     distance: this.placeFilter.distance,
+                    name: this.placeFilter.name,
+                    tags: tags,
+                    page: targetPage
                 }
             })
                 .then( res => {
                     this.infraList_status = 'finish'
+
+                    this.placePaging.current_page = res.data.meta.current_page
+                    this.placePaging.last_page = res.data.meta.last_page
+                    this.placePaging.total = res.data.meta.total
 
                     let list = res.data.data.map(data => {
                         data.Tags = {
@@ -479,8 +528,20 @@ export default {
                         }
                         return data;
                     })
-                    this.infraList = list
-                    this.slide.setAsyncFinish()
+
+                    if(setNewList){
+                        this.infraList = list
+                        this.slide.setAsyncFinish(0)
+                    } else {
+                        list.forEach( place => this.infraList.push(place))
+                    }
+
+                })
+                .catch((error) => {
+                    console.log('getPlaceData Error => ',error);
+                    this.infraList_status = 'error'
+
+                    setTimeout(()=> this.infraList_status = 'ready')
                 })
         },
         setCaroucel($slide){
@@ -489,6 +550,11 @@ export default {
         getFocused(_focusNumber){
             this.doPanToPlace(_focusNumber)
             this.DisplayItems_toggled = _focusNumber
+
+            // 자동 로딩
+            if(this.placePaging.current_page < this.placePaging.last_page && ((this.infraList.length - _focusNumber) < 3)){
+                this.getPlaceData(false);
+            }
         },
         async getTagsData(){
             this.tagList.ajax_status = 'loading'
@@ -501,32 +567,6 @@ export default {
                     console.error("getData Error =>", error)
                     this.tagList.ajax_status = 'error'
                     setTimeout(() => this.tagList.ajax_status = 'ready', 2000)
-                })
-        },
-        async getInfraData(){
-            this.infraList_status = 'loading'
-
-            return axios.get(this.infraList_ajax.url)
-                .then((res) => {
-                    this.infraList_status = 'finish'
-
-                    let list = res.data.data.map(data => {
-                        data.Tags = {
-                            "Utility" : Tag.filterTagObjectByType(data.tags,'Utility'),
-                            "Brand" : Tag.filterTagObjectByType(data.tags,'Brand'),
-                            "Merchant" : Tag.filterTagObjectByType(data.tags,'Merchant'),
-                            "others" : Tag.filterTagObjectByType(data.tags,'others'),
-                        }
-                        return data;
-                    })
-                    this.infraList = list
-                    this.slide.setAsyncFinish()
-                })
-                .catch((error) => {
-                    console.log('getPlaceData Error => ',error);
-                    this.infraList_status = 'error'
-
-                    setTimeout(()=> this.infraList_status = 'ready')
                 })
         },
         /**
@@ -572,7 +612,7 @@ export default {
     created() {
         this.getTagsData()
             .then(() => {
-                this.getInfraData()
+                this.getPlaceData()
             })
     },
     mounted(){
@@ -586,6 +626,10 @@ export default {
                 this.doPanToPlace(_toggledItemNumber)
                 this.doSlideToggle(_toggledItemNumber)
             }
+        },
+        placeFilter:{
+            deep: true,
+            handler: 'setTestCircle',
         }
     }
 }
