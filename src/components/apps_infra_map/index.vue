@@ -283,7 +283,7 @@ export default {
     },
     data(){
         let place_load_url = '//'+process.env.VUE_APP_API_HOST+'/v1/places';
-        let place_tags = '//'+process.env.VUE_APP_API_HOST+'/v1/tags/';
+        let place_tags = '//'+process.env.VUE_APP_API_HOST+'/v1/tags';
         
         return {
             // Map UI Control
