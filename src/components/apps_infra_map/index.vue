@@ -715,18 +715,22 @@ export default {
                 position absolute
                 /*background-color white*/
                 backdrop-filter blur(5px)
-                transform translateX(0%)
                 width 100%
                 z-index 180
-                transition-property backdrop-filter
-                transition-duration 0.5s
-                transition-timing-function linear
+                transform translateY(0%)
+                opacity 1
+                transition-property transform, backdrop-filter, opacity
+                transition-duration 0s, 0.25s, 0.25s
+                transition-delay 0s, 0s, 0s
+                transition-timing-function linear, liner, unset
                 &.hidden
-                    transform translateX(-100%)
+                    transform translateY(100%)
+                    opacity 0
                     backdrop-filter blur(0px)
-                    transition-property backdrop-filter
-                    transition-duration 0.5s
-                    transition-timing-function linear
+                    transition-property transform, backdrop-filter, opacity
+                    transition-duration 0s, 0.25s, 0.25s
+                    transition-delay 0.25s, 0s, 0s
+                    transition-timing-function linear, liner, unset
                     @media screen and (-ms-high-contrast: none), (-ms-high-contrast: active)
                         background-color rgba(255,255,255,0.6)
 
