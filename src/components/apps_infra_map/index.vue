@@ -500,7 +500,7 @@ export default {
                         height: this.$refs['rightSection'].clientHeight
                     })
 
-                    this.map.refresh()
+                    // this.map.refresh()
                 },1000)
             }
         },
