@@ -7,88 +7,102 @@
             }"
         >
             <div class="left-section-box">
-                <div>
-                    <input
-                            class="lumi-input-liner"
-                            placeholder="명칭"
-                            v-model="placeFilter.name"
-                    />
-                    <button
-                            class="lumi-button-liner"
-                            @click="getPlaceData()"
-                    >
-                        Search
-                    </button>
-                    <button
-                        @click="toggleLeftMenu()"
-                    >
-                        X
-                    </button>
-                </div>
-                <div>
-                    <a
-                        v-for="tag in placeFilter.tags"
-                        :key="tag.id"
-                        @click="addTagInPlaceFilter(tag, true)"
-                    >
-                        {{ tag.label }} | [X]
-                    </a>
-                </div>
-                <hr>
-                    [ = 슬라이더 UI로 develop = ]
-                    <select
-                        v-model="placeFilter.distance"
-                    >
-                        <option
-                            v-for="distance in distanceZoomOptions"
-                            :key="distance.distance"
-                            :value="distance.distance"
+                <form
+                    id="setPlaceFilter"
+                    @click.prevent="getPlaceData()"
+                >
+                    <div class="left-section-flex-wrapper">
+                        <input
+                                class="left-section-search-input lumi-input-liner"
+                                placeholder="명칭"
+                                v-model="placeFilter.name"
+                        />
+                        <button
+                                class="left-section-search-button lumi-button-liner"
+                                type="submit"
                         >
-                            {{ distance.distance }}
-                        </option>
-                    </select>
-                    km
-                <hr>
-                <div v-if="tagList.ajax_status === 'finish'" >
-                    <b>Select Tag</b>
-                    <div
-                            v-for="tagType in TagTree"
-                            :key="tagType.id"
-                    >
-                        <b>{{ tagType.label }}</b>
-                        <div>
-                            <a
-                                v-for="tag in tagType.tags"
-                                :key="tag.id"
-                                :class="{
-                                    'tagSelected': tag.selected
-                                }"
-                                @click="addTagInPlaceFilter(tag, tag.selected)"
+                            Search
+                        </button>
+                        <button
+                            class="left-section-close"
+                            @click="toggleLeftMenu()"
+                        >
+                            <font-awesome-icon icon="times" />
+                        </button>
+                    </div>
+                    <div>
+                        <a
+                            v-for="tag in placeFilter.tags"
+                            :key="tag.id"
+                            @click="addTagInPlaceFilter(tag, true)"
+                        >
+                            {{ tag.label }} | [X]
+                        </a>
+                    </div>
+                    <hr>
+                        [ = 슬라이더 UI로 develop = ]
+                        <select
+                            v-model="placeFilter.distance"
+                        >
+                            <option
+                                v-for="distance in distanceZoomOptions"
+                                :key="distance.distance"
+                                :value="distance.distance"
+                                :selected="distance.default"
                             >
-                                {{ tag.label }}
-                                <span v-if="tag.selected">[X]</span>
-                            </a>
+                                {{ distance.distance }}
+                            </option>
+                        </select>
+                        km
+                    <hr>
+                    <div v-if="tagList.ajax_status === 'finish'" >
+                        <b>Select Tag</b>
+                        <div
+                                v-for="tagType in TagTree"
+                                :key="tagType.id"
+                        >
+                            <b>{{ tagType.label }}</b>
+                            <div>
+                                <a
+                                    v-for="tag in tagType.tags"
+                                    :key="tag.id"
+                                    :class="{
+                                        'tagSelected': tag.selected
+                                    }"
+                                    @click="addTagInPlaceFilter(tag, tag.selected)"
+                                >
+                                    {{ tag.label }}
+                                    <span v-if="tag.selected">[X]</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
         <div id="mapRightSection" ref="rightSection">
-
             <div id="MenuTop">
                 <div class="lumi-flex-slider-wrapper scroll-free">
                     <ul class="lumi-flex-slider" style="padding-left: 1em">
 
                         <li class="lumi-flex-slider-item">
                             <button
-                                    class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
-                                    @click="toggleLeftMenu()"
+                                class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
+                                @click="toggleLeftMenu()"
                             >
-                                <span v-if="infraList">
-                                    {{ infraList.length }}
-                                </span>
-                                <span v-else>
-                                    0
+                                <span class="place-filter-indicator">
+                                    <font-awesome-icon
+                                        icon="chevron-right"
+                                        class="left-slider-indicator"
+                                        :class="{ 'menuOpened' : showLeftMenu}"
+                                    />
+                                    <font-awesome-icon
+                                        class="place-filter-icon"
+                                        icon="search"
+                                    />
+                                    <span class="place-count-number">
+                                        {{ infraList.length }}
+                                    </span>
                                 </span>
                             </button>
                         </li>
@@ -327,7 +341,7 @@ export default {
             },
             distanceZoomOptions: [
                 {zoom: 13, distance: 15},
-                {zoom: 12, distance: 30},
+                {zoom: 12, distance: 30, default: true},
                 {zoom: 11, distance: 50},
                 {zoom: 10, distance: 150},
                 {zoom: 9, distance: 300},
@@ -462,8 +476,8 @@ export default {
                     height: this.$refs['rightSection'].clientHeight
                 })
 
-                // this.map.refresh()
-            },100)
+                this.map.refresh()
+            },1000)
         },
         getCurrentPosition(){
             navigator.geolocation.getCurrentPosition(position => {
@@ -696,15 +710,17 @@ export default {
                 width 30%
                 min-width 200px
                 max-width: 350px
-                transition-property width
-                transition-duration 1s
-                transition-timing-function ease-out
+                transition-property width min-width
+                transition-duration 0.5s
+                transition-timing-function linear
                 &.hidden
-                    width 0%
+                    width 0px
                     min-width 0px
-                    transition-property width
-                    transition-duration 1s
-                    transition-timing-function ease-in
+                    transition-property width min-width
+                    transition-duration 0.5s
+                    transition-timing-function linear
+                .left-section-close
+                    display none
             #mapRightSection
                 flex 1 1 auto
                 overflow hidden
@@ -736,6 +752,37 @@ export default {
 
     #mapLeftSection
         border-left 1px solid grey
+        .left-section-flex-wrapper
+            display flex
+            padding-left 0.7rem
+            padding-right 0.7rem
+            .left-section-search-input
+                flex-basis 100%
+            .left-section-search-button
+                min-width 100px
+                margin-right 10px
+            .left-section-close
+                margin-left auto
+
+    .place-filter-indicator
+        .left-slider-indicator
+            transform rotate(0deg)
+            transition-property transform
+            transition-duration 0.5s
+            transition-timing-function ease-in-out
+            &.menuOpened
+                transform rotate(180deg)
+                transition-property transform
+                transition-duration 0.5s
+                transition-timing-function ease-in-out
+        .place-filter-icon
+            margin-left 0.25rem
+            padding-left 0.5rem
+            padding-right 0.5rem
+        .place-count-number
+            border-left lightgray 1px solid
+            color dodgerblue
+            padding-left 0.5rem
 
     #mapRightSection
         box-shadow -5px -1px 20px 2px rgba(0,0,0,0.6)
