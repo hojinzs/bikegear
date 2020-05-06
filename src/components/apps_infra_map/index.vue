@@ -9,7 +9,7 @@
             <div class="left-section-box">
                 <form
                     id="setPlaceFilter"
-                    @click.prevent="getPlaceData()"
+                    @submit.prevent="getPlaceData()"
                 >
                     <div class="left-section-flex-wrapper">
                         <input
@@ -40,7 +40,8 @@
                         </a>
                     </div>
                     <hr>
-                        [ = 슬라이더 UI로 develop = ]
+                        <!-- [ = 슬라이더 UI로 develop = ] -->
+                        검색 반경
                         <select
                             v-model="placeFilter.distance"
                         >
@@ -100,34 +101,34 @@
                                         class="place-filter-icon"
                                         icon="search"
                                     />
-                                    <span class="place-count-number">
-                                        {{ infraList.length }}
-                                    </span>
+                                    <!-- Loading -->
+                                    <template v-if="(infraList_status === 'loading' && infraList.length === 0)" >
+                                        Loading <img class="loading" src="/images/Spinner-1s-104px.gif">
+                                    </template>
+
+                                    <!-- Loading Error -->
+                                    <template v-if="infraList_status === 'error'">
+                                        <font-awesome-icon :icon="'exclamation-triangle'" />
+                                    </template>
+
+                                    <!-- Loading Finish -->
+                                    <template v-if="infraList.length > 0">
+                                        <span class="place-count-number">
+                                            {{ PlaceCounter }}
+<!--                                            {{ infraList.length }}-->
+                                            <span v-if="(infraList_status === 'finish' && placePaging.current_page < placePaging.last_page)">
+                                                <font-awesome-icon :icon="'plus'" />
+                                            </span>
+                                            <span v-else-if="(infraList_status === 'loading' && infraList.length > 0)">
+                                                <img class="loading" src="/images/Spinner-1s-104px.gif">
+                                            </span>
+                                        </span>
+                                    </template>
                                 </span>
                             </button>
                         </li>
 
-                        <!-- Loading -->
-                        <li class="lumi-flex-slider-item"
-                            v-if="infraList_status === 'loading'">
-                            <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow">
-                                <img class="loading" src="/images/Spinner-1s-104px.gif">
-                                <!-- :style="{color: item.color}"/> -->
-                                Loading
-                            </button>
-                        </li>
-
-                        <!-- Load Error -->
-                        <li class="lumi-flex-slider-item"
-                            v-if="infraList_status === 'error'">
-                            <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
-                                    :style="{color: 'red'}">
-                                <font-awesome-icon class="infra-icon"
-                                                   :icon="'exclamation-triangle'" />
-                                Error
-                            </button>
-                        </li>
-
+                        <!-- todo :: 실제 검색 프리셋 세팅을 불러올 수 있도록 변경 필요 -->
                         <!-- LOOP START -->
                         <li class="lumi-flex-slider-item"
                             v-for="(item,index) in FeaturedItems"
@@ -267,6 +268,7 @@ import Vue from 'vue'
 import naver from 'vue-naver-maps'
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Velocity from 'velocity-animate'
 
 // Sample Data
 import { featured, tags } from '../../plugins/sampledb'
@@ -308,6 +310,7 @@ export default {
             // 샘플 데이터 edn
             tags,
             infraList: [],
+            placeListCount: 0,
             infraList_ajax: {
                 url: place_load_url,
                 status: 'loading',
@@ -371,26 +374,21 @@ export default {
             if(this.tagList.data.length === 0 ){
                 return []
             }
-
             let tagTypes = []
             this.tagList.data.forEach( tag => {
                 /** todo :: 태그 타입 기준으로 트리 리스트 만들 **/
 
                 let currentTagType = tagTypes.find( tagType => tagType.name === tag.tag_Type.name )
+
                 if(typeof currentTagType === 'undefined'){
                     currentTagType = tag.tag_Type
                     currentTagType.tags = []
                     tagTypes.push(currentTagType)
-                    console.log("new Tag Type")
-                } else {
-                    console.log("old Tag Type")
                 }
-                console.log("Currnet Tag Type => ", currentTagType)
+
                 tag.selected = tag.selected || false
                 currentTagType.tags.push(tag)
             })
-
-            console.log("tag Trees => ", tagTypes)
             return tagTypes;
         },
         /**
@@ -423,6 +421,9 @@ export default {
             }
             return this.infraList
         },
+        PlaceCounter(){
+            return this.placeListCount.toFixed(0)
+        }
     },
     methods:{
         /**
@@ -431,6 +432,33 @@ export default {
         onLoad(_map){
             this.map = _map
             this.naverMap = window.naver.maps
+
+            this.getCurrentPosition()
+
+            // naver Maps Event List => https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Map.html
+            // 이벤트 등록이 필요할 경우 해당 코드 참조하여 삽입
+            this.naverMap.Event.addListener(_map.map,'zoom_changed', () => {
+                // let center = this.map.map.getCenter()
+                let zoomLevel = this.map.map.getZoom()
+
+                let option = this.distanceZoomOptions.find(option => {
+                    if(zoomLevel === option.zoom) {
+                        return true
+                    }
+                    if(zoomLevel > 13 && option.zoom === 13){
+                        return true
+                    }
+                    if(zoomLevel < 9 && option.zoom === 9){
+                        return true
+                    }
+                    return false
+                })
+                if(typeof option === 'undefined'){
+                    option = this.distanceZoomOptions[0]
+                }
+
+                this.placeFilter.distance = option.distance
+            })
 
             // // Debug Circle
             // let center = this.map.map.getCenter();
@@ -443,16 +471,11 @@ export default {
             //     radius: Number(this.placeFilter.distance * 1000)
             // })
 
-            this.getCurrentPosition()
+            this.getTagsData()
+                .then(() => {
+                    this.getPlaceData()
+                })
 
-            this.naverMap.Event.addListener(_map.map,'bounds_changed', () => {
-                let center = this.map.map.getCenter()
-                let zoomLevel = this.map.map.getZoom()
-
-                console.log("Drag End => ", center, "\nZoomLevel => ", zoomLevel)
-
-                // this.setPlaceFilterLatLng(center.y, center.x)
-            })
         },
         // // use when to debug
         // setTestCircle(){
@@ -516,17 +539,37 @@ export default {
         },
         async getPlaceData(setNewList = true){
 
-            let targetPage = 1;
+            // 새로운 목록을 불러 오는 것이 아니고, 마지막 페이지일 경우 반응 하지 않는다.
+            if(setNewList === false && this.placePaging.current_page === this.placePaging.last_page)
+            {
+                console.error('this is last Page')
+                return new Promise.reject('this is last Page')
+            }
+
+            // 새로운 목록을 불러올 경우 초기화 옵션
             if(setNewList === true){
+                // 페이지 번호와 목록을 초기화
+                this.placePaging.current_page = 0
+                this.infraList = []
+
+                // 검색 필터를 현재 지도의 중심점으로 맞춘다.
                 let center = this.map.map.getCenter()
                 this.setPlaceFilterLatLng(center.y, center.x)
-            } else {
-                if (this.placePaging.last_page > this.placePaging.current_page) {
-                    targetPage = this.placePaging.current_page + 1
-                } else {
-                    return
-                }
             }
+
+            let targetPage = this.placePaging.current_page + 1;
+
+            // if(setNewList === true){
+            //     let center = this.map.map.getCenter()
+            //     this.setPlaceFilterLatLng(center.y, center.x)
+            //     this.placePaging.current_page = 0
+            // } else {
+            //     if (this.placePaging.last_page > this.placePaging.current_page) {
+            //         targetPage = this.placePaging.current_page + 1
+            //     } else {
+            //         return
+            //     }
+            // }
 
             this.infraList_status = 'loading'
 
@@ -581,8 +624,12 @@ export default {
             this.doPanToPlace(_focusNumber)
             this.DisplayItems_toggled = _focusNumber
 
-            // 자동 로딩
-            if(this.placePaging.current_page < this.placePaging.last_page && ((this.infraList.length - _focusNumber) < 3)){
+            // 마지막 페이지가 아니며, 다른 데이터를 로딩중이 아니라면 추가 데이터를 불러온다.
+            if(
+                this.placePaging.current_page < this.placePaging.last_page
+                && (this.infraList.length - _focusNumber) < 3
+                && this.infraList_status !== 'loading'
+            ){
                 this.getPlaceData(false);
             }
         },
@@ -639,11 +686,7 @@ export default {
             this.$router.push({ name: 'place', params: { id: _id } } )
         },
     },
-    created() {
-        this.getTagsData()
-            .then(() => {
-                this.getPlaceData()
-            })
+    created(){
     },
     mounted(){
         if(this.isMobile){
@@ -664,8 +707,27 @@ export default {
         // },
         'placeFilter.distance': function (newDistance) {
             console.log("new Distance => ", newDistance);
+
             let distanceZoomLevel = this.distanceZoomOptions.find( option => option.distance === newDistance)
             this.map.map.setZoom(distanceZoomLevel.zoom)
+        },
+        'infraList': function(newList) {
+
+            if(newList.length === 0){
+                this.placeListCount = 0
+                return
+            }
+
+            let old = this.placeListCount
+            Velocity(this.$el, {
+                tween: [(newList.length), old],
+            },{
+                duration: 1000,
+                progress: (elements, complete, remaining, start, tweenValue) => {
+                    this.placeListCount = tweenValue || old
+                }
+            })
+
         }
     }
 }
