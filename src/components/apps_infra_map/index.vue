@@ -25,7 +25,7 @@
                         </button>
                         <button
                             class="left-section-close"
-                            @click="toggleLeftMenu()"
+                            @click.prevent="toggleLeftMenu()"
                         >
                             <font-awesome-icon icon="times" />
                         </button>
@@ -493,14 +493,16 @@ export default {
         toggleLeftMenu(show = !this.showLeftMenu){
             this.showLeftMenu = show;
 
-            setTimeout(() => {
-                this.map.setSize({
-                    width: this.$refs['rightSection'].clientWidth,
-                    height: this.$refs['rightSection'].clientHeight
-                })
+            if(!this.isMobile){
+                setTimeout(() => {
+                    this.map.setSize({
+                        width: this.$refs['rightSection'].clientWidth,
+                        height: this.$refs['rightSection'].clientHeight
+                    })
 
-                this.map.refresh()
-            },1000)
+                    this.map.refresh()
+                },1000)
+            }
         },
         getCurrentPosition(){
             navigator.geolocation.getCurrentPosition(position => {
@@ -607,6 +609,10 @@ export default {
                         this.slide.setAsyncFinish(0)
                     } else {
                         list.forEach( place => this.infraList.push(place))
+                    }
+
+                    if(this.isMobile && this.showLeftMenu ){
+                        this.toggleLeftMenu(false)
                     }
 
                 })
