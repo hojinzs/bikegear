@@ -12,22 +12,27 @@
                     @submit.prevent="getPlaceData()"
                 >
                     <div class="left-section-flex-wrapper">
+                        <button
+                            class="left-section-list-button"
+                            @click.prevent=""
+                        >
+                            <font-awesome-icon
+                                icon="list-ul"
+                            />
+                            <span class="list-bubble">{{ infraList.length }}</span>
+                        </button>
                         <input
-                                class="left-section-search-input lumi-input-liner"
-                                placeholder="명칭"
-                                v-model="placeFilter.name"
+                            class="left-section-search-input lumi-input-liner"
+                            placeholder="명칭"
+                            v-model="placeFilter.name"
                         />
                         <button
-                                class="left-section-search-button lumi-button-liner"
-                                type="submit"
+                            class="left-section-search-button lumi-button-liner"
+                            type="submit"
                         >
-                            Search
-                        </button>
-                        <button
-                            class="left-section-close"
-                            @click.prevent="toggleLeftMenu()"
-                        >
-                            <font-awesome-icon icon="times" />
+                            <font-awesome-icon
+                                icon="search"
+                            />
                         </button>
                     </div>
                     <div>
@@ -59,8 +64,8 @@
                     <div v-if="tagList.ajax_status === 'finish'" >
                         <b>Select Tag</b>
                         <div
-                                v-for="tagType in TagTree"
-                                :key="tagType.id"
+                            v-for="tagType in TagTree"
+                            :key="tagType.id"
                         >
                             <b>{{ tagType.label }}</b>
                             <div>
@@ -82,8 +87,12 @@
             </div>
         </div>
         <div id="mapRightSection" ref="rightSection">
-            <div id="MenuTop">
-                <div class="lumi-flex-slider-wrapper scroll-free">
+            <div id="MenuTop"
+                 :class="{'slided': showLeftMenu }"
+            >
+                <div class="lumi-flex-slider-wrapper"
+                     :class="{ 'scroll-free' : !showLeftMenu}"
+                >
                     <ul class="lumi-flex-slider" style="padding-left: 1em">
 
                         <li class="lumi-flex-slider-item">
@@ -103,7 +112,9 @@
                                     />
                                     <!-- Loading -->
                                     <template v-if="(infraList_status === 'loading' && infraList.length === 0)" >
-                                        Loading <img class="loading" src="/images/Spinner-1s-104px.gif">
+                                        <span>
+                                            <img class="loading" src="/images/Spinner-1s-104px.gif">
+                                        </span>
                                     </template>
 
                                     <!-- Loading Error -->
@@ -115,13 +126,22 @@
                                     <template v-if="infraList.length > 0">
                                         <span class="place-count-number">
                                             {{ PlaceCounter }}
-<!--                                            {{ infraList.length }}-->
-                                            <span v-if="(infraList_status === 'finish' && placePaging.current_page < placePaging.last_page)">
-                                                <font-awesome-icon :icon="'plus'" />
-                                            </span>
+                                            <font-awesome-icon
+                                                class="more"
+                                                v-if="(infraList_status === 'finish' && placePaging.current_page < placePaging.last_page)"
+                                                :icon="'plus'"
+                                            />
                                             <span v-else-if="(infraList_status === 'loading' && infraList.length > 0)">
                                                 <img class="loading" src="/images/Spinner-1s-104px.gif">
                                             </span>
+                                        </span>
+                                    </template>
+
+                                    <!-- Loading Error -->
+                                    <template v-if="infraList_status === 'finish' && infraList.length === 0" >
+                                        <span class="place-empty">
+                                            <font-awesome-icon :icon="'exclamation-triangle'" />
+                                            0
                                         </span>
                                     </template>
                                 </span>
@@ -210,16 +230,6 @@
                             </template>
                         </PlaceCard>
 
-                    </lumiCaroucelSlide>
-
-                    <lumiCaroucelSlide
-                        v-if="placePaging.last_page > placePaging.current_page"
-                    >
-                        <button
-                            @click="getPlaceData(false)"
-                        >
-                            Load More
-                        </button>
                     </lumiCaroucelSlide>
 
                 </lumiCaroucel>
@@ -778,14 +788,15 @@ export default {
                 width 30%
                 min-width 200px
                 max-width: 350px
+                box-shadow inset -3px 1px 20px 2px rgba(0,0,0,0.6)
                 transition-property width min-width
-                transition-duration 0.5s
+                transition-duration 0.25s
                 transition-timing-function linear
                 &.hidden
                     width 0px
                     min-width 0px
                     transition-property width min-width
-                    transition-duration 0.5s
+                    transition-duration 0.25s
                     transition-timing-function linear
                 .left-section-close
                     display none
@@ -797,38 +808,73 @@ export default {
         #app
             #mapLeftSection
                 position absolute
-                /*background-color white*/
-                backdrop-filter blur(5px)
-                width 100%
+                width 70%
                 z-index 180
-                transform translateY(0%)
+                /*background-color white*/
+                // backdrop-filter blur(5px)
+                // for animation
                 opacity 1
-                transition-property transform, backdrop-filter, opacity
-                transition-duration 0s, 0.25s, 0.25s
-                transition-delay 0s, 0s, 0s
-                transition-timing-function linear, liner, unset
+                left 0%
+                box-shadow inset rgba(0,0,0,0.7) 40px 0px 30px 0px
+                transition-property left opacity box-shadow
+                transition-duration 0.25s
+                transition-delay 0s
+                transition-timing-function ease-out
                 &.hidden
-                    transform translateY(100%)
                     opacity 0
-                    backdrop-filter blur(0px)
-                    transition-property transform, backdrop-filter, opacity
-                    transition-duration 0s, 0.25s, 0.25s
-                    transition-delay 0.25s, 0s, 0s
-                    transition-timing-function linear, liner, unset
-                    @media screen and (-ms-high-contrast: none), (-ms-high-contrast: active)
-                        background-color rgba(255,255,255,0.6)
+                    left -70%
+                    box-shadow none
+                    transition-property left opacity box-shadow
+                    transition-duration 0.25s
+                    transition-delay 0s
+                    transition-timing-function ease-in
+            #MenuTop
+                left 0%
+                transition-property left
+                transition-duration 0.25s
+                transition-timing-function ease-in-out
+                &.slided
+                    left 70%
+                    transition-property left
+                    transition-duration 0.25s
+                    transition-timing-function ease-in-out
+
+    .left-section-box
+        margin 0.5rem
+        padding-top 0.5rem
+        padding-bottom 0.5rem
+        background-color white
+        border-radius 8px
+        box-shadow rgba(0,0,0,0.5) 1px 2px 7px 1px
+        hr
+            border solid 1px #cecece
+
 
     #mapLeftSection
-        border-left 1px solid grey
         .left-section-flex-wrapper
             display flex
             padding-left 0.7rem
             padding-right 0.7rem
+            .left-section-list-button
+                width 40px
+                padding-left 0px
+                margin-left 0px
+                margin-right 0.5em
+                position relative
+                .list-bubble
+                    position absolute
+                    background-color dodgerblue
+                    color white
+                    font-size 0.4rem
+                    right 0px
+                    top 0px
+                    border-radius 0.4rem
+                    padding-left 0.2rem
+                    padding-right 0.2rem
             .left-section-search-input
                 flex-basis 100%
-            .left-section-search-button
-                min-width 100px
-                margin-right 10px
+            /*.left-section-search-button*/
+            /*    min-width 90px*/
             .left-section-close
                 margin-left auto
 
@@ -844,16 +890,18 @@ export default {
                 transition-duration 0.5s
                 transition-timing-function ease-in-out
         .place-filter-icon
-            margin-left 0.25rem
+            margin-right 0.5rem
             padding-left 0.5rem
             padding-right 0.5rem
+            border-right lightgray 1px solid
         .place-count-number
-            border-left lightgray 1px solid
             color dodgerblue
-            padding-left 0.5rem
+            .more
+                font-size 0.6em
+                margin-bottom 0.2em
+        .place-empty
+            color lightcoral
 
-    #mapRightSection
-        box-shadow -5px -1px 20px 2px rgba(0,0,0,0.6)
 
     .activate
         border none
