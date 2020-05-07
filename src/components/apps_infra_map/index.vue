@@ -839,44 +839,50 @@ export default {
                     transition-duration 0.25s
                     transition-timing-function ease-in-out
 
-    .left-section-box
-        margin 0.5rem
-        padding-top 0.5rem
-        padding-bottom 0.5rem
-        background-color white
-        border-radius 8px
-        box-shadow rgba(0,0,0,0.5) 1px 2px 7px 1px
-        hr
-            border solid 1px #cecece
+
 
 
     #mapLeftSection
-        .left-section-flex-wrapper
-            display flex
-            padding-left 0.7rem
-            padding-right 0.7rem
-            .left-section-list-button
-                width 40px
-                padding-left 0px
-                margin-left 0px
-                margin-right 0.5em
-                position relative
-                .list-bubble
-                    position absolute
-                    background-color dodgerblue
-                    color white
-                    font-size 0.4rem
-                    right 0px
-                    top 0px
-                    border-radius 0.4rem
-                    padding-left 0.2rem
-                    padding-right 0.2rem
-            .left-section-search-input
-                flex-basis 100%
-            /*.left-section-search-button*/
-            /*    min-width 90px*/
-            .left-section-close
-                margin-left auto
+        display flex
+        flex-direction column
+        .left-section-box
+            max-height 100%
+            margin 0.5rem
+            margin-bottom 4.5rem
+            padding-top 0.5rem
+            padding-bottom 0.5rem
+            background-color white
+            border-radius 8px
+            box-shadow rgba(0,0,0,0.5) 1px 2px 7px 1px
+            overflow none
+            hr
+                border solid 1px #cecece
+            .left-section-flex-wrapper
+                display flex
+                padding-left 0.7rem
+                padding-right 0.7rem
+                .left-section-list-button
+                    width 40px
+                    padding-left 0px
+                    margin-left 0px
+                    margin-right 0.5em
+                    position relative
+                    .list-bubble
+                        position absolute
+                        background-color dodgerblue
+                        color white
+                        font-size 0.4rem
+                        right 0px
+                        top 0px
+                        border-radius 0.4rem
+                        padding-left 0.2rem
+                        padding-right 0.2rem
+                .left-section-search-input
+                    flex-basis 100%
+                /*.left-section-search-button*/
+                /*    min-width 90px*/
+                .left-section-close
+                    margin-left auto
 
     .place-filter-indicator
         .left-slider-indicator
