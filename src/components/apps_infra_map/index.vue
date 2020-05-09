@@ -7,83 +7,120 @@
             }"
         >
             <div class="left-section-box">
-                <form
-                    id="setPlaceFilter"
-                    @submit.prevent="getPlaceData()"
-                >
-                    <div class="left-section-flex-wrapper">
-                        <button
-                            class="left-section-list-button"
-                            @click.prevent=""
-                        >
-                            <font-awesome-icon
-                                icon="list-ul"
-                            />
-                            <span class="list-bubble">{{ infraList.length }}</span>
-                        </button>
-                        <input
-                            class="left-section-search-input lumi-input-liner"
-                            placeholder="명칭"
-                            v-model="placeFilter.name"
-                        />
-                        <button
-                            class="left-section-search-button lumi-button-liner"
-                            type="submit"
-                        >
-                            <font-awesome-icon
-                                icon="search"
-                            />
-                        </button>
-                    </div>
-                    <div>
-                        <a
-                            v-for="tag in placeFilter.tags"
-                            :key="tag.id"
-                            @click="addTagInPlaceFilter(tag, true)"
-                        >
-                            {{ tag.label }} | [X]
-                        </a>
-                    </div>
-                    <hr>
-                        <!-- [ = 슬라이더 UI로 develop = ] -->
-                        검색 반경
-                        <select
-                            v-model="placeFilter.distance"
-                        >
-                            <option
-                                v-for="distance in distanceZoomOptions"
-                                :key="distance.distance"
-                                :value="distance.distance"
-                                :selected="distance.default"
+                <div class="left-section-box-top">
+                    <form
+                        id="setPlaceFilter"
+                        @submit.prevent="getPlaceData()"
+                    >
+                        <div class="left-section-flex-wrapper">
+                            <button
+                                class="left-section-list-button"
+                                @click.prevent="toggleLeftMenuMode('places')"
                             >
-                                {{ distance.distance }}
-                            </option>
-                        </select>
-                        km
-                    <hr>
-                    <div v-if="tagList.ajax_status === 'finish'" >
-                        <b>Select Tag</b>
+                                <font-awesome-icon
+                                        icon="map-marker-alt"
+                                />
+                                <span class="list-bubble">{{ infraList.length }}</span>
+                            </button>
+                            <button
+                                v-if="leftMenuMode === 'places'"
+                                class="left-section-search-button"
+                                @click.prevent="toggleLeftMenuMode('search')"
+                            >
+                                <font-awesome-icon
+                                    icon="search"
+                                />
+                            </button>
+                            <input
+                                v-if="leftMenuMode === 'search'"
+                                class="left-section-search-input lumi-input-liner"
+                                placeholder="명칭"
+                                v-model="placeFilter.name"
+                            />
+                            <button
+                                v-if="leftMenuMode === 'search'"
+                                class="left-section-search-button lumi-button-liner"
+                                type="submit"
+                            >
+                                <font-awesome-icon
+                                    icon="search"
+                                />
+                            </button>
+                        </div>
+                        <!-- [ = 슬라이더 UI로 develop = ] -->
                         <div
-                            v-for="tagType in TagTree"
-                            :key="tagType.id"
+                            v-if="leftMenuMode === 'search'"
+                            class="distance-meter"
                         >
-                            <b>{{ tagType.label }}</b>
-                            <div>
-                                <a
-                                    v-for="tag in tagType.tags"
-                                    :key="tag.id"
-                                    :class="{
-                                        'tagSelected': tag.selected
-                                    }"
-                                    @click="addTagInPlaceFilter(tag, tag.selected)"
+                            겸색 반경
+                            <select
+                                    v-model="placeFilter.distance"
+                            >
+                                <option
+                                        v-for="distance in distanceZoomOptions"
+                                        :key="distance.distance"
+                                        :value="distance.distance"
+                                        :selected="distance.default"
                                 >
-                                    {{ tag.label }}
-                                    <span v-if="tag.selected">[X]</span>
-                                </a>
+                                    {{ distance.distance }}
+                                </option>
+                            </select>
+                            km
+                        </div>
+                        <div
+                            v-if="leftMenuMode === 'search'"
+                            class="selected-tag-list"
+                        >
+                            <a
+                                    class="selected-tag"
+                                    v-for="tag in placeFilter.tags"
+                                    :key="tag.id"
+                                    @click="addTagInPlaceFilter(tag, true)"
+                            >
+                                <place-tag-mini
+                                        :tag-object="tag"
+                                />
+                                <span class="close">
+                                <font-awesome-icon icon="times-circle"
+                                />
+                            </span>
+                            </a>
+                        </div>
+                    </form>
+                    <hr>
+                </div>
+                <div class="left-section-box-bottom">
+                    <div
+                        v-if="leftMenuMode === 'search'"
+                    >
+                        <div
+                                class="tag-list box-side-padding-sm"
+                                v-if="tagList.ajax_status === 'finish'"
+                        >
+                            <h3>태그 선택</h3>
+                            <div
+                                    v-for="tagType in TagTree"
+                                    :key="tagType.id"
+                            >
+                                <b>{{ tagType.label }}</b>
+                                <div>
+                                    <a
+                                            v-for="tag in tagType.tags"
+                                            :key="tag.id"
+                                            @click="addTagInPlaceFilter(tag, tag.selected)"
+                                    >
+                                        <place-tag-mini
+                                                :tag-object="tag"
+                                                :class="{
+                                            'tagSelected': tag.selected
+                                        }"
+                                        />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
         <div id="mapRightSection" ref="rightSection">
@@ -287,6 +324,7 @@ import Tag from '../../plugins/journey66_tag'
 import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 import StyleVariable from '@/assets/variable.styl'
 import PlaceCard from './place_card'
+import PlaceTagMini from "../apps_infra_place/place-tag-mini";
 
 /**
  * vue-naver-maps
@@ -302,6 +340,7 @@ Vue.use(naver,{
 
 export default {
     components:{
+        PlaceTagMini,
         FontAwesomeIcon,
         lumiCaroucel,
         lumiCaroucelSlide,
@@ -341,6 +380,7 @@ export default {
             map: null,
             naverMap: null,
             testCircle : null,
+            leftMenuMode : 'search', // ['places', 'search']
             mapOptions: {
                 lat: 37.4876,
                 lng: 127.1246,
@@ -445,30 +485,18 @@ export default {
 
             this.getCurrentPosition()
 
-            // naver Maps Event List => https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Map.html
             // 이벤트 등록이 필요할 경우 해당 코드 참조하여 삽입
+            // naver Maps Event List => https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Map.html
             this.naverMap.Event.addListener(_map.map,'zoom_changed', () => {
-                // let center = this.map.map.getCenter()
-                let zoomLevel = this.map.map.getZoom()
-
-                let option = this.distanceZoomOptions.find(option => {
-                    if(zoomLevel === option.zoom) {
-                        return true
-                    }
-                    if(zoomLevel > 13 && option.zoom === 13){
-                        return true
-                    }
-                    if(zoomLevel < 9 && option.zoom === 9){
-                        return true
-                    }
-                    return false
-                })
-                if(typeof option === 'undefined'){
-                    option = this.distanceZoomOptions[0]
-                }
-
-                this.placeFilter.distance = option.distance
+                this.setZoomDistanceLevel()
             })
+
+            this.getTagsData()
+                .then(() => {
+                    this.getPlaceData()
+                })
+
+            this.setZoomDistanceLevel()
 
             // // Debug Circle
             // let center = this.map.map.getCenter();
@@ -480,11 +508,6 @@ export default {
             //     },
             //     radius: Number(this.placeFilter.distance * 1000)
             // })
-
-            this.getTagsData()
-                .then(() => {
-                    this.getPlaceData()
-                })
 
         },
         // // use when to debug
@@ -701,6 +724,47 @@ export default {
         showDetail(_id){
             this.$router.push({ name: 'place', params: { id: _id } } )
         },
+        /**
+         *
+         */
+        toggleLeftMenuMode(mode = null){
+            let modeList = ['search', 'places']
+            if(!modeList.find( findMode => findMode === mode)){
+                throw new Error(mode+' is not Menu')
+            }
+            if(mode === null){
+                let i = modeList.findIndex(findMode => findMode === mode) + 1
+                if(modeList.length === i){
+                    i = 0
+                }
+                mode = modeList[i]
+            }
+            this.leftMenuMode = mode
+        },
+        /**
+         *
+         */
+        setZoomDistanceLevel(){
+            let zoomLevel = this.map.map.getZoom()
+
+            let option = this.distanceZoomOptions.find(option => {
+                if(zoomLevel === option.zoom) {
+                    return true
+                }
+                if(zoomLevel > 13 && option.zoom === 13){
+                    return true
+                }
+                if(zoomLevel < 9 && option.zoom === 9){
+                    return true
+                }
+                return false
+            })
+            if(typeof option === 'undefined'){
+                option = this.distanceZoomOptions[0]
+            }
+
+            this.placeFilter.distance = option.distance
+        }
     },
     created(){
     },
@@ -840,12 +904,14 @@ export default {
                     transition-timing-function ease-in-out
 
 
-
-
     #mapLeftSection
         display flex
         flex-direction column
+        hr
+            border solid 1px #cecece
         .left-section-box
+            display flex
+            flex-direction column
             max-height 100%
             margin 0.5rem
             margin-bottom 4.5rem
@@ -854,9 +920,12 @@ export default {
             background-color white
             border-radius 8px
             box-shadow rgba(0,0,0,0.5) 1px 2px 7px 1px
-            overflow none
-            hr
-                border solid 1px #cecece
+            overflow hidden
+            .left-section-box-top
+                flex 1 1 auto
+            .left-section-box-bottom
+                flex 1 1 auto
+                overflow-y scroll
             .left-section-flex-wrapper
                 display flex
                 padding-left 0.7rem
@@ -883,6 +952,19 @@ export default {
                 /*    min-width 90px*/
                 .left-section-close
                     margin-left auto
+            .selected-tag-list
+                margin-top 0.5rem
+                .selected-tag
+                    position relative
+                    .close
+                        position absolute
+                        right 0
+                        top -50%
+
+            .tag-list
+                text-align left
+                .tagSelected
+                    border solid 2px dodgerblue
 
     .place-filter-indicator
         .left-slider-indicator

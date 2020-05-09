@@ -1,13 +1,30 @@
 <template>
-    <div class="tag-mini" >
+    <div
+        class="tag-mini"
+        :style="{
+            'background-color': 'rgba( '+String(getColor('rgb'))+', 0.2)'
+        }"
+        @click="doClick"
+    >
         <span class="dot"></span>
-        <font-awesome-icon :icon="[getIconPrefix(),getIconName()]" />
-        <span :title="getDescription()"> {{ getTagLabel() }} </span>
+        <font-awesome-icon
+            v-if="showIcon"
+            :style="{
+
+            }"
+            :icon="[getIconPrefix(),getIconName()]"
+        />
+        <span
+            :title="getDescription()"
+        >
+            {{ getTagLabel() }}
+        </span>
     </div>
 </template>
 
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import colorConverter from 'color-convert'
 
 export default {
     name: 'place-tag-mini',
@@ -30,6 +47,10 @@ export default {
             type: String,
             default: 'tag'
         },
+        showIcon: {
+            type: Boolean,
+            default: true,
+        },
         description: {
             type: String,
             default: '(설명 없음)'
@@ -43,11 +64,31 @@ export default {
                 return this.tagObject.label
             }
         },
+        getColor(returnType = 'hex'){
+            let color = null
+            if(typeof this.tagObject === "undefined"){
+                color = this.color
+            } else {
+                color = this.tagObject.color
+            }
+
+            switch (returnType) {
+                case 'hex':
+                    return color;
+
+                case 'rgb':
+                    return colorConverter.hex.rgb(color)
+
+                default:
+                    break;
+            }
+            return color;
+        },
         getIconPrefix(){
-            if(typeof this.tagObject == 'undefined'){
+            if(typeof this.tagObject === 'undefined'){
                 return this.icon_prefix
             } else {
-                return this.tagObject.icon_prefix
+                return this.tagObject.icon_prefix || 'fas'
             }
         },
         getIconName(){
@@ -63,6 +104,9 @@ export default {
             } else {
                 return this.tagObject.description
             }
+        },
+        doClick(){
+            this.$emit('click',this)
         }
     }
 }
@@ -70,20 +114,22 @@ export default {
 
 <style lang="stylus" scoped>
 .tag-mini
+    line-height 2rem
     user-select none
     display inline-block
-    background-color grey
-    padding 0 1em 0 0.5em
-    border-radius 0.5em
+    /*background-color grey*/
+    padding 0 1rem 0 0.5rem
+    border-radius 0.5rem
     color black
+    margin-bottom 0.5rem
+    margin-right 0.5rem
 
 span.dot
-    height 0.6em
-    width 0.6em
+    height 0.6rem
+    width 0.6rem
     background-color white
     border-radius 50%
     display inline-block
     margin-left 0.2em
     margin-right 0.5em
-
 </style>
