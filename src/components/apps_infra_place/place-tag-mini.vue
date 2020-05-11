@@ -86,9 +86,9 @@ export default {
         },
         getIconPrefix(){
             if(typeof this.tagObject === 'undefined'){
-                return this.icon_prefix
+                return this.icon_prefix|| 'fas'
             } else {
-                return this.tagObject.icon_prefix || 'fas'
+                return this.tagObject.icon_prefix
             }
         },
         getIconName(){
