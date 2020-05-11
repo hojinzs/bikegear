@@ -1,5 +1,5 @@
 <template>
-    <div id="app" :class="{blocked: (this.$store.state.page.cover_style === 'none') }">
+    <div id="app" :class="{'blocked': (this.$store.state.page.cover_style === 'none') }">
 
         <TopMenuBar
             :Blocked="(this.store_cover_style === 'none')"
@@ -36,8 +36,13 @@
 import TopMenuBar from '@/components/menu'
 import Footer from '@/components/footer'
 import { GlobalMenu, ShotLinks } from "./global-menu-list"
-
 import axios from 'axios'
+
+/**
+ * Tailwind CSS
+ * vue cli 3 import guide :: https://medium.com/@morrislaptop/using-tailwind-with-vue-cli-3-405171de6a58
+ */
+import './assets/css/tailwind.css'
 
 export default {
     name: 'app',
@@ -85,53 +90,49 @@ export default {
 </script>
 
 <style lang="stylus">
+    // @import 'assets/css/tailwind.css'
 
-@import 'assets/*'
+    @import 'assets/*'
+        @require 'luminus'
+        @require 'variable'
 
-// @import "./assets/luminus.styl"
-// @import "./assets/variable.styl"
+    $footer_height = 50px
+    $menu_height = ($global_inline_height * 2) + ($global_font_text / 2)
 
-@require 'luminus'
-@require 'variable'
+    html, body
+        font-size 14px
 
-$footer_height = 50px
-$menu_height = ($global_inline_height * 2) + ($global_font_text / 2)
-
-html, body
-    font-size 14px
-
-#app
-    font-family: 'Avenir', Helvetica, Arial, sans-serif
-    -webkit-font-smoothing: antialiased
-    -moz-osx-font-smoothing: grayscale
-    text-align: center
-    color: #2c3e50
-    position relative
-    &.blocked
-        // margin-top $menu_height
-        height 100%
-        overflow none
-    #contents
-        height 100%
-        &.scrolled
-            min-height 100vh
-        .container
-            background none
-            z-index 100
-            .container_wrapper
-                max-width $container_width
-                padding-top 2em
-                margin 0 auto
-                @media (max-width: $container_width)
-                    padding 2em 2% 0 2%
-            &.coverless
-                padding-top $menu_height
-            &.backgrounded
-                color white
-                text-shadow 1px 1px 5px black
-    #footer
-        min-height $footer_height
-
+    #app
+        font-family: 'Avenir', Helvetica, Arial, sans-serif
+        -webkit-font-smoothing: antialiased
+        -moz-osx-font-smoothing: grayscale
+        text-align: center
+        color: #2c3e50
+        position relative
+        &.blocked
+            // margin-top $menu_height
+            height 100%
+            overflow none
+        #contents
+            height 100%
+            &.scrolled
+                min-height 100vh
+            .app-container
+                background none
+                z-index 100
+                .container_wrapper
+                    max-width $container_width
+                    padding-top 2em
+                    margin 0 auto
+                    @media (max-width: $container_width)
+                        padding 2em 2% 0 2%
+                &.coverless
+                    padding-top $menu_height
+                &.backgrounded
+                    color white
+                    text-shadow 1px 1px 5px black
+        #footer
+            min-height $footer_height
 </style>
 
 <style lang="stylus" scoped>

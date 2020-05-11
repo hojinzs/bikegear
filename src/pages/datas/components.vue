@@ -1,5 +1,5 @@
 <template>
-    <div id="gear-database" class="container coverless backgrounded">
+    <div id="gear-database" class="app-container coverless backgrounded">
         <div class="container_wrapper">
             <CompDB></CompDB>
         </div>

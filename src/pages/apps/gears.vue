@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="app-container">
         <div class="container_wrapper">
             <Gears></Gears>
         </div>

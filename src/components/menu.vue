@@ -294,6 +294,9 @@ $shadow_color = #595959
         margin 0 auto
         span.unused
             color: $link_color_disabled
+        ul
+            margin-top 1rem
+            margin-bottom 1rem
         #MenuLeft
             float left
             display flex

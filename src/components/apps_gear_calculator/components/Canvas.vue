@@ -108,18 +108,18 @@ export default {
 }
 </script>
 
-<style scoped>
-.chart .label{
-    text-align: left;
-    padding-left: 0.5em;
-}
+<style lang="stylus" scoped>
+    .chart .label{
+        text-align: left;
+        padding-left: 0.5em;
+    }
 
-.canvas-wrapper{
-    width: 100%;
-}
+    .canvas-wrapper{
+        width: 100%;
+    }
 
-.this-canvas{
-    width: 100%;
-    background-color: white;
-}
+    .this-canvas{
+        width: 100%;
+        background-color: white;
+    }
 </style>

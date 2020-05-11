@@ -44,8 +44,8 @@ export default {
 
                 // get Min & Max data
                 this.Gears.forEach(gear => {
-                    if(this.maxSpeed < gear.SpeedTable.maxSpeed || this.maxSpeed == 0) this.maxSpeed = gear.SpeedTable.maxSpeed;
-                    if(this.minSpeed > gear.SpeedTable.minSpeed || this.minSpeed == 0) this.minSpeed = gear.SpeedTable.minSpeed;
+                    if(this.maxSpeed < gear.SpeedTable.maxSpeed || this.maxSpeed === 0) this.maxSpeed = gear.SpeedTable.maxSpeed;
+                    if(this.minSpeed > gear.SpeedTable.minSpeed || this.minSpeed === 0) this.minSpeed = gear.SpeedTable.minSpeed;
                 });
             },
             deep: true,
@@ -54,15 +54,15 @@ export default {
 }
 </script>
 
-<style scoped>
-#chart{
-    width: 100%;
-    right: 0px;
-}
+<style lang="stylus" scoped>
 
-.chart-wrapper{
-    width: 100%;
-    right: 0px;
-    position: relative;
-}
+    #chart
+        width 100%
+        right 0px
+
+    .chart-wrapper
+        width: 100%
+        right: 0px
+        position: relative
+
 </style>

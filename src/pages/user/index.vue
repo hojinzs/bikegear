@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="app-container">
         <div class="container_wrapper">
             <!-- find user data -->
             <div v-if="signin">

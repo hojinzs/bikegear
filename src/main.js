@@ -21,9 +21,7 @@ import { router } from './routes' // Vue Router Setting
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-
 library.add(fas, fab)
-
 
 /**
  * Set XSRF-TOKEN
@@ -44,6 +42,8 @@ if(Cookies.get('Authorization')){
 if(window.localStorage.getItem('Authorization')){
     axios.defaults.headers.common['Authorization'] = `Bearer ${window.localStorage.getItem('Authorization')}`
 }
+
+// import './assets/css/tailwind.css'
 
 new Vue({
     router,

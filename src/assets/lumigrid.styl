@@ -3,6 +3,9 @@
 */
 @import "variable.styl"
 
+.icon
+    box-sizing content-box
+
 .lumi-container
     max-width $container_width
     margin 0 auto
@@ -23,6 +26,8 @@
     ul.lumi-flex-slider
         display flex
         flex-wrap nowrap
+        margin-top $global_font_text
+        margin-bottom $global_font_text
         &.lumi-flex-slider-align-bottom
             align-items flex-end
         li.lumi-flex-slider-item

@@ -18,7 +18,8 @@
                                 @click.prevent="toggleLeftMenuMode('places')"
                             >
                                 <font-awesome-icon
-                                        icon="map-marker-alt"
+                                    class="icon"
+                                    icon="map-marker-alt"
                                 />
                                 <span class="list-bubble">{{ infraList.length }}</span>
                             </button>
@@ -28,6 +29,7 @@
                                 @click.prevent="toggleLeftMenuMode('search')"
                             >
                                 <font-awesome-icon
+                                    class="icon"
                                     icon="search"
                                 />
                             </button>
@@ -43,6 +45,7 @@
                                 type="submit"
                             >
                                 <font-awesome-icon
+                                    class="icon"
                                     icon="search"
                                 />
                             </button>
@@ -90,6 +93,7 @@
                     <hr>
                 </div>
                 <div class="left-section-box-bottom">
+                    <!-- 태그 선택 영역 종료 -->
                     <div
                         v-if="leftMenuMode === 'search'"
                     >
@@ -120,6 +124,27 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 태그 선택 영역 시작 -->
+
+                    <!-- 장소 정보 목록 영역 시작 -->
+                    <div
+                        v-if="leftMenuMode === 'places'"
+                    >
+                        <template
+                            v-for="places in infraList">
+                            <div
+                                :key="places.id"
+                            >
+                                <div class="bg-purple text-white">
+                                    <img class="h-16 w-16" :src="places.Image" />
+                                </div>
+                                <div>
+                                    {{ places.name }}
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <!-- 장소 정보 목록 영역 종료 -->
                 </div>
             </div>
         </div>
@@ -144,12 +169,12 @@
                                         :class="{ 'menuOpened' : showLeftMenu}"
                                     />
                                     <font-awesome-icon
-                                        class="place-filter-icon"
+                                        class="place-filter-icon icon"
                                         icon="search"
                                     />
                                     <!-- Loading -->
                                     <template v-if="(infraList_status === 'loading' && infraList.length === 0)" >
-                                        <span>
+                                        <span class="icon">
                                             <img class="loading" src="/images/Spinner-1s-104px.gif">
                                         </span>
                                     </template>
@@ -164,11 +189,11 @@
                                         <span class="place-count-number">
                                             {{ PlaceCounter }}
                                             <font-awesome-icon
-                                                class="more"
+                                                class="icon more"
                                                 v-if="(infraList_status === 'finish' && placePaging.current_page < placePaging.last_page)"
                                                 :icon="'plus'"
                                             />
-                                            <span v-else-if="(infraList_status === 'loading' && infraList.length > 0)">
+                                            <span class="icon" v-else-if="(infraList_status === 'loading' && infraList.length > 0)">
                                                 <img class="loading" src="/images/Spinner-1s-104px.gif">
                                             </span>
                                         </span>
@@ -177,7 +202,7 @@
                                     <!-- Loading Error -->
                                     <template v-if="infraList_status === 'finish' && infraList.length === 0" >
                                         <span class="place-empty">
-                                            <font-awesome-icon :icon="'exclamation-triangle'" />
+                                            <font-awesome-icon class="icon" :icon="'exclamation-triangle'" />
                                             0
                                         </span>
                                     </template>
@@ -299,7 +324,9 @@
                         :key="index" :lat="item.geoPoint.latitude"
                         :lng="item.geoPoint.longitude"
                         @click="getFocused(index)"
-                    />
+                    >
+                        <!-- todo :: slot 내의 html 마크업을 icon.content 로 불러올 수 있도록 PR -->
+                    </naver-marker>
 
                 </naver-maps>
 
