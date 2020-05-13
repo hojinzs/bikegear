@@ -1,7 +1,10 @@
 <template>
     <div id="app">
         <div
+            ref="LeftSection"
             id="mapLeftSection"
+            class="padding-menu"
+            @swipe="swipeLeftSection"
             :class="{
             'hidden': !showLeftMenu
             }"
@@ -129,33 +132,40 @@
                     <!-- 장소 정보 목록 영역 시작 -->
                     <div
                         v-if="leftMenuMode === 'places'"
+                        style="text-align: left"
                     >
-                        <template
-                            v-for="places in infraList">
-                            <div
-                                :key="places.id"
+                        <place-card-list
+                            v-for="(place, index) in infraList"
+                            :key="place.id"
+                            :tag-object="place"
+                            :focused="DisplayItems_toggled === index"
+                            @click="getFocused(index)"
+                        />
+
+                        <div class="place-card-list-more p-2">
+                            <button
+                                class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                @click.prevent="getPlaceData(false)"
                             >
-                                <div class="bg-purple text-white">
-                                    <img class="h-16 w-16" :src="places.Image" />
-                                </div>
-                                <div>
-                                    {{ places.name }}
-                                </div>
-                            </div>
-                        </template>
+                                + 더 보기
+                            </button>
+                        </div>
+
                     </div>
                     <!-- 장소 정보 목록 영역 종료 -->
+
                 </div>
             </div>
         </div>
         <div id="mapRightSection" ref="rightSection">
             <div id="MenuTop"
+                 class="padding-menu"
                  :class="{'slided': showLeftMenu }"
             >
                 <div class="lumi-flex-slider-wrapper"
                      :class="{ 'scroll-free' : !showLeftMenu}"
                 >
-                    <ul class="lumi-flex-slider" style="padding-left: 1em">
+                    <ul class="lumi-flex-slider" style="padding-left: 0.5rem">
 
                         <li class="lumi-flex-slider-item">
                             <button
@@ -236,57 +246,71 @@
 
                     </ul>
                 </div>
-                <div>
-                    <div class="lumi-flex-slider-wrapper scroll-free">
-                        <ul class="lumi-flex-slider" style="padding-left: 1em">
-                            <li class="lumi-flex-slider-item">
-                                <button
-                                        class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
-                                        @click="getCurrentPosition()"
-                                >
-                                    <transition name="fade" mode="out-in">
-                                        <template name="hidden" v-if="currentPosition.status === 'hidden'">
-                                            <font-awesome-icon icon='question-circle' />
-                                        </template>
-                                        <template name="loading" v-if="currentPosition.status === 'loading'">
-                                            <img class="loading" src="/images/Spinner-1s-104px.gif">
-                                        </template>
-                                        <template name="display" v-if="currentPosition.status === 'display'">
-                                            <font-awesome-icon icon='crosshairs' />
-                                        </template>
-                                        <template name="error" v-if="currentPosition.status === 'error'">
-                                            <font-awesome-icon icon="exclamation-circle" />
-                                        </template>
-                                    </transition>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+
+                <!-- 현재 위치 찾기 시작 -->
+                <div style="padding-left: 0.5rem">
+                    <button
+                            class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow pointer-event-auto"
+                            @click="getCurrentPosition()"
+                    >
+                        <transition name="fade" mode="out-in">
+                            <template name="hidden" v-if="currentPosition.status === 'hidden'">
+                                <font-awesome-icon icon='crosshairs' style="color: grey"/>
+                            </template>
+                            <template name="loading" v-if="currentPosition.status === 'loading'">
+                                <img class="loading" src="/images/Spinner-1s-104px.gif">
+                            </template>
+                            <template name="display" v-if="currentPosition.status === 'display'">
+                                <font-awesome-icon icon='crosshairs' style="color: dodgerblue"/>
+                            </template>
+                            <template name="error" v-if="currentPosition.status === 'error'">
+                                <font-awesome-icon icon="exclamation-circle" style="color: darkred"/>
+                            </template>
+                        </transition>
+                    </button>
                 </div>
+<!--                <div class="lumi-flex-slider-wrapper">-->
+<!--                    <ul style="padding-left: 1em">-->
+<!--                        <li class="lumi-flex-slider-item">-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+                <!-- 현재 위치 찾기 종료 -->
             </div>
 
-            <div id="MenuBottom">
+            <div
+                id="MenuBottom"
+                :class="{
+                    'burrow' : ( !isMobile && showLeftMenu === true && leftMenuMode === 'places' ) || infraList.length === 0
+                }"
+            >
                 <lumiCaroucel
-                        :speedStiky="700"
-                        :positionStiky="'center'"
-                        :async="true"
-                        :autofocus="false"
-                        @loaded="setCaroucel"
-                        @focused="getFocused">
+                    :speedStiky="700"
+                    :positionStiky="'center'"
+                    :async="true"
+                    :autofocus="false"
+                    @loaded="setCaroucel"
+                    @focused="getFocused"
+                >
 
                     <lumiCaroucelSlide
-                            v-for="(place,index) in DisplayItems"
-                            :key="index"
-                            @onClick="getFocused(index)">
+                        v-for="(place,index) in DisplayItems"
+                        :key="index"
+                        @onClick="getFocused(index)"
+                    >
 
                         <PlaceCard
-                                :title="place.name"
-                                :thumbnail_img_url="place.Image"
-                                :extention_toggled="(DisplayItems_toggled === index)">
+                            :title="place.name"
+                            :thumbnail_img_url="place.Image"
+                            :extention_toggled="(DisplayItems_toggled === index)"
+                        >
                             {{place.type}}
+
                             <template v-slot:expention>
-                                <button class="lumi-button-liner"
-                                        @click.stop="showDetail(place.id)">
+                                <button
+                                    class="lumi-button-liner"
+                                    @click.stop="showDetail(place.id)"
+                                >
                                     정보 보기
                                 </button>
                             </template>
@@ -343,6 +367,7 @@ import naver from 'vue-naver-maps'
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Velocity from 'velocity-animate'
+import elementTouchControl from '../../plugins/element-touch-controll'
 
 // Sample Data
 import { featured, tags } from '../../plugins/sampledb'
@@ -352,6 +377,7 @@ import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 import StyleVariable from '@/assets/variable.styl'
 import PlaceCard from './place_card'
 import PlaceTagMini from "../apps_infra_place/place-tag-mini";
+import PlaceCardList from './place_card_list'
 
 /**
  * vue-naver-maps
@@ -372,6 +398,7 @@ export default {
         lumiCaroucel,
         lumiCaroucelSlide,
         PlaceCard,
+        PlaceCardList,
     },
     data(){
         let place_load_url = '//'+process.env.VUE_APP_API_HOST+'/v1/places';
@@ -564,6 +591,11 @@ export default {
                 },1000)
             }
         },
+        swipeLeftSection(e){
+            if(e.detail.swipe === 'left'){
+                this.toggleLeftMenu(false);
+            }
+        },
         getCurrentPosition(){
             navigator.geolocation.getCurrentPosition(position => {
                 this.currentPosition.latitude = position.coords.latitude
@@ -673,6 +705,10 @@ export default {
 
                     if(this.isMobile && this.showLeftMenu ){
                         this.toggleLeftMenu(false)
+                    }
+
+                    if(!this.isMobile && this.showLeftMenu){
+                        this.toggleLeftMenuMode('places')
                     }
 
                 })
@@ -796,6 +832,12 @@ export default {
     created(){
     },
     mounted(){
+        let LeftSection = new elementTouchControl(this.$refs.LeftSection,{
+            detectAxis: 'X'
+        })
+        LeftSection.bindPointingEnd(() => {})
+
+
         if(this.isMobile){
             this.toggleLeftMenu(false)
         }
@@ -849,7 +891,6 @@ export default {
         width 100%
         overflow hidden
         #mapLeftSection
-            padding-top 4rem
             overflow-x hidden
             height 100%
         #mapRightSection
@@ -858,18 +899,23 @@ export default {
             #MenuTop
                 position absolute
                 max-width 100%
-                top 4rem
                 z-index 150
             #MenuBottom
                 position absolute
                 width 100%
                 bottom 0
                 z-index 150
+                transition bottom 0.5s ease-in
+                &.burrow
+                    bottom -30%
+                    transition bottom 0.5s ease-out
             #Map
                 position absolute
                 width 100%
                 height 100%
                 z-index 100
+        .padding-menu
+            padding-top 3.5rem
 
     @media (min-width: $container_width)
         #app
@@ -879,7 +925,7 @@ export default {
                 width 30%
                 min-width 200px
                 max-width: 350px
-                box-shadow inset -3px 1px 20px 2px rgba(0,0,0,0.6)
+                box-shadow inset rgba(0,0,0,0.7) 40px -40px 20px 0px
                 transition-property width min-width
                 transition-duration 0.25s
                 transition-timing-function linear
@@ -906,7 +952,7 @@ export default {
                 // for animation
                 opacity 1
                 left 0%
-                box-shadow inset rgba(0,0,0,0.7) 40px 0px 30px 0px
+                box-shadow inset rgba(0,0,0,0.7) 40px -40px 30px 0px
                 transition-property left opacity box-shadow
                 transition-duration 0.25s
                 transition-delay 0s
@@ -987,11 +1033,20 @@ export default {
                         position absolute
                         right 0
                         top -50%
-
             .tag-list
                 text-align left
                 .tagSelected
                     border solid 2px dodgerblue
+
+    #mapRightSection
+        text-align left
+        #MenuTop
+            pointer-events none
+            .lumi-flex-slider-wrapper
+                pointer-events auto
+
+    .pointer-event-auto
+        pointer-events auto
 
     .place-filter-indicator
         .left-slider-indicator

@@ -15,9 +15,11 @@
             </div>
         </div>
 
-        <div class="infra-place-section-2"
-            v-if="extention_toggled">
-            <slot name="expention">
+        <div
+            class="infra-place-section-2"
+            :class="{'toggled': extention_toggled}"
+        >
+            <slot v-if="extention_toggled" name="expention">
             </slot>
         </div>
     </div>
@@ -58,12 +60,11 @@ export default {
     position relative
     text-align left
     width 360px
-    // height 100px
     height auto
     overflow hidden
     // pointer-events auto
-    @media (max-width: 400px)
-        width 70vw
+    @media (max-width: $mobile_viewport_width)
+        width 60vw
         min-width 240px
     .infra-place-section-1
         display flex
@@ -82,7 +83,8 @@ export default {
                 margin-right 0.5rem
             .infra-place-title
                 font-size 1.2rem
-                font-weight bolder
+                font-weight 500
+                word-break break-all
             .infra-detail
                 padding-top 0.2rem
                 padding-bottom 0.2rem
@@ -90,6 +92,12 @@ export default {
     .infra-place-section-2
         display flex
         margin-top 1rem
+        max-height 0px
+        overflow hidden
+        transition max-height 0.5s 0.25s
+        &.toggled
+            max-height 500px
+            transition max-height 0.5s 0.25s
         button 
             margin-left auto
 
