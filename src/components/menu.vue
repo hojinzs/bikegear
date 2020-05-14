@@ -90,7 +90,7 @@
 
                         </ul>
 
-                        <ul v-if="(!isMobile)">
+                        <ul v-if="(!isMobile)" class="user-profile-ul">
                             <menu-user-profile-mini class="user-info transition-border"/>
 
                             <menuitem v-if="$store.getters['user/signed']" v-show="(MenuRight_expaneded || isMobile)">
@@ -323,8 +323,9 @@ $shadow_color = #595959
                         display block
                         font-size 90%
                         overflow hidden
-            .user-info
-                margin-top -0.4em
+            .user-profile-ul
+                margin-top 0.5em
+                margin-bottom 0.5em
 
 .mobile-bg
     position absolute

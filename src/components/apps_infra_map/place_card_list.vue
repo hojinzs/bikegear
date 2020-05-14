@@ -4,7 +4,7 @@
              @click="doClick"
         >
             <div class="flex">
-                <div class="place-card-list-right inline-block w-20">
+                <div class="place-card-list-right inline-block w-24">
                     <div class="relative bg-gray-500" style="padding-bottom: 100%">
                         <img
                                 class="place-card-list-image absolute h-full w-full object-cover"
@@ -12,7 +12,7 @@
                         />
                     </div>
                 </div>
-                <div class="place-card-list-left inline-block p-2 flex-grow">
+                <div class="place-card-list-left inline-block p-2 w-full overflow-hidden">
                     <div class="place-card-list-name truncate">
                         {{ tagObject.name }}
                     </div>
@@ -62,6 +62,12 @@
 </script>
 
 <style lang="stylus" scoped>
+    /*.place-card-list-right*/
+    /*    flex-basis 6rem*/
+
+    /*.place-card-list-left*/
+    /*    flex-shrink 0*/
+
     .place-card-list-detail
         max-height 0px
         overflow hidden

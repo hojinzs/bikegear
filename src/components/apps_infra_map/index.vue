@@ -11,13 +11,13 @@
         >
             <div class="left-section-box">
                 <div class="left-section-box-top">
-                    <form
+                    <div
                         id="setPlaceFilter"
-                        @submit.prevent="getPlaceData()"
                     >
                         <div class="left-section-flex-wrapper">
                             <button
                                 class="left-section-list-button"
+                                :class="{'activate':leftMenuMode === 'places'}"
                                 @click.prevent="toggleLeftMenuMode('places')"
                             >
                                 <font-awesome-icon
@@ -45,7 +45,7 @@
                             <button
                                 v-if="leftMenuMode === 'search'"
                                 class="left-section-search-button lumi-button-liner"
-                                type="submit"
+                                @click.prevent="getPlaceData()"
                             >
                                 <font-awesome-icon
                                     class="icon"
@@ -92,7 +92,7 @@
                             </span>
                             </a>
                         </div>
-                    </form>
+                    </div>
                     <hr>
                 </div>
                 <div class="left-section-box-bottom">
@@ -832,9 +832,7 @@ export default {
     created(){
     },
     mounted(){
-        let LeftSection = new elementTouchControl(this.$refs.LeftSection,{
-            detectAxis: 'X'
-        })
+        let LeftSection = new elementTouchControl(this.$refs.LeftSection)
         LeftSection.bindPointingEnd(() => {})
 
 
@@ -893,6 +891,8 @@ export default {
         #mapLeftSection
             overflow-x hidden
             height 100%
+            .activate
+                color dodgerblue
         #mapRightSection
             position relative
             height 100%
@@ -1044,9 +1044,6 @@ export default {
             pointer-events none
             .lumi-flex-slider-wrapper
                 pointer-events auto
-
-    .pointer-event-auto
-        pointer-events auto
 
     .place-filter-indicator
         .left-slider-indicator

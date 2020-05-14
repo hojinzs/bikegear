@@ -1,12 +1,16 @@
 <template>
     <div class="profile">
-        <div class="profile-mini" v-if="this.userData">
+        <div
+            class="profile-mini lumi-click-el"
+            v-if="this.userData"
+            @click="goProfilePage"
+        >
             <div class="profile-img">
                 <img class="img-round" :src="userData.profile" />
             </div>
             <div class="profile-text">
                 <div class="profile-text-name">
-                    <router-link :to="{ name:'User' }">{{ userData.name }}</router-link>
+                    {{ userData.name }}
                 </div>
             </div>
         </div>
@@ -36,6 +40,11 @@ export default {
         userData() {
             return this.$store.state.user.user_data
         }
+    },
+    methods: {
+        goProfilePage(){
+            this.$router.push({ name:'User' })
+        }
     }
 }
 </script>
@@ -63,6 +72,7 @@ export default {
                 height 20px
                 border-radius 50%
         .profile-text
+            color inherit
             flex 1 1 200px
             margin-right 0px
             text-align left
