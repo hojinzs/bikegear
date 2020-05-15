@@ -1,148 +1,127 @@
 <template>
     <div id="app">
-        <div
-            ref="LeftSection"
-            id="mapLeftSection"
-            class="padding-menu"
-            @swipe="swipeLeftSection"
-            :class="{
-            'hidden': !showLeftMenu
-            }"
+        <div ref="LeftSection"
+             id="mapLeftSection"
+             class="padding-menu"
+             @swipe="swipeLeftSection"
+             :class="{ 'hidden': !showLeftMenu }"
         >
             <div class="left-section-box">
                 <div class="left-section-box-top">
-                    <div
-                        id="setPlaceFilter"
-                    >
+
+                    <div id="setPlaceFilter">
                         <div class="left-section-flex-wrapper">
-                            <button
-                                class="left-section-list-button"
-                                :class="{'activate':leftMenuMode === 'places'}"
-                                @click.prevent="toggleLeftMenuMode('places')"
+                            <button class="left-section-list-button left-section-button-tab"
+                                    :class="{'activate lumi-button-liner':leftMenuMode === 'places'}"
+                                    @click.prevent="toggleLeftMenuMode('places')"
                             >
-                                <font-awesome-icon
-                                    class="icon"
-                                    icon="map-marker-alt"
-                                />
-                                <span class="list-bubble">{{ infraList.length }}</span>
-                            </button>
-                            <button
-                                v-if="leftMenuMode === 'places'"
-                                class="left-section-search-button"
-                                @click.prevent="toggleLeftMenuMode('search')"
-                            >
-                                <font-awesome-icon
-                                    class="icon"
-                                    icon="search"
-                                />
-                            </button>
-                            <input
-                                v-if="leftMenuMode === 'search'"
-                                class="left-section-search-input lumi-input-liner"
-                                placeholder="명칭"
-                                v-model="placeFilter.name"
-                            />
-                            <button
-                                v-if="leftMenuMode === 'search'"
-                                class="left-section-search-button lumi-button-liner"
-                                @click.prevent="getPlaceData()"
-                            >
-                                <font-awesome-icon
-                                    class="icon"
-                                    icon="search"
-                                />
-                            </button>
-                        </div>
-                        <!-- [ = 슬라이더 UI로 develop = ] -->
-                        <div
-                            v-if="leftMenuMode === 'search'"
-                            class="distance-meter"
-                        >
-                            겸색 반경
-                            <select
-                                    v-model="placeFilter.distance"
-                            >
-                                <option
-                                        v-for="distance in distanceZoomOptions"
-                                        :key="distance.distance"
-                                        :value="distance.distance"
-                                        :selected="distance.default"
+                                <font-awesome-icon class="icon" icon="map-marker-alt" />
+                                <span class="list-bubble"
+                                      v-if="leftMenuMode !== 'places'"
                                 >
-                                    {{ distance.distance }}
-                                </option>
-                            </select>
-                            km
-                        </div>
-                        <div
-                            v-if="leftMenuMode === 'search'"
-                            class="selected-tag-list"
-                        >
-                            <a
-                                    class="selected-tag"
-                                    v-for="tag in placeFilter.tags"
-                                    :key="tag.id"
-                                    @click="addTagInPlaceFilter(tag, true)"
+                                    {{ placeList.data.length }}
+                                </span>
+                            </button>
+                            <input class="left-section-search-input lumi-input-liner liner-full"
+                                   :class="{ 'liner-close': leftMenuMode !== 'search' }"
+                                   :disabled="leftMenuMode !== 'search'"
+                                   v-model="placeFilter.name"
+                                   placeholder="이름"
+                            />
+                            <button class="left-section-search-button left-section-button-tab lumi-button-liner"
+                                    v-if="leftMenuMode === 'search'"
+                                    @click.prevent="getPlaceData()"
                             >
-                                <place-tag-mini
-                                        :tag-object="tag"
-                                />
-                                <span class="close">
-                                <font-awesome-icon icon="times-circle"
-                                />
-                            </span>
-                            </a>
+                                <font-awesome-icon class="icon" icon="search" />
+                            </button>
+                            <button class="left-section-search-button left-section-button-tab"
+                                    v-if="leftMenuMode !== 'search'"
+                                    @click.prevent="toggleLeftMenuMode('search')"
+                            >
+                                <font-awesome-icon class="icon" icon="search" />
+                            </button>
                         </div>
                     </div>
-                    <hr>
-                </div>
-                <div class="left-section-box-bottom">
-                    <!-- 태그 선택 영역 종료 -->
-                    <div
-                        v-if="leftMenuMode === 'search'"
-                    >
-                        <div
-                                class="tag-list box-side-padding-sm"
-                                v-if="tagList.ajax_status === 'finish'"
+
+                    <div class="left-section-top-description text-left p-2">
+                        <!-- 선택된 태그 목록 영역 시작 -->
+                        <div class="selected-tag-list"
+                             v-if="leftMenuMode === 'search'"
                         >
-                            <h3>태그 선택</h3>
-                            <div
-                                    v-for="tagType in TagTree"
-                                    :key="tagType.id"
+                            <div class="text-center font-light"
+                                  v-if="placeFilter.tags.length === 0"
                             >
-                                <b>{{ tagType.label }}</b>
+                                태그 목록에서 태그 선택
+                            </div>
+                            <a class="selected-tag"
+                               v-for="tag in placeFilter.tags"
+                               :key="tag.id"
+                               @click="addTagInPlaceFilter(tag, true)"
+                            >
+                                <place-tag-mini :tag-object="tag" />
+                                <span class="close">
+                                    <font-awesome-icon icon="times-circle" />
+                                </span>
+                            </a>
+                        </div>
+                        <!-- 선택된 태그 목록 영역 종료 -->
+
+                        <!-- 검색 결과 갯수 시작 -->
+                        <div class="text-lg text-dodgerblue font-medium pt-2"
+                             v-if="leftMenuMode === 'places'"
+                        >
+                            # 검색 결과 {{ PlaceCounter }}건
+                        </div>
+                        <!-- 검색 결과 갯수 종료 -->
+
+                    </div>
+                </div>
+                <div class="left-section-box-bottom"
+                     style="text-align: left"
+                >
+
+                    <!-- 태그 목록 영역 시작 -->
+                    <div v-if="leftMenuMode === 'search'"
+                    >
+                        <div class="tag-list box-side-padding-sm"
+                             v-if="tagList.status === 'finish'"
+                        >
+                            <div class="pb-2">
+                                <b>태그 목록</b>
+                            </div>
+                            <div v-for="tagType in TagTree"
+                                 :key="tagType.id"
+                            >
+                                {{ tagType.label }}
                                 <div>
-                                    <a
-                                            v-for="tag in tagType.tags"
-                                            :key="tag.id"
-                                            @click="addTagInPlaceFilter(tag, tag.selected)"
+                                    <a v-for="tag in tagType.tags"
+                                       :key="tag.id"
+                                       @click="addTagInPlaceFilter(tag, tag.selected)"
                                     >
                                         <place-tag-mini
-                                                :tag-object="tag"
-                                                :class="{
-                                            'tagSelected': tag.selected
-                                        }"
+                                            :tag-object="tag"
+                                            :class="{'tagSelected': tag.selected}"
                                         />
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- 태그 선택 영역 시작 -->
+                    <!-- 태그 목록 영역 종료 -->
 
                     <!-- 장소 정보 목록 영역 시작 -->
-                    <div
-                        v-if="leftMenuMode === 'places'"
-                        style="text-align: left"
-                    >
+                    <div v-if="leftMenuMode === 'places'">
                         <place-card-list
-                            v-for="(place, index) in infraList"
+                            v-for="(place, index) in DisplayItems"
                             :key="place.id"
                             :tag-object="place"
                             :focused="DisplayItems_toggled === index"
                             @click="getFocused(index)"
                         />
 
-                        <div class="place-card-list-more p-2">
+                        <div class="place-card-list-more p-2"
+                             v-if="(placeList.status === 'finish' && placePaging.current_page < placePaging.last_page)"
+                        >
                             <button
                                 class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
                                 @click.prevent="getPlaceData(false)"
@@ -157,7 +136,13 @@
                 </div>
             </div>
         </div>
+
+
         <div id="mapRightSection" ref="rightSection">
+
+            <!---------------------------
+                상단 메뉴(Top Menu) 영역 시작
+            ---------------------------->
             <div id="MenuTop"
                  class="padding-menu"
                  :class="{'slided': showLeftMenu }"
@@ -168,86 +153,93 @@
                     <ul class="lumi-flex-slider" style="padding-left: 0.5rem">
 
                         <li class="lumi-flex-slider-item">
-                            <button
-                                class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
-                                @click="toggleLeftMenu()"
+                            <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
+                                    @click="toggleLeftMenu()"
                             >
                                 <span class="place-filter-indicator">
-                                    <font-awesome-icon
-                                        icon="chevron-right"
-                                        class="left-slider-indicator"
-                                        :class="{ 'menuOpened' : showLeftMenu}"
+                                    <font-awesome-icon class="left-slider-indicator"
+                                                       :class="{ 'menuOpened' : showLeftMenu}"
+                                                       icon="chevron-right"
                                     />
-                                    <font-awesome-icon
-                                        class="place-filter-icon icon"
-                                        icon="search"
+                                    <font-awesome-icon class="place-filter-icon icon"
+                                                       icon="search"
                                     />
+
                                     <!-- Loading -->
-                                    <template v-if="(infraList_status === 'loading' && infraList.length === 0)" >
+                                    <template v-if="(placeList.status === 'loading' && placeList.data.length === 0)" >
                                         <span class="icon">
                                             <img class="loading" src="/images/Spinner-1s-104px.gif">
                                         </span>
                                     </template>
 
                                     <!-- Loading Error -->
-                                    <template v-if="infraList_status === 'error'">
-                                        <font-awesome-icon :icon="'exclamation-triangle'" />
+                                    <template v-if="placeList.data === 'fail'">
+                                        <font-awesome-icon icon="exclamation-triangle" />
                                     </template>
 
                                     <!-- Loading Finish -->
-                                    <template v-if="infraList.length > 0">
+                                    <template v-if="placeList.data.length > 0">
                                         <span class="place-count-number">
                                             {{ PlaceCounter }}
                                             <font-awesome-icon
                                                 class="icon more"
-                                                v-if="(infraList_status === 'finish' && placePaging.current_page < placePaging.last_page)"
+                                                v-if="(placeList.status === 'finish' && placePaging.current_page < placePaging.last_page)"
                                                 :icon="'plus'"
                                             />
-                                            <span class="icon" v-else-if="(infraList_status === 'loading' && infraList.length > 0)">
+                                            <span class="icon" v-else-if="(placeList.status === 'loading' && placeList.data.length > 0)">
                                                 <img class="loading" src="/images/Spinner-1s-104px.gif">
                                             </span>
                                         </span>
                                     </template>
 
                                     <!-- Loading Error -->
-                                    <template v-if="infraList_status === 'finish' && infraList.length === 0" >
+                                    <template v-if="placeList.status === 'finish' && placeList.data.length === 0" >
                                         <span class="place-empty">
                                             <font-awesome-icon class="icon" :icon="'exclamation-triangle'" />
                                             0
                                         </span>
                                     </template>
+
                                 </span>
                             </button>
                         </li>
 
-                        <!-- todo :: 실제 검색 프리셋 세팅을 불러올 수 있도록 변경 필요 -->
-                        <!-- LOOP START -->
+                        <!---------------------------------
+                            Featured Item Control. 향후 개발
+                            todo :: 실제 검색 프리셋 세팅을 불러올 수 있도록 변경 필요
+                        ---------------------------------->
+                        <!--
                         <li class="lumi-flex-slider-item"
                             v-for="(item,index) in FeaturedItems"
                             :key="index">
                             <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
-                                    @click="toggleFilter(item.name)">
-                        <span class="dot infra-indicator-item"
-                              :class="{'active' : (filter.tags.indexOf(item.name) !== -1) }">
-                        </span>
+                                    @click="toggleFilter(item.name)"
+                            >
+                                <span
+                                    class="dot infra-indicator-item"
+                                    :class="{'active' : (filter.tags.indexOf(item.name) !== -1) }"
+                                />
                                 <font-awesome-icon class="infra-icon infra-indicator-item"
                                                    :icon="item.icon"
                                                    :style="{color: item.color}"/>
                                 <span class="infra-indicator-item">
-                            {{item.label}}
-                        </span>
+                                    {{item.label}}
+                                </span>
                                 <span class="infra-count-int infra-indicator-item"
                                       :style="{backgroundColor: item.color}">
-                            {{item.count}}
-                        </span>
+                                    {{item.count}}
+                                </span>
                             </button>
                         </li>
-                        <!-- LOOP END -->
+                        -->
+                        <!-- Featured Item Control 종료 -->
 
                     </ul>
                 </div>
 
-                <!-- 현재 위치 찾기 시작 -->
+                <!---------------------
+                현재 위치 찾기 시작
+                ----------------------->
                 <div style="padding-left: 0.5rem">
                     <button
                             class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow pointer-event-auto"
@@ -269,20 +261,17 @@
                         </transition>
                     </button>
                 </div>
-<!--                <div class="lumi-flex-slider-wrapper">-->
-<!--                    <ul style="padding-left: 1em">-->
-<!--                        <li class="lumi-flex-slider-item">-->
-<!--                        </li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-                <!-- 현재 위치 찾기 종료 -->
+                <!---------------------
+                현재 위치 찾기 종료
+                ----------------------->
+
+
             </div>
 
-            <div
-                id="MenuBottom"
-                :class="{
-                    'burrow' : ( !isMobile && showLeftMenu === true && leftMenuMode === 'places' ) || infraList.length === 0
-                }"
+            <div id="MenuBottom"
+                 :class="{
+                    'burrow' : ( !isMobile && showLeftMenu === true && leftMenuMode === 'places' ) || placeList.data.length === 0
+                 }"
             >
                 <lumiCaroucel
                     :speedStiky="700"
@@ -295,26 +284,14 @@
 
                     <lumiCaroucelSlide
                         v-for="(place,index) in DisplayItems"
-                        :key="index"
+                        :key="place.id"
                         @onClick="getFocused(index)"
                     >
 
                         <PlaceCard
-                            :title="place.name"
-                            :thumbnail_img_url="place.Image"
-                            :extention_toggled="(DisplayItems_toggled === index)"
-                        >
-                            {{place.type}}
-
-                            <template v-slot:expention>
-                                <button
-                                    class="lumi-button-liner"
-                                    @click.stop="showDetail(place.id)"
-                                >
-                                    정보 보기
-                                </button>
-                            </template>
-                        </PlaceCard>
+                            :placeObject="place"
+                            :focused="DisplayItems_toggled === index"
+                        />
 
                     </lumiCaroucelSlide>
 
@@ -349,7 +326,7 @@
                         :lng="item.geoPoint.longitude"
                         @click="getFocused(index)"
                     >
-                        <!-- todo :: slot 내의 html 마크업을 icon.content 로 불러올 수 있도록 PR -->
+                        <!-- todo :: slot 내의 html 마크업을 icon.content 로 불러올 수 있도록 기여 -->
                     </naver-marker>
 
                 </naver-maps>
@@ -362,6 +339,8 @@
 </template>
 
 <script>
+
+// import packages
 import Vue from 'vue'
 import naver from 'vue-naver-maps'
 import axios from 'axios'
@@ -369,15 +348,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Velocity from 'velocity-animate'
 import elementTouchControl from '../../plugins/element-touch-controll'
 
-// Sample Data
-import { featured, tags } from '../../plugins/sampledb'
-import Tag from '../../plugins/journey66_tag'
-
+// import components & plugins
 import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
 import StyleVariable from '@/assets/variable.styl'
 import PlaceCard from './place_card'
 import PlaceTagMini from "../apps_infra_place/place-tag-mini";
 import PlaceCardList from './place_card_list'
+import apiResourceManager from "../../plugins/apiResourceManager";
 
 /**
  * vue-naver-maps
@@ -389,7 +366,6 @@ Vue.use(naver,{
     useGovAPI: false,
     subModules:''
 });
-
 
 export default {
     components:{
@@ -405,36 +381,20 @@ export default {
         let place_tags = '//'+process.env.VUE_APP_API_HOST+'/v1/tags';
         
         return {
-            // Map UI Control
-            showLeftMenu: true,
+            // UI Properties
             StyleVariable,
-            // 샘플 데이터
-            featured,
-            // 샘플 데이터 edn
-            tags,
-            infraList: [],
+            // UI Control
+            showLeftMenu: true,
+            leftMenuMode : 'search', // ['places', 'search']
+            placeList: new apiResourceManager(place_load_url),
             placeListCount: 0,
-            infraList_ajax: {
-                url: place_load_url,
-                status: 'loading',
-            },
-            tagList: {
-                data: [],
-                ajax_url: place_tags,
-                ajax_status: 'ready', // ['ready', 'loading', 'finish', 'error' ]
-            },
-            infraList_status: 'loading',
             DisplayItems_toggled : 0,
-            filter: {
-                tags: []
-            },
+            tagList: new apiResourceManager(place_tags),
             // 슬라이더 오브젝트
             slide: null,
             // 지도 오브젝트
             map: null,
             naverMap: null,
-            testCircle : null,
-            leftMenuMode : 'search', // ['places', 'search']
             mapOptions: {
                 lat: 37.4876,
                 lng: 127.1246,
@@ -442,9 +402,10 @@ export default {
             },
             initLayers: ['BACKGROUND', 'BACKGROUND_DETAIL', 'POI_KOREAN', 'TRANSIT'],
             currentPosition: {
-                status: 'hidden', // ['hidden','loading','display']
+                status: 'hidden', // ['hidden','loading','display', 'error']
                 latitude: null,
                 longitude: null,
+                error: '',
             },
             distanceZoomOptions: [
                 {zoom: 13, distance: 15},
@@ -453,8 +414,15 @@ export default {
                 {zoom: 10, distance: 150},
                 {zoom: 9, distance: 300},
             ],
+            distance: 5,
             placeFilter: {
-                position: {
+                bounds: {
+                    north: 0,
+                    east: 0,
+                    south: 0,
+                    west: 0,
+                },
+                center: {
                     latitude: 37.4876,
                     longitude: 127.1246,
                 },
@@ -474,6 +442,11 @@ export default {
         isMobile(){
             return window.screen.width < Number(this.StyleVariable.containerWidth.replace("px",""))
         },
+        /**
+         * 태그 선택 UI에서 보여줄 태그 트리의 Getter
+         * @returns {[]|*[]}
+         * @constructor
+         */
         TagTree(){
             if(this.tagList.data.length === 0 ){
                 return []
@@ -496,34 +469,11 @@ export default {
             return tagTypes;
         },
         /**
-         * 상단에 띄울 태그 목록을 제어하는 Getter
-         */
-        FeaturedItems(){
-            let featured = []
-
-            this.featured.forEach(name => {
-                let i = this.tags.findIndex((e) => e.name === name)
-                let item = {
-                    name : this.tags[i].name,
-                    label : this.tags[i].label,
-                    icon : this.tags[i].icon,
-                    color : this.tags[i].color,
-                    count : Tag.countInfrasByTag(this.infraList,this.tags[i].name).length
-                }
-                featured.push(item)
-            });
-
-            return featured
-        },
-        /**
-         * 마커 목록을 보여주는 Getter
+         * 장소 목록을 보여주는 Getter
          */
         DisplayItems(){
-            if(this.filter.tags.length !== 0){
-                let items = this.infraList.filter((item) => Tag.findTagsOnInfra(item,this.filter.tags));
-                return items
-            }
-            return this.infraList
+            // 향후 필터를 고도화 하여 추가
+            return this.placeList.data
         },
         PlaceCounter(){
             return this.placeListCount.toFixed(0)
@@ -531,7 +481,7 @@ export default {
     },
     methods:{
         /**
-         * 페이지 로드시 세팅
+         * 지도 로드 완료 후
          */
         onLoad(_map){
             this.map = _map
@@ -542,41 +492,22 @@ export default {
             // 이벤트 등록이 필요할 경우 해당 코드 참조하여 삽입
             // naver Maps Event List => https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Map.html
             this.naverMap.Event.addListener(_map.map,'zoom_changed', () => {
+                // 줌 레벨이 바뀌었을 때
                 this.setZoomDistanceLevel()
             })
+
+            this.setZoomDistanceLevel()
 
             this.getTagsData()
                 .then(() => {
                     this.getPlaceData()
                 })
 
-            this.setZoomDistanceLevel()
-
-            // // Debug Circle
-            // let center = this.map.map.getCenter();
-            // this.testCircle = new this.naverMap.Circle({
-            //     map: _map.map,
-            //     center: {
-            //         lat: center.y,
-            //         lng: center.x
-            //     },
-            //     radius: Number(this.placeFilter.distance * 1000)
-            // })
-
         },
-        // // use when to debug
-        // setTestCircle(){
-        //     console.log("change Filter => ",this.placeFilter)
-        //
-        //     console.log("Circle => ",this.testCircle)
-        //
-        //     this.testCircle.setCenter({
-        //         lat: this.placeFilter.position.latitude,
-        //         lng: this.placeFilter.position.longitude,
-        //     })
-        //
-        //     this.testCircle.setRadius(Number(this.placeFilter.distance * 1000))
-        // },
+        /**
+         * 좌측 검색 영역을 토글
+         * @param {Boolean} show 검색 영역 표시 여부
+         */
         toggleLeftMenu(show = !this.showLeftMenu){
             this.showLeftMenu = show;
 
@@ -591,12 +522,42 @@ export default {
                 },1000)
             }
         },
+        /**
+         * 좌측 검색 영역을 왼쪽으로 스와이프 하면, 좌즉 영역을 숨긴다.
+         */
         swipeLeftSection(e){
             if(e.detail.swipe === 'left'){
                 this.toggleLeftMenu(false);
             }
         },
+        setCaroucel($slide){
+            this.slide = $slide
+        },
+        /**
+         * 장소 포커스 변경
+         */
+        getFocused(_focusNumber){
+            this.doPanToPlace(_focusNumber)
+            this.DisplayItems_toggled = _focusNumber
+
+            // 마지막 페이지가 아니며, 다른 데이터를 로딩중이 아니라면 추가 데이터를 불러온다.
+            if(
+                this.placePaging.current_page < this.placePaging.last_page
+                && (this.placeList.data.length - _focusNumber) < 3
+                && this.placeList.status !== 'loading'
+            ){
+                this.getPlaceData(false);
+            }
+        },
+        /**
+         * 현재 위치 가져오기
+         */
         getCurrentPosition(){
+            // 에러나 로딩 상황에서는 동작하지 않음
+            if(this.currentPosition.status === ('error' || 'loading')){
+                return;
+            }
+
             navigator.geolocation.getCurrentPosition(position => {
                 this.currentPosition.latitude = position.coords.latitude
                 this.currentPosition.longitude = position.coords.longitude
@@ -605,31 +566,47 @@ export default {
                 this.map.setCenter(this.currentPosition.latitude,this.currentPosition.longitude)
             },error => {
                 console.error("== Cannot Get Current Position == \n",error)
-                setTimeout(() => {
-                    this.currentPosition.status = 'hidden'
-                }, 2000)
+
+                if(error.code === ( 1 || 2 )){
+                    // 에러 코드 1, 2일 경우 에러메시지 표시
+                    // 에러코드 레퍼런스 :: https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
+                    if(error.code === 1){
+                        this.currentPosition.error = '위치 접근권한 없음'
+                    } else {
+                        this.currentPosition.error = '위치 정보가 유효하지 않음'
+                    }
+
+                } else {
+                    // 에러 코드 1,2가 아니라면 재시도 할 수 있도록 타임아웃 설정
+                    setTimeout(() => {
+                        this.currentPosition.status = 'hidden'
+                    }, 2000)
+                }
                 this.currentPosition.status = 'error'
             })
             this.currentPosition.status = 'loading'
         },
         addTagInPlaceFilter(tag, removeTag = false){
             let selectedTagIndex = this.placeFilter.tags.findIndex(selectedTag => selectedTag === tag)
-            console.log("selectedTagIndex =>", selectedTagIndex, tag)
             if(selectedTagIndex === -1 && removeTag === false){
                 this.placeFilter.tags.push(tag)
                 tag.selected = true
-                console.log("tag ADD")
             } else if( removeTag === true){
                 this.placeFilter.tags.splice(selectedTagIndex, 1)
                 tag.selected = false
-                console.log("tag REMOVE")
             }
-
-            console.log(this.placeFilter)
         },
         setPlaceFilterLatLng(latitude, longitude){
-            this.placeFilter.position.latitude = latitude
-            this.placeFilter.position.longitude = longitude
+            this.placeFilter.center.latitude = latitude
+            this.placeFilter.center.longitude = longitude
+        },
+        setPlaceFilterBounds(){
+            let bounds = this.map.map.getBounds()
+
+            this.placeFilter.bounds.north = bounds._ne._lng
+            this.placeFilter.bounds.east = bounds._ne._lat
+            this.placeFilter.bounds.south = bounds._sw._lng
+            this.placeFilter.bounds.west = bounds._sw._lat
         },
         async getPlaceData(setNewList = true){
 
@@ -644,35 +621,24 @@ export default {
             if(setNewList === true){
                 // 페이지 번호와 목록을 초기화
                 this.placePaging.current_page = 0
-                this.infraList = []
+                this.placeList.clearData()
+                // this.infraList = []
 
                 // 검색 필터를 현재 지도의 중심점으로 맞춘다.
                 let center = this.map.map.getCenter()
                 this.setPlaceFilterLatLng(center.y, center.x)
+                this.setPlaceFilterBounds()
+                this.placeFilter.distance = this.distance
             }
 
             let targetPage = this.placePaging.current_page + 1;
-
-            // if(setNewList === true){
-            //     let center = this.map.map.getCenter()
-            //     this.setPlaceFilterLatLng(center.y, center.x)
-            //     this.placePaging.current_page = 0
-            // } else {
-            //     if (this.placePaging.last_page > this.placePaging.current_page) {
-            //         targetPage = this.placePaging.current_page + 1
-            //     } else {
-            //         return
-            //     }
-            // }
-
-            this.infraList_status = 'loading'
-
             let tags = this.placeFilter.tags.map( tag => tag.name)
 
-            return axios.get(this.infraList_ajax.url,{
+            this.placeList.setLoading()
+            return axios.get(this.placeList.apiUrl,{
                 params: {
-                    latitude: this.placeFilter.position.latitude,
-                    longitude: this.placeFilter.position.longitude,
+                    latitude: this.placeFilter.center.latitude,
+                    longitude: this.placeFilter.center.longitude,
                     distance: this.placeFilter.distance,
                     name: this.placeFilter.name,
                     tags: tags,
@@ -680,27 +646,17 @@ export default {
                 }
             })
                 .then( res => {
-                    this.infraList_status = 'finish'
-
                     this.placePaging.current_page = res.data.meta.current_page
                     this.placePaging.last_page = res.data.meta.last_page
                     this.placePaging.total = res.data.meta.total
 
-                    let list = res.data.data.map(data => {
-                        data.Tags = {
-                            "Utility" : Tag.filterTagObjectByType(data.tags,'Utility'),
-                            "Brand" : Tag.filterTagObjectByType(data.tags,'Brand'),
-                            "Merchant" : Tag.filterTagObjectByType(data.tags,'Merchant'),
-                            "others" : Tag.filterTagObjectByType(data.tags,'others'),
-                        }
-                        return data;
-                    })
+                    let list = res.data.data
 
                     if(setNewList){
-                        this.infraList = list
+                        this.placeList.data = list
                         this.slide.setAsyncFinish(0)
                     } else {
-                        list.forEach( place => this.infraList.push(place))
+                        this.placeList.mergeData(list)
                     }
 
                     if(this.isMobile && this.showLeftMenu ){
@@ -712,83 +668,40 @@ export default {
                     }
 
                 })
-                .catch((error) => {
-                    console.log('getPlaceData Error => ',error);
-                    this.infraList_status = 'error'
-
-                    setTimeout(()=> this.infraList_status = 'ready')
+                .catch( error => {
+                    this.placeList.handlingFail(error.message)
                 })
         },
-        setCaroucel($slide){
-            this.slide = $slide
-        },
-        getFocused(_focusNumber){
-            this.doPanToPlace(_focusNumber)
-            this.DisplayItems_toggled = _focusNumber
-
-            // 마지막 페이지가 아니며, 다른 데이터를 로딩중이 아니라면 추가 데이터를 불러온다.
-            if(
-                this.placePaging.current_page < this.placePaging.last_page
-                && (this.infraList.length - _focusNumber) < 3
-                && this.infraList_status !== 'loading'
-            ){
-                this.getPlaceData(false);
-            }
-        },
         async getTagsData(){
-            this.tagList.ajax_status = 'loading'
-            return axios.get(this.tagList.ajax_url)
+            this.tagList.setLoading()
+            return axios.get(this.tagList.apiUrl)
                 .then( res => {
-                    this.tagList.ajax_status = 'finish'
                     this.tagList.data = res.data.data
                 })
                 .catch( error => {
                     console.error("getData Error =>", error)
-                    this.tagList.ajax_status = 'error'
-                    setTimeout(() => this.tagList.ajax_status = 'ready', 2000)
+                    this.tagList.handlingFail()
                 })
         },
         /**
-         * 필터 컨트롤을 위한 메소드
-         * @param {Array} _tagName filter에 넣거나 뺄 태그 name
-         */
-        toggleFilter(_tagName){
-
-            let i = this.filter.tags.indexOf(_tagName)
-
-            if(i !== -1){
-                this.filter.tags.splice(i,1)
-            } else {
-                this.filter.tags.push(_tagName)
-            }
-
-            this.doPanToPlace(0)
-            this.getFocused(0)
-        },
-        /**
-         * 아이템 토글 제어
-         * * @param {Number} _SlideNumber 포커스할 슬라이드 번호
+         * 슬라이드를 토글한다.
+         * @param {Number} _SlideNumber 포커스할 슬라이드 번호
          */
         doSlideToggle(_SlideNumber){
-            if(this.slide.slideFocused !== _SlideNumber) this.slide.doItemFocus(_SlideNumber)
+            if(this.slide.slideFocused !== _SlideNumber) {
+                this.slide.doItemFocus(_SlideNumber)
+            }
         },
         doPanToPlace(_DisplayItemNumber){
             if(this.DisplayItems[_DisplayItemNumber] !== undefined){
                 let target = this.DisplayItems[_DisplayItemNumber],
                     lat = target.geoPoint.latitude,
                     lng = target.geoPoint.longitude
-
                 this.map.panTo({lat,lng})
             }
         },
         /**
-         * 아이템 정보 보기 클릭시 액션
-         */
-        showDetail(_id){
-            this.$router.push({ name: 'place', params: { id: _id } } )
-        },
-        /**
-         *
+         * 왼쪽 영역의 모드 변경
          */
         toggleLeftMenuMode(mode = null){
             let modeList = ['search', 'places']
@@ -805,7 +718,7 @@ export default {
             this.leftMenuMode = mode
         },
         /**
-         *
+         * 지도의 줌 상태에 따라 검색 범위 (distance)를 조절한다.
          */
         setZoomDistanceLevel(){
             let zoomLevel = this.map.map.getZoom()
@@ -826,16 +739,18 @@ export default {
                 option = this.distanceZoomOptions[0]
             }
 
-            this.placeFilter.distance = option.distance
-        }
+            this.distance = option.distance
+        },
     },
     created(){
     },
     mounted(){
+
+        // 좌측 토글 영역에 swipe 이벤트 핸들러를 붙임
         let LeftSection = new elementTouchControl(this.$refs.LeftSection)
         LeftSection.bindPointingEnd(() => {})
 
-
+        // 모바일일 경우, 좌측 토글 메뉴 영역은 기본적으로 숨긴다.
         if(this.isMobile){
             this.toggleLeftMenu(false)
         }
@@ -847,29 +762,22 @@ export default {
                 this.doSlideToggle(_toggledItemNumber)
             }
         },
-        // // use this observer when enable debug circle
-        // placeFilter:{
-        //     deep: true,
-        //     handler: 'setTestCircle',
-        // },
-        'placeFilter.distance': function (newDistance) {
-            console.log("new Distance => ", newDistance);
-
+        distance: function (newDistance) {
             let distanceZoomLevel = this.distanceZoomOptions.find( option => option.distance === newDistance)
             this.map.map.setZoom(distanceZoomLevel.zoom)
         },
-        'infraList': function(newList) {
+        'placeList.data': function(newList) {
 
+            // placeList 데이터가 바뀌었을 떄, 검색 결과 장소 갯수의 카운팅 애니메이션 수행
             if(newList.length === 0){
                 this.placeListCount = 0
                 return
             }
-
             let old = this.placeListCount
             Velocity(this.$el, {
                 tween: [(newList.length), old],
             },{
-                duration: 1000,
+                duration: 700,
                 progress: (elements, complete, remaining, start, tweenValue) => {
                     this.placeListCount = tweenValue || old
                 }
@@ -1003,9 +911,11 @@ export default {
                 display flex
                 padding-left 0.7rem
                 padding-right 0.7rem
+                .left-section-button-tab
+                    flex-shrink 0
+                    flex-basis 40px
                 .left-section-list-button
                     width 40px
-                    padding-left 0px
                     margin-left 0px
                     margin-right 0.5em
                     position relative
@@ -1013,12 +923,10 @@ export default {
                         position absolute
                         background-color dodgerblue
                         color white
-                        font-size 0.4rem
+                        font-size 4px
                         right 0px
                         top 0px
-                        border-radius 0.4rem
-                        padding-left 0.2rem
-                        padding-right 0.2rem
+                        border-radius 6px
                 .left-section-search-input
                     flex-basis 100%
                 /*.left-section-search-button*/
@@ -1026,7 +934,10 @@ export default {
                 .left-section-close
                     margin-left auto
             .selected-tag-list
+                white-space nowrap
+                overflow-x scroll
                 margin-top 0.5rem
+                padding-bottom 0.7rem
                 .selected-tag
                     position relative
                     .close
@@ -1070,8 +981,8 @@ export default {
             color lightcoral
 
 
-    .activate
-        border none
+    /*.activate*/
+    /*    border none*/
 
     .lumi-flex-slider-wrapper
         ul
@@ -1116,5 +1027,8 @@ export default {
     .fade-enter,
     .fade-leave-to
         opacity 0
+
+    .text-dodgerblue
+        color dodgerblue
 
 </style>

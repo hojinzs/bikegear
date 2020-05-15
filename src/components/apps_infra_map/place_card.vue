@@ -1,26 +1,29 @@
 <template>
-    <div class="infra-place lumi-box lumi-box-block-white lumi-box-shadow">
+    <div class="infra-place lumi-box lumi-box-block-white lumi-box-shadow" @click="doClick">
                             
         <div class="infra-place-section-1">
             <div class="infra-place-thumbnail thumbnail-wrapper thumbnail-border-radius">
-                <div class="thumbnail" v-bind:style="backgroundImage(thumbnail_img_url)" />
+                <div class="thumbnail" v-bind:style="backgroundImage(placeObject.Image)" />
             </div>
             <div class="infra-place-contents">
                 <div class="infra-place-title infra-place-contents-blocks">
-                    {{title}}
+                    {{placeObject.name}}
                 </div>
                 <div class="infra-place-description infra-place-contents-blocks">
-                    <slot></slot>
+                    {{placeObject.type}}
                 </div>
             </div>
         </div>
 
         <div
             class="infra-place-section-2"
-            :class="{'toggled': extention_toggled}"
+            :class="{'toggled': focused}"
         >
-            <slot v-if="extention_toggled" name="expention">
-            </slot>
+            <button
+                @click.prevent="$router.push({ name: 'place', params: { id: placeObject.id } } )"
+            >
+                정보 보기
+            </button>
         </div>
     </div>
 </template>
@@ -29,12 +32,16 @@
 export default {
     name: 'place_card',
     props: {
+        placeObject: {
+            type: Object,
+            require: true
+        },
         thumbnail_img_url: {
             type: String,
             default: "/images/bw-bike01.jpg"
         },
         title: String,
-        extention_toggled: {
+        focused: {
             type: Boolean,
             default: false
         }
@@ -48,7 +55,10 @@ export default {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center center'
             }
-        }
+        },
+        doClick(element){
+            this.$emit('click',element)
+        },
     }
 }
 </script>

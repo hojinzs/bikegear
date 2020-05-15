@@ -50,13 +50,6 @@
             doClick(element){
                 this.$emit('click',element)
             },
-            backgroundImage(_URL){
-                return {
-                    backgroundImage: 'url('+_URL+')',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center center'
-                }
-            }
         }
     }
 </script>

@@ -121,12 +121,12 @@ export default {
     padding 0 1rem 0 0.5rem
     border-radius 0.5rem
     color black
-    margin-bottom 0.5rem
+    margin-top 0.5rem
     margin-right 0.5rem
 
 span.dot
-    height 0.6rem
-    width 0.6rem
+    height 6px
+    width 6px
     background-color white
     border-radius 50%
     display inline-block

@@ -19,7 +19,6 @@
 <script>
 import { lumiPopupPannel } from 'vue-luminus-style'
 import InfraPlace from '@/components/apps_infra_place/index'
-import Tag from '../../plugins/journey66_tag'
 
 import axios from 'axios'
 
@@ -50,24 +49,13 @@ export default {
             axios({
                 method: 'GET',
                 url: this.load_place.url+this.place_id,
-                headers: {
-                    // 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY),
-                },
             })
-            .then((res) => {
-                console.log("get Place Data => ", res.data);
-                let place = res.data.data
-                place.Tags = {
-                        "Utility" : Tag.filterTagObjectByType(place.tags,'Utility'),
-                        "Brand" : Tag.filterTagObjectByType(place.tags,'Brand'),
-                        "Merchant" : Tag.filterTagObjectByType(place.tags,'Merchant'),
-                        "others" : Tag.filterTagObjectByType(place.tags,'others'),
-                }
-                this.place_data = place
+            .then( res => {
+                this.place_data = res.data.data
                 this.loading = false
 
             })
-            .catch((error) => {
+            .catch( error => {
                 console.log('AXIOS ERROR => ',error,'preset data');
             })
         }
