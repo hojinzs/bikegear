@@ -43,11 +43,10 @@
                 </div>
             </div>
         </div>
-        <div class="section">
-            <hr class="lumi-devider">
-        </div>
         <div class="lumi-tab-wrapper">
-            <lumiTab :tabs="tabs" @toggle="toggleTab" />
+            <lumiTab :tabs="tabs"
+                     @toggle="toggleTab"
+            />
             <div class="lumi-tab-contents">
                 <transition name="tab-fade" mode="out-in">
                     <keep-alive>

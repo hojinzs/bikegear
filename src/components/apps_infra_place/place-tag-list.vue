@@ -4,13 +4,23 @@
         <div class="new-tag section">
 
             <div class="lumi-box lumi-box-block-grey">
-                <place-tag-write :place="place" />
+                <place-tag-write
+                    :place="place"
+                    @update="getTagData"
+                />
             </div>
 
         </div>
         <div class="tag-list">
+            <div class="section">
+                <!-- TODO:: 디자인 다듬기 -->
+                <button @click="getTagData"
+                >
+                    새로고침
+                </button>
+            </div>
             <div class="section"
-                v-for="(tag,index) in place_tags"
+                v-for="(tag,index) in placeTags.data"
                 :key="index">
                 <place-tag-card
                     :place_id="placeId"
@@ -22,8 +32,10 @@
 </template>
 
 <script>
+import axios from 'axios'
 import placeTagCard from './place-tag-card'
 import placeTagWrite from './place-tag-write'
+import apiResourceManager from "../../plugins/apiResourceManager";
 
 export default {
     name: 'place-tag-list',
@@ -33,29 +45,22 @@ export default {
     },
     props: ['place','placeId','TagList'],
     data(){
+        let apiPlaceTagsIndex = `//${process.env.VUE_APP_API_HOST}/v1/places/${this.placeId}/tags`
         return {
-            user_data: {
-                login: true,
-            },
-            place_tags: this.TagList,
-            post_tag: {
-                status: 'hidden', // [hidden, posting, posted]
-                tag_selected : null,
-                text: '',
-                ajax_status: 'ready', // [ready, posting, success, fail]
-                ajax_fail_message: null,
-            },
-            user_taging: []
+            placeTags: new apiResourceManager(apiPlaceTagsIndex)
         }
     },
-    computed: {
+    methods: {
+        getTagData(){
+            axios.get(this.placeTags.apiUrl)
+                .then( res => {
+                    this.placeTags.data = res.data.data
+                    console.log(this.placeTags.data.data)
+                })
+        }
     },
-    methods:{
-        getTagsOnPlace(){
-
-        },
-    },
-    mounted(){
+    created() {
+        this.placeTags.setData(this.TagList)
     }
 }
 </script>

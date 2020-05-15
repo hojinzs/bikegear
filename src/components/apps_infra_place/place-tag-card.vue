@@ -22,8 +22,10 @@
         </div>
         <div class="tag-recommends">
             <div v-if="show_comments">
-                <hr class="lumi-horizon">
-                <div class="tag-comment" v-for="cmt in tag_comments.list" :key="cmt.id">
+                <div class="tag-comment"
+                     v-for="cmt in tagComments.data"
+                     :key="cmt.id"
+                >
                     <div class="tag-comment-row">
                         <div class="tag-comment-text">
                             {{ cmt.comment }}
@@ -31,13 +33,29 @@
                     </div>
                     <div class="tag-comment-row">
                         <div class="tag-author tag-comment-row-item">
-                            <a class="a-flat a-flat-red" href="" @click.prevent="toggleCommentLike(cmt)">
-                                <font-awesome-icon class="thumbs-up" :class="{ 'active' : cmt.user_like == true }" icon="heart" /> {{ cmt.likes }}</a>
+                            <a class="a-flat a-flat-red"
+                               href=""
+                               @click.prevent="toggleCommentLike(cmt)"
+                            >
+                                <font-awesome-icon class="thumbs-up"
+                                                   :class="{ 'active' : cmt.user_like === true }"
+                                                   icon="heart"
+                                />
+                                {{ cmt.likes }}
+                            </a>
                             | {{ cmt.author }}
                             | {{ _written_at(cmt.written_at) }}
                         </div>
                     </div>
                 </div>
+
+                <!-- TODO:: 디자인 다듬기 -->
+                <button
+                    v-if="tagComments.nextPage"
+                    @click="getTagComments(true)"
+                >
+                    더 보기
+                </button>
             </div>
         </div>
     </div>
@@ -46,17 +64,16 @@
 <script>
 import moment from 'moment'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import apiResourceManager from "../../plugins/apiResourceManager";
 
 import placeTagMini from './place-tag-mini'
 
 import axios from 'axios'
 
-// import { tag_comment } from '@/plugins/sampledb'
-
 export default {
     name: 'place-tag-card',
     components:{
-        'font-awesome-icon' : FontAwesomeIcon,
+        FontAwesomeIcon,
         placeTagMini,
     },
     props: {
@@ -77,51 +94,51 @@ export default {
 
         return {
             show_comments : false,
-            comments: [],
-            tag_comments: {
-                ajax_url: ajax_url,
-                ajax_status: 'standby', //[stanby, loading, success, fail, nomore]
-                ajax_fail_message: null,
-                list: [],
-            }
+            tagComments: new apiResourceManager(ajax_url),
         }
     },
     methods: {
-        getTagComments(){
+        getTagComments(getMoreData = false){
+            let page = 1
+            if(getMoreData){
+                if(this.tagComments.nextPage === null) throw new Error('this is lastpage')
 
-            //get data
-            axios({
-                method: 'GET',
-                url: this.tag_comments.ajax_url
+                page = this.tagComments.nextPage
+            }
+
+            axios.get(this.tagComments.apiUrl,{
+                params: {
+                    'page': page
+                }
             })
-            .then(res => {
-                console.log("get Tag Comment Data => ",res)
-
-                //코멘트 배열에 데이터 넣기
-                let comments = res.data.data
-                comments.forEach(comment => {
-                    let newComment = {
-                        id: comment.id,
-                        comment: comment.comment,
-                        likes: comment.likes,
-                        user_like: comment.user_like,
-                        author: comment.author.name,
-                        written_at: comment.written_at,
-                    }
-                    this.tag_comments.list.push(newComment);
+                .then(res => {
+                    let comments = res.data.data.map( comment => {
+                        return {
+                            id: comment.id,
+                            comment: comment.comment,
+                            likes: comment.likes,
+                            user_like: comment.user_like,
+                            author: comment.author.name,
+                            written_at: comment.written_at,
+                        }
+                    })
+                    this.tagComments.mergeData(comments)
+                    this.tagComments.setPaging(res.data.meta)
                 })
-
-                this.tag_comments.ajax_status = 'success'
-            })
-
-            // Before
-            this.tag_comments.ajax_status = 'complete'
+                .catch(error => {
+                    this.tagComments.handlingFail(error.message)
+                })
+            this.tagComments.setLoading()
         },
         _written_at(date){
             return moment(date).fromNow()
         },
         toggleCommentLike(comment){
-            axios.post('//'+process.env.VUE_APP_API_HOST+'/v1/places/tags/comments/'+comment.id+'/like')
+            let like_url = '//'+process.env.VUE_APP_API_HOST
+                +'/v1/places/tags/comments/'
+                +comment.id+'/like'
+
+            axios.post(like_url)
                 .then(res => {
                     switch (res.data) {
                         case 'stored':

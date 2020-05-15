@@ -1,4 +1,5 @@
 <template>
+    <!-- TODO:: 디자인 다듬기 -->
     <div class="lumi-tab lumi-tab-liner section">
         <div class="lumi-tab-item"
             v-for="(tab,index) in tabs"
