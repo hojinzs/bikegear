@@ -140,22 +140,20 @@ export default {
     },
     computed: {
         styleWrapperHeight(){
-
-            let maxHeight = this.wrapperHeight,
-                minHeight = maxHeight * (0.01 * this.maxHeight),
-                mixedHeight = minHeight + this.scrolled,
-                height
-
-            if(mixedHeight < minHeight){
-                height = minHeight
-            } else if(mixedHeight > maxHeight){
-                height = maxHeight
-            } else {
-                height = mixedHeight
-            }
-
+            // let maxHeight = this.wrapperHeight,
+            //     minHeight = maxHeight * (0.01 * this.maxHeight),
+            //     mixedHeight = minHeight + this.scrolled,
+            //     height
+            //
+            // if(mixedHeight < minHeight){
+            //     height = minHeight
+            // } else if(mixedHeight > maxHeight){
+            //     height = maxHeight
+            // } else {
+            //     height = mixedHeight
+            // }
             return {
-                'height': height+'px'
+                'height': this.maxHeight+'%'
             }
         }
         // styleBackdropFilter(){
@@ -329,10 +327,6 @@ export default {
         },
     },
     mounted(){
-        setTimeout(() => {
-            this.wrapperHeight = this.$el.offsetHeight
-        },100)
-
         this.topHandler = new elementTouchControl(this.$refs.topHandler,{
             'swipeDetectDirection': 'bottom'
         })
