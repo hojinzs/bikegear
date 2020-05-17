@@ -180,7 +180,7 @@ export default {
         },
         touchSwipeHandler(e){
             let _direction = e.detail.swipe
-            console.log("Swipe => ",_direction)
+
             if(this.SliderMoving === false && this.touchEvent.isSwipe === true) {
 
                 switch (_direction) {
@@ -405,9 +405,6 @@ export default {
          */
         isClick(){
             return this.mouseEvent.totalMovded === 0
-        },
-        testing(text = 'test'){
-            console.log("TESTING => ", text)
         },
         resizeAction() {
             return setTimeout(() => {

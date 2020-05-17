@@ -124,7 +124,7 @@ const elementTouchControl = class {
                     totalMovedX = point.x - this._startPointX,
                     totalMovedY = point.y - this._startPointY,
                     direction   = this._getDirection(totalMovedX,totalMovedY),
-                    swipe       = null
+                    swipe       = 'none'
 
                 // 스와이프 판정 체크
                 if(
@@ -159,7 +159,7 @@ const elementTouchControl = class {
 
                 // 스와이프 종료 후 이벤트 실행 옵션이 있을 경우 (기본: false)
                 if(
-                    swipe === null ||
+                    swipe === 'none' ||
                     ( swipe && this._swipeAndPrevent === false )
                 ){
 

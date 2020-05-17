@@ -26,7 +26,6 @@
                      @swipe="topHandlerSwipe"
                      @pointingEnd="topHandlerPointingEnd"
                 >
-                     <!-- @touchstart="touchStart" -->
 
                     <div class="handler" ref="handler"></div>
                 </div>
@@ -147,7 +146,7 @@ export default {
             console.log("Pointing Start => ", e)
 
             /**
-             * 터치 시작시 피드백
+             * 터치 시작시 핸들러 피드백 (포커싱) 한다
              */
             Velocity(this.$refs.handler,{
                 scaleX: [1, 1.2, 0.8],
@@ -163,16 +162,15 @@ export default {
             this.position.translateY = this.position.translateY + e.detail.movedY
         },
         topHandlerSwipe(e){
-            console.log("Swipe => ", e)
-            if(e.detail.swipe === "bottom"){
+            // 하단으로 스와이프 되었을 떄, 팝업을 닫는다.
+            if(e.detail.swipe === 'bottom'){
                 this.setClose()
             }
         },
         topHandlerPointingEnd(e){
-            console.log("Pointing End => ", e)
 
             /**
-             * 터치 시작시 피드백
+             * 포커싱된 핸들러 초기화
              */
             Velocity(this.$refs.handler,{
                 backgroundColor: '#a6a6a6',
@@ -180,107 +178,28 @@ export default {
                 duration: 500,
             })
 
-            let scrollDowned = this.$el.clientTop + this.position.translateY,
-                limit = ( window.outerHeight * ( 1 - 0.70) )
-            if(scrollDowned > limit){
-                this.setClose()
-            } else {
-                // 70% 이하가 아닐 경우 바운스
-                Velocity(this.$refs['popup'], {
-                    translateY: [ 0, this.position.translateY ]
-                },{
-                    duration: this.transitionDuring,
-                    easing: 'spring',
-                    complete: () => {
-                        this.position.translateY = 0
-                    },
-                })
-            }
+            // 하단으로 스와이프 되지 않았을 경우
+            if(e.detail.swipe === 'none' || e.detail.swipe.swipe !== 'bottom'){
 
-        },
-        touchStart($touchEvent){
-            // $touchEvent.preventDefault()
-            this.touchEvent.isMoving = true
-            this.touchEvent.movedY = $touchEvent.touches[0].clientY
-            this.touchEvent.totalMovded = 0
-
-            /**
-             * 터치 시작시 피드백
-             */
-            Velocity(this.$refs.handler,{
-                scaleX: [1, 1.2, 0.8],
-                scaleY: [1, 1.5, 0.8],
-                backgroundColor: '#4d4d4d',
-            },{
-                duration: 500,
-                easing: 'spring'
-            })
-
-            /**
-             * 일정 시간 동안 스와이프 판정
-             */
-            this.touchEvent.isSwipe = true,
-            setTimeout(() => {
-                this.touchEvent.isSwipe = false
-            },this.touchEvent.swipeTolerance)
-
-            let touchMove = ($touchMoveEvent) => {
-                let moved = this.touchEvent.movedY - $touchMoveEvent.touches[0].clientY
-                this.position.translateY = this.position.translateY - moved
-                this.touchEvent.totalMovded = this.touchEvent.totalMovded + moved
-
-                this.touchEvent.movedY = $touchMoveEvent.touches[0].clientY
-                this.touchEvent.startPosition = 0
-            }
-            /** finish touchMove **/
-
-            let touchEnd = () => {
-                document.body.removeEventListener("touchmove", touchMove)
-
-                /**
-                 * 터치 시작시 피드백
-                 */
-                Velocity(this.$refs.handler,{
-                    backgroundColor: '#a6a6a6',
-                },{
-                    duration: 500,
-                })
-
-                /**
-                 * 스와이프 감지 시간동안, 음의 방향으로 움직였다면 닫기로 감지
-                 */
-                if(this.touchEvent.isSwipe && this.touchEvent.totalMovded < 0){
-                    this.touchEvent.isMoving = false
+                let scrollDowned = this.$el.clientTop + this.position.translateY,
+                    limit = ( window.outerHeight * ( 1 - 0.70) )
+                if(scrollDowned > limit){
+                    // 화면의 70% 이하로 내려갔을 경우 팝업을 닫는다.
                     this.setClose()
                 } else {
-                    /**
-                     * body Height의 70% 이하로 내려가면 창을 닫는다.
-                     */
-                    let scrollDowned = this.$el.clientTop + this.position.translateY,
-                        limit = ( window.outerHeight * ( 1 - 0.70) )
-                    if(scrollDowned > limit){
-                        this.touchEvent.isMoving = false
-                        this.setClose()
-                    } else {
-                        // 70% 이하가 아닐 경우 바운스
-                        Velocity(this.$refs['popup'], {
-                            translateY: [ 0, this.position.translateY ]
-                        },{
-                            duration: this.transitionDuring,
-                            easing: 'spring',
-                            complete: () => {
-                                this.position.translateY = 0
-                                this.touchEvent.isMoving = false
-                                this.touchEvent.movedY = 0
-                            },
-                        })
-                    }
+                    // 70% 이하가 아닐 경우 바운스.
+                    Velocity(this.$refs['popup'], {
+                        translateY: [ 0, this.position.translateY ]
+                    },{
+                        duration: this.transitionDuring,
+                        easing: 'spring',
+                        complete: () => {
+                            this.position.translateY = 0
+                        },
+                    })
                 }
             }
-            /** finish touchEnd **/
 
-            document.body.addEventListener('touchmove',touchMove,false)
-            document.body.addEventListener('touchend',touchEnd,{once: true})
         },
         open(){
             if(!this.touchEvent.isMoving && this.displayModal === false){
@@ -388,7 +307,6 @@ export default {
     },
     mounted(){
         this.topHandler = new elementTouchControl(this.$refs.topHandler,{
-            'swipeAndPrevent': true,
             'swipeDetectDirection': 'bottom'
         })
 
