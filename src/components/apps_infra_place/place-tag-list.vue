@@ -67,48 +67,48 @@ export default {
 
 <style lang="stylus" scoped>
 
-.section
-    padding 0.5em 1em 0.5em 1em
+    .section
+        padding 0.5em 1em 0.5em 1em
 
-.lumi-button-full
-    .lumi-button
-        width 100%
+    .lumi-button-full
+        .lumi-button
+            width 100%
 
-.lumi-button-group
-    display flex
-    button
-        flex 1 1 auto
-        &:not(:last-child)
-            margin-right 0.5rem
+    .lumi-button-group
+        display flex
+        button
+            flex 1 1 auto
+            &:not(:last-child)
+                margin-right 0.5rem
 
-.lumi-text-area-wrapper
-    textarea
-        width 100%
+    .lumi-text-area-wrapper
+        textarea
+            width 100%
 
-.my-tag
-    line-height 2rem
-    margin-top 8px
-    .option
+    .my-tag
+        line-height 2rem
+        margin-top 8px
+        .option
+            font-size 0.9rem
+
+    .tagpost_description
+        text-align center
         font-size 0.9rem
+        margin 10px 0 10px 0
 
-.tagpost_description
-    text-align center
-    font-size 0.9rem
-    margin 10px 0 10px 0
+    .tag-description
+        margin-bottom 1rem
 
-.tag-description
-    margin-bottom 1rem
+    .warning
+        color red
 
-.warning
-    color red
+    // tab transition Style
+    .tab-fade-enter-active
+    ,.tab-fade-leave-active
+        transition opacity .3s ease;
 
-// tab transition Style
-.tab-fade-enter-active
-,.tab-fade-leave-active
-    transition opacity .3s ease;
-
-.tab-fade-enter
-,.tab-fade-leave-to
-    opacity 0
+    .tab-fade-enter
+    ,.tab-fade-leave-to
+        opacity 0
 
 </style>

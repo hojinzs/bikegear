@@ -48,14 +48,10 @@ export default {
 }
 </script>
 
-
 <style lang="stylus" scoped>
-@import '../../../assets/luminus.styl'
-@import '../../../assets/luminus.styl'
+    input
+        text-align center
 
-input
-    text-align center
-
-.input-properties
-    max-width 100%
+    .input-properties
+        max-width 100%
 </style>

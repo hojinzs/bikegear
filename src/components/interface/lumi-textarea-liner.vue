@@ -68,14 +68,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../assets/luminus.styl'
-
-textarea
-    width 100%
-    overflow-y hidden
-    resize none
-    padding-left 0.5em
-    padding-right  0.5em
-    padding-top 0.5em
-    box-sizing border-box
+    textarea
+        width 100%
+        overflow-y hidden
+        resize none
+        padding-left 0.5em
+        padding-right  0.5em
+        padding-top 0.5em
+        box-sizing border-box
 </style>

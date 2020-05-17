@@ -14,7 +14,9 @@ const elementTouchControl = class {
     constructor(element, options = {
         detectAxis: null,
         swipeToleranceInterval: null,
-        swipeToleranceMoved: null
+        swipeToleranceMoved: null,
+        swipeAndPrevent: null,
+        swipeDetectDirection: null,
     }) {
         this._Target = element
 
@@ -22,6 +24,8 @@ const elementTouchControl = class {
         this._detectAxis = options.detectAxis || 'ALL'
         this._swipeToleranceInterval = options.swipeToleranceInterval || 300
         this._swipeToleranceMoved = options.swipeToleranceMoved || 10
+        this._swipeAndPrevent = options.swipeAndPrevent || false
+        this._swipeDetectDirection = options.swipeDetectDirection || null
 
         // moving state
         this._type = ''
@@ -63,6 +67,17 @@ const elementTouchControl = class {
             // 시작 콜백 실행
             this._callbackFn.start(startEvent);
 
+            let PointingStart = new CustomEvent('pointingStart',{
+                detail: {
+                    'e': startEvent,
+                    'clientX': point.x,
+                    'clientY': point.y,
+                    'movedX': 0,
+                    'movedY': 0,
+                }
+            })
+            this._Target.dispatchEvent(PointingStart)
+
             /**
              * 포인터 무빙 이벤트
              * @param {Event} touchMoveEvent
@@ -74,12 +89,25 @@ const elementTouchControl = class {
 
                 this._callbackFn.moved({
                     'e': touchMoveEvent,
-                    'x': movedX,
-                    'y': movedY,
+                    'clientX': point.x,
+                    'clientY': point.y,
+                    'movedX': movedX,
+                    'movedY': movedY,
                 })
 
                 this._pointerMovedX = point.x
                 this._pointerMovedY = point.y
+
+                let PointerMove = new CustomEvent('pointerMove',{
+                    detail: {
+                        'e': touchMoveEvent,
+                        'clientX': point.x,
+                        'clientY': point.y,
+                        'movedX': movedX,
+                        'movedY': movedY,
+                    }
+                })
+                this._Target.dispatchEvent(PointerMove)
             }
             document.body.addEventListener('touchmove', pointMoveHandler, false)
             document.body.addEventListener('mousemove', pointMoveHandler, false)
@@ -95,34 +123,65 @@ const elementTouchControl = class {
                 let point       = this._getPoint(endEvent),
                     totalMovedX = point.x - this._startPointX,
                     totalMovedY = point.y - this._startPointY,
-                    direction   = this._getDirection(totalMovedX,totalMovedY)
+                    direction   = this._getDirection(totalMovedX,totalMovedY),
+                    swipe       = null
 
-                // 스와이프 일 경우
+                // 스와이프 판정 체크
                 if(
                     this._isSwipe === true &&
                     ( Math.abs(totalMovedX) > this._swipeToleranceMoved || Math.abs(totalMovedY) > this._swipeToleranceMoved )
                 ){
 
-                    this._callbackFn.swipe({
-                        'e': endEvent,
-                        'direction': direction,
-                        'swipe': direction.swipe
-                    })
-                    let swipeEvent = new CustomEvent('swipe',{
-                        detail: {
-                            'origin': endEvent,
+                    // 지정된 스와이프 검출 방향(swipeDetectionDirection)과 일치할 경우
+                    if(
+                        this._swipeDetectDirection === null ||
+                        this._swipeDetectDirection === direction.swipe
+                    ){
+                        swipe = {
+                            'e': endEvent,
                             'direction': direction,
                             'swipe': direction.swipe
-                        },
-                    })
-                    this._Target.dispatchEvent(swipeEvent)
+                        }
+
+                        this._callbackFn.swipe(swipe)
+                        let swipeEvent = new CustomEvent('swipe',{
+                            detail: {
+                                'e': endEvent,
+                                'direction': direction,
+                                'swipe': direction.swipe,
+                                'totalMovedX': totalMovedX,
+                                'totalMovedY': totalMovedY,
+                            },
+                        })
+                        this._Target.dispatchEvent(swipeEvent)
+                    }
                 }
 
-                this._callbackFn.end({
-                    'e': endEvent,
-                    'direction': direction
+                // 스와이프 종료 후 이벤트 실행 옵션이 있을 경우 (기본: false)
+                if(
+                    swipe === null ||
+                    ( swipe && this._swipeAndPrevent === false )
+                ){
 
-                })
+                    this._callbackFn.end({
+                        'e': endEvent,
+                        'direction': direction,
+                        'totalMovedX': totalMovedX,
+                        'totalMovedY': totalMovedY,
+                        'swipe': swipe,
+                    })
+
+                    let pointingEnd = new CustomEvent('pointingEnd',{
+                        detail: {
+                            'e': endEvent,
+                            'direction': direction,
+                            'totalMovedX': totalMovedX,
+                            'totalMovedY': totalMovedY,
+                            'swipe': swipe,
+                        }
+                    })
+                    this._Target.dispatchEvent(pointingEnd)
+                }
 
                 this._pointerMoving = false
             }
@@ -140,7 +199,7 @@ const elementTouchControl = class {
     }
 
     /**
-     * bind touchstart event callback function
+     * bind Events
      * @param {Function} callback
      * @returns {elementTouchControl}
      */
@@ -148,17 +207,14 @@ const elementTouchControl = class {
         this._callbackFn.start = callback
         return this
     }
-
     bindPointerMoved(callback){
         this._callbackFn.moved = callback
         return this
     }
-
     bindPointingEnd(callback){
         this._callbackFn.end = callback
         return this
     }
-
     bindSwipe(callback){
         this._callbackFn.swipe = callback
         return this

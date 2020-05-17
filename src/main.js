@@ -24,6 +24,13 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fas, fab)
 
 /**
+ * use Luminus Component & CSS
+ */
+import '../luminus/luminus.styl'
+import Luminus from '../luminus/components'
+Vue.use(Luminus)
+
+/**
  * Set XSRF-TOKEN
  */
 import axios from 'axios'

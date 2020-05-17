@@ -55,7 +55,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
     #chart
         width 100%
         right 0px

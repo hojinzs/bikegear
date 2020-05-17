@@ -111,25 +111,24 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../assets/luminus.styl'
 
-.section
-    padding 0.5em 1em 0.5em 1em
+    .section
+        padding 0.5em 1em 0.5em 1em
 
-.warning
-    color red
+    .warning
+        color red
 
-.loading
-    width 1em
-    height auto
+    .loading
+        width 1em
+        height auto
 
-// tab transition Style
-.tab-fade-enter-active
-,.tab-fade-leave-active
-    transition opacity .3s ease;
+    // tab transition Style
+    .tab-fade-enter-active
+    ,.tab-fade-leave-active
+        transition opacity .3s ease;
 
-.tab-fade-enter
-,.tab-fade-leave-to
-    opacity 0
+    .tab-fade-enter
+    ,.tab-fade-leave-to
+        opacity 0
 
 </style>

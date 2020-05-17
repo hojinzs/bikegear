@@ -218,29 +218,24 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-@import '../../assets/variable.styl'
-@import '../../assets/luminus.styl'
-
-.gear_settings
-    width: 100%
-    display: flex
-    overflow-x: auto
-    .set_gear
-        flex: 0 0 320px
-        overflow: none;
-        margin: 0 0 1em 1em
-        &:first-child
-            margin-left 0px
-        $:last-child
-            margin-right  0px
-
-.section
-    margin-top 1em
-
-@media (max-width: $container_width)
     .gear_settings
+        width: 100%
+        display: flex
+        overflow-x: auto
         .set_gear
-            flex 0 0 70%
+            flex: 0 0 320px
+            overflow: none;
+            margin: 0 0 1em 1em
+            &:first-child
+                margin-left 0px
+            $:last-child
+                margin-right  0px
 
+    .section
+        margin-top 1em
+
+    @media (max-width: $container_width)
+        .gear_settings
+            .set_gear
+                flex 0 0 70%
 </style>

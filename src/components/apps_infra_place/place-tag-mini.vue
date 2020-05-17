@@ -113,23 +113,23 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.tag-mini
-    line-height 2rem
-    user-select none
-    display inline-block
-    /*background-color grey*/
-    padding 0 1rem 0 0.5rem
-    border-radius 0.5rem
-    color black
-    margin-top 0.5rem
-    margin-right 0.5rem
+    .tag-mini
+        line-height 2rem
+        user-select none
+        display inline-block
+        /*background-color grey*/
+        padding 0 1rem 0 0.5rem
+        border-radius 0.5rem
+        color black
+        margin-top 0.5rem
+        margin-right 0.5rem
 
-span.dot
-    height 10px
-    width 10px
-    background-color white
-    border-radius 50%
-    display inline-block
-    margin-left 0.2em
-    margin-right 0.5em
+    span.dot
+        height 10px
+        width 10px
+        background-color white
+        border-radius 50%
+        display inline-block
+        margin-left 0.2em
+        margin-right 0.5em
 </style>

@@ -84,25 +84,23 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../assets/luminus.styl'
+    .thumbs-up.active
+        color red
 
-.thumbs-up.active
-    color red
-
-.recommend-comment
-    font-size 1rem
-    line-height 1.6rem
-    text-align left
-    &.boxing
-        margin 0.5rem
-    .recommend-comment-info
-        user-select none
-        display flex
-        flex-direction row
-        font-size 0.9rem
-        .like
-            flex 1 1 auto
-        .author
-            flex 1 1 auto
-            text-align right
+    .recommend-comment
+        font-size 1rem
+        line-height 1.6rem
+        text-align left
+        &.boxing
+            margin 0.5rem
+        .recommend-comment-info
+            user-select none
+            display flex
+            flex-direction row
+            font-size 0.9rem
+            .like
+                flex 1 1 auto
+            .author
+                flex 1 1 auto
+                text-align right
 </style>

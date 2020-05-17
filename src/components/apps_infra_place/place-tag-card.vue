@@ -163,58 +163,55 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../assets/variable.styl'
+@import '../../../luminus/styl/variable.styl'
 
-.thumbs-up.active
-    color red
+    .thumbs-up.active
+        color red
 
-.tag-card
-    .tag
-        display flex
-        .tag-info
-            flex-grow 1
-            .tag-mini-list
-                line-height 2rem
-            .tag-description
-                margin-top 10px
-        .tag-retaging
-            flex-basis 15px
-            user-select none
-            margin-left auto
-            .tag-retaging-wrapper
-                display flex
-                height 4.5rem
-                flex-direction column
-                border-radius 5px
-                // background-color grey
-                .tag-retaging-count
-                    flex 1 1 auto
-                    width 100%
+    .tag-card
+        .tag
+            display flex
+            .tag-info
+                flex-grow 1
+                .tag-mini-list
+                    line-height 2rem
+                .tag-description
+                    margin-top 10px
+            .tag-retaging
+                flex-basis 15px
+                user-select none
+                margin-left auto
+                .tag-retaging-wrapper
                     display flex
-                    justify-content center
-                    align-items center
-                    font-size 1.4rem
-                .tag-retaging-label
-                    flex none
-                    flex-basis 0.5rem
-                    width 100%
-                    font-size 0.5rem
-    .tag-recommends
-        .tag-comment
-            line-height 1.6rem
-            margin-bottom 1rem
-            background-color $lumi_opacity_white_level_2
-            border-radius 6px
-            padding 0.5rem
-            .tag-comment-row
-                display flex
-                .tag-comment-row-item
-                    flex 1 1 50%
-                .tag-comment-posted
-                    text-align right
-                .tag-author
-                    font-size 0.9rem
-
-
-
+                    height 4.5rem
+                    flex-direction column
+                    border-radius 5px
+                    // background-color grey
+                    .tag-retaging-count
+                        flex 1 1 auto
+                        width 100%
+                        display flex
+                        justify-content center
+                        align-items center
+                        font-size 1.4rem
+                    .tag-retaging-label
+                        flex none
+                        flex-basis 0.5rem
+                        width 100%
+                        font-size 0.5rem
+        .tag-recommends
+            .tag-comment
+                line-height 1.6rem
+                margin-bottom 1rem
+                background-color $lumi_opacity_white_level_2
+                border-radius 6px
+                padding 0.5rem
+                .tag-comment-row
+                    display flex
+                    .tag-comment-row-item
+                        flex 1 1 50%
+                    .tag-comment-posted
+                        text-align right
+                    .tag-author
+                        font-size 0.9rem
 </style>

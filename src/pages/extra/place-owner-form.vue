@@ -53,15 +53,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-    @import "../../assets/variable.styl"
+    @import "../../../luminus/styl/variable.styl"
 
-.form
-    text-align left
-    border none
+    .form
+        text-align left
+        border none
 
-.lumi-container
-    max-width $container_width
-    margin 0 auto
+    .lumi-container
+        max-width $container_width
+        margin 0 auto
 
 </style>
 

@@ -177,24 +177,22 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../../assets/luminus.styl"
+    select
+        width 100%
 
-select
-    width 100%
-    
-#gears
-    text-align center
-    .header
-        h3
-            margin: 0px
-        .input-wrapper
-            width 90%
-            margin auto
-            input
-                width 100%
-                text-align center
+    #gears
+        text-align center
+        .header
+            h3
+                margin: 0px
+            .input-wrapper
+                width 90%
+                margin auto
+                input
+                    width 100%
+                    text-align center
 
-table
-    width 100%
-    text-align center
+    table
+        width 100%
+        text-align center
 </style>

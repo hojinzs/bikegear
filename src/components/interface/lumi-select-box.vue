@@ -98,32 +98,29 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../assets/luminus.styl'
+    select:invalid
+        color grey
 
-select:invalid
-    color grey
-
-.lumi-select-box-wrapper
-    margin-top 1em
-    margin-bottom 1em
-    .lumi-select-box
-        position relative
-        display flex
-        select
-            height 2.5em
-            flex 1 1 auto
-            padding-top 0.3em
-            padding-left 0.5em
-            padding-right 0.5em
-        .lumi-select-box-decorate
-            position absolute
-            font-size 1.5em
-            right 0
-            height 90%
-            width 8%
-            max-width 2.5rem
+    .lumi-select-box-wrapper
+        margin-top 1em
+        margin-bottom 1em
+        .lumi-select-box
+            position relative
             display flex
-            align-items center
-            justify-content center
-
+            select
+                height 2.5em
+                flex 1 1 auto
+                padding-top 0.3em
+                padding-left 0.5em
+                padding-right 0.5em
+            .lumi-select-box-decorate
+                position absolute
+                font-size 1.5em
+                right 0
+                height 90%
+                width 8%
+                max-width 2.5rem
+                display flex
+                align-items center
+                justify-content center
 </style>

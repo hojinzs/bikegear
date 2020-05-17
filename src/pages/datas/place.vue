@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { lumiPopupPannel } from 'vue-luminus-style'
 import InfraPlace from '@/components/apps_infra_place/index'
 
 import axios from 'axios'
@@ -26,7 +25,6 @@ export default {
     name: 'place_info',
     components:{
         InfraPlace,
-        lumiPopupPannel,
     },
     data(){
         let ajax_url = '//'+process.env.VUE_APP_API_HOST

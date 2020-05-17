@@ -84,7 +84,7 @@
 <script>
 import axios from 'axios'
 import { vueWindowSizeMixin } from 'vue-window-size';
-import StyleVariable from '@/assets/variable.styl'
+import StyleVariable from '@/../luminus/styl/variable.styl'
 
 export default {
     mixins: [vueWindowSizeMixin],
@@ -135,32 +135,32 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "../../assets/variable.styl"
-@import "../../assets/lumigrid.styl"
 
-#CompDB
-    text-align left
+    @import "../../../luminus/styl/variable.styl"
 
-#CompSelect_PC
-    text-align center
+    #CompDB
+        text-align left
 
-#CompList
-    .items
-        margin-top 1.2em
-        .name
-            font-weight 800
-            padding 0px 0px 10px 0px
+    #CompSelect_PC
+        text-align center
+
+    #CompList
+        .items
+            margin-top 1.2em
+            .name
+                font-weight 800
+                padding 0px 0px 10px 0px
 
 
-@media (min-width: $container_width)
-    .flex-wrapper
-        display flex
-        .flex-sidemenu
-            flex 0
-            flex-basis 250px
-        .flex-contents
-            margin-left 1.2em
-            flex-grow 1
-            flex-basis auto
+    @media (min-width: $container_width)
+        .flex-wrapper
+            display flex
+            .flex-sidemenu
+                flex 0
+                flex-basis 250px
+            .flex-contents
+                margin-left 1.2em
+                flex-grow 1
+                flex-basis auto
 
 </style>

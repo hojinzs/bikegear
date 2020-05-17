@@ -124,16 +124,16 @@
 </template>
 
 <script>
-import StyleVariable from '@/assets/variable.styl'
+import StyleVariable from '@/../luminus/styl/variable.styl'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBars,faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faBars,faTimes)
-
 import menuUserProfile from './menu-user-profile.vue'
 import menuUserProfileMini from './menu-user-profile-mini.vue'
+
+library.add(faBars,faTimes)
 
 export default {
     components:{
@@ -225,39 +225,22 @@ export default {
 </script>
 
 <style lang="stylus">
+    @import "../../luminus/styl/variable.styl"
 
-@import "../assets/variable.styl"
+    $is_clear_link_color = white
 
-$is_clear_link_color = white
+    $link_color = black
+    $link_color_disabled = #b3b3b3
 
-$link_color = black
-$link_color_disabled = #b3b3b3
+    $shadow_color = #595959
 
-$shadow_color = #595959
-
-#Menu
-    position fixed
-    top 0
-    width 100%
-    z-index 500
-    align-items center
-    font-weight 500
-    a
-        color: $link_color
-        text-decoration: none
-        font-weight 700
-        &:link
-        &:visited
-            color: $link_color
-        &:hover
-            font-weight bolder
-    .transition-border
-        border-radius 5px
-        border-style solid
-        border-width 1px
-    &.menu_blocked
-        background white
-        border-bottom 1px solid $link_color_disabled
+    #Menu
+        position fixed
+        top 0
+        width 100%
+        z-index 500
+        align-items center
+        font-weight 500
         a
             color: $link_color
             text-decoration: none
@@ -268,131 +251,147 @@ $shadow_color = #595959
             &:hover
                 font-weight bolder
         .transition-border
-            border-color $link_color
-    &.menu_clear
-        background: none //linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0))
-        text-shadow 1px 1px 2px $shadow_color
-        a
-            color: $is_clear_link_color
-            &:link
-            &:visited
+            border-radius 5px
+            border-style solid
+            border-width 1px
+        &.menu_blocked
+            background white
+            border-bottom 1px solid $link_color_disabled
+            a
+                color: $link_color
+                text-decoration: none
+                font-weight 700
+                &:link
+                &:visited
+                    color: $link_color
+                &:hover
+                    font-weight bolder
+            .transition-border
+                border-color $link_color
+        &.menu_clear
+            background: none //linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0))
+            text-shadow 1px 1px 2px $shadow_color
+            a
                 color: $is_clear_link_color
-        &.hover
-            background: rgba(0,0,0,0.5)
-            text-shadow none
-        .showmenu
-            color $is_clear_link_color
-        .transition-border
-            border-color $is_clear_link_color
-    &.mobile_menu_show
-        background white
-    ul
-        padding-inline-start 0px
-        font-size 1rem
-    .menu-wrapper
-        max-width $container_width
-        margin 0 auto
-        span.unused
-            color: $link_color_disabled
-        ul
-            margin-top 1rem
-            margin-bottom 1rem
-        #MenuLeft
-            float left
-            display flex
-            left 0px
-            width 30%
-            ul
-                float left 
-                flex 1
-                .logo_item
-                    padding-left 10px
-        #MobileMenu
-            float right
+                &:link
+                &:visited
+                    color: $is_clear_link_color
+            &.hover
+                background: rgba(0,0,0,0.5)
+                text-shadow none
             .showmenu
-                height 1em
-                margin-right 1em
-        #MenuRight
-            .flex_wrapper
+                color $is_clear_link_color
+            .transition-border
+                border-color $is_clear_link_color
+        &.mobile_menu_show
+            background white
+        ul
+            padding-inline-start 0px
+            font-size 1rem
+        .menu-wrapper
+            max-width $container_width
+            margin 0 auto
+            span.unused
+                color: $link_color_disabled
+            ul
+                margin-top 1rem
+                margin-bottom 1rem
+            #MenuLeft
+                float left
                 display flex
+                left 0px
+                width 30%
                 ul
+                    float left
                     flex 1
+                    .logo_item
+                        padding-left 10px
+            #MobileMenu
+                float right
+                .showmenu
+                    height 1em
+                    margin-right 1em
+            #MenuRight
+                .flex_wrapper
+                    display flex
+                    ul
+                        flex 1
+                        li.item
+                            margin-top 1em
+                            margin-bottom 1em
+                            display block
+                            font-size 90%
+                            overflow hidden
+                .user-profile-ul
+                    margin-top 0.5em
+                    margin-bottom 0.5em
+
+    .mobile-bg
+        position absolute
+        z-index 99
+        height 100%
+        width 100%
+        background-color rgba(0,0,0,0.5)
+
+    @media (min-width: $container_width)
+        #Menu
+            &.mobile_menu_show
+                border-radius 10px
+                border-bottom 1px solid $link_color_disabled
+            #MenuRight
+                float right
+                right 20px
+                width 50%
+                ul
+                    float left
                     li.item
                         margin-top 1em
                         margin-bottom 1em
                         display block
                         font-size 90%
                         overflow hidden
-            .user-profile-ul
-                margin-top 0.5em
-                margin-bottom 0.5em
+                    hr
+                        display none
 
-.mobile-bg
-    position absolute
-    z-index 99
-    height 100%
-    width 100%
-    background-color rgba(0,0,0,0.5)
 
-@media (min-width: $container_width)
-    #Menu
-        &.mobile_menu_show
-            border-radius 10px
-            border-bottom 1px solid $link_color_disabled
-        #MenuRight
-            float right
-            right 20px
-            width 50%
-            ul
-                float left   
-                li.item
-                    margin-top 1em
-                    margin-bottom 1em
-                    display block
-                    font-size 90%
-                    overflow hidden
-                hr
-                    display none
-       
+    @media (max-width: $container_width)
+        #Menu
+            #MenuRight
+                display flow-root
+                width 100%
+                .flex_wrapper
+                    flex-direction column
+                ul
+                    hr
+                        width 60%
+                        border: solid 1px $link_color_disabled
+                .menu-section-wrapper
+                    display flex
+                    .menu-section
+                        width 80%
+                        margin 0 auto
+                        margin-top 8px
+                        margin-bottom 8px
+    /**
+    * Animation Styles
+    */
+    #Menu.menu_blocked
+        transition-property: background-color border color
+        transition-duration: 0.5s;
 
-@media (max-width: $container_width)
-    #Menu
-        #MenuRight
-            display flow-root
-            width 100%
-            .flex_wrapper
-                flex-direction column
-            ul
-                hr
-                    width 60%
-                    border: solid 1px $link_color_disabled
-            .menu-section-wrapper
-                display flex
-                .menu-section
-                    width 80%
-                    margin 0 auto
-                    margin-top 8px
-                    margin-bottom 8px
-/**
-* Animation Styles
-*/
-#Menu.menu_blocked
-    transition-property: background-color border color
-    transition-duration: 0.5s;
+    #Menu.menu_clear
+        transition-property background-color border color
+        transition-duration 0.5s
 
-#Menu.menu_clear
-    transition-property background-color border color
-    transition-duration 0.5s
+    #Menu.mobile_menu_show
+        transition-property background-color border color
+        transition-duration 0.5s
 
-#Menu.mobile_menu_show
-    transition-property background-color border color
-    transition-duration 0.5s
+    #Menu.menu_clear.hover
+        transition-property background-color border color
+        transition-duration 0.5s
 
-#Menu.menu_clear.hover
-    transition-property background-color border color
-    transition-duration 0.5s
-
-.second_menu_fade-enter-active
-.second_menu_fade-leave-active
-    transition height 0.5s
+    .second_menu_fade-enter-active
+    .second_menu_fade-leave-active
+        transition height 0.5s
 </style>

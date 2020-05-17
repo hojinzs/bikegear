@@ -150,7 +150,7 @@
                 <div class="lumi-flex-slider-wrapper"
                      :class="{ 'scroll-free' : !showLeftMenu}"
                 >
-                    <ul class="lumi-flex-slider" style="padding-left: 0.5rem">
+                    <ul class="lumi-flex-slider">
 
                         <li class="lumi-flex-slider-item">
                             <button class="infra-indicator lumi-button lumi-button-border-round lumi-button-block-white lumi-button-shadow"
@@ -273,7 +273,7 @@
                     'burrow' : ( !isMobile && showLeftMenu === true && leftMenuMode === 'places' ) || placeList.data.length === 0
                  }"
             >
-                <lumiCaroucel
+                <lumiCaroucel class="pb-2"
                     :speedStiky="700"
                     :positionStiky="'center'"
                     :async="true"
@@ -349,8 +349,7 @@ import Velocity from 'velocity-animate'
 import elementTouchControl from '../../plugins/element-touch-controll'
 
 // import components & plugins
-import { lumiCaroucel, lumiCaroucelSlide } from 'vue-luminus-style'
-import StyleVariable from '@/assets/variable.styl'
+import StyleVariable from '@/../luminus/styl/variable.styl'
 import PlaceCard from './place_card'
 import PlaceTagMini from "../apps_infra_place/place-tag-mini";
 import PlaceCardList from './place_card_list'
@@ -371,8 +370,8 @@ export default {
     components:{
         PlaceTagMini,
         FontAwesomeIcon,
-        lumiCaroucel,
-        lumiCaroucelSlide,
+        // lumiCaroucel,
+        // lumiCaroucelSlide,
         PlaceCard,
         PlaceCardList,
     },
@@ -386,6 +385,7 @@ export default {
             // UI Control
             showLeftMenu: true,
             leftMenuMode : 'search', // ['places', 'search']
+            leftSection : null,
             placeList: new apiResourceManager(place_load_url),
             placeListCount: 0,
             DisplayItems_toggled : 0,
@@ -747,8 +747,7 @@ export default {
     mounted(){
 
         // 좌측 토글 영역에 swipe 이벤트 핸들러를 붙임
-        let LeftSection = new elementTouchControl(this.$refs.LeftSection)
-        LeftSection.bindPointingEnd(() => {})
+        this.leftSection = new elementTouchControl(this.$refs.LeftSection)
 
         // 모바일일 경우, 좌측 토글 메뉴 영역은 기본적으로 숨긴다.
         if(this.isMobile){
@@ -789,7 +788,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-    @import "../../assets/lumigrid.styl"
+
+    @import "../../../luminus/styl/variable.styl"
 
     #app
         position relative

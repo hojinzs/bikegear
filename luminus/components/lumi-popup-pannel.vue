@@ -1,0 +1,465 @@
+<template>
+    <div class="lumi-popup-backdrop"
+         :class="{
+             'backdrop-on': backdropOn
+         }"
+         v-show="displayModal"
+         @click.self="setClose()"
+    >
+
+        <div class="lumi-popop-wrapper"
+             :style="{height: maxHeight+'%'}"
+             @click.self="setClose()"
+        >
+
+            <div ref="popup"
+                 class="lumi-popup"
+                 :style="{
+                    transform: 'translateY('+position.translateY+'px)',
+                    maxWidth: this.maxWidth+'px'}"
+            >
+
+                <div ref="topHandler"
+                     class="lumi-popup-pannel-handler"
+                     @pointingStart="topHandlerPointingStart"
+                     @pointerMove="topHandlerMoving"
+                     @swipe="topHandlerSwipe"
+                     @pointingEnd="topHandlerPointingEnd"
+                >
+                     <!-- @touchstart="touchStart" -->
+
+                    <div class="handler" ref="handler"></div>
+                </div>
+
+                <div class="lumi-popup-pannel-header"
+                    v-if="showHeader"
+                    @click="$refs.contents.scrollTop = 0"
+                >
+                    <slot name="header">
+                        <div class="header-default">
+                            <h3>{{headerTitle}}</h3>
+                        </div>
+                    </slot>
+                </div>
+
+                <div class="popup_contents" ref="contents"
+                     :style="'box-shadow: inset 1px 6px 9px -6px rgba(0,0,0,'+contents.scrollShadow+')'"
+                     @scroll="handleScroll"
+                >
+                    <div class="popup_contents_wrapper" >
+                        <slot></slot>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</template>
+
+<script>
+import Velocity from 'velocity-animate'
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
+import elementTouchControl from "../plugins/element-touch-control";
+
+export default {
+    name: 'lumi-popup',
+    props: {
+        display: {
+            type: Boolean,
+            default: false
+        },
+        backdropBlur: {
+            type: Number,
+            default: 2
+        },
+        backdropBright: {
+            type: Number,
+            default: 40
+        },
+        transitionDuring: {
+            type: Number,
+            default: 700
+        },
+        maxWidth: {
+            type: Number,
+            default: 990
+        },
+        maxHeight: {
+            type: Number,
+            default: 92
+        },
+        returnTo: {
+            type: Object,
+            default: null
+        },
+        headerTitle: {
+            type: String,
+        },
+        useHeader: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
+        let _headerTitleUse = () => {
+            return !(typeof this.headerTitle == 'undefined') || this.useHeader
+        }
+        return {
+            displayModal: false,
+            backdropOn: false,
+            position: {
+                translateY: 0,
+                PannelMoving: false
+            },
+            topHandler: null,
+            // backdrop: {
+            //     Blur: 0,
+            //     Bright: 100,
+            // },
+            touchEvent: {
+                isMoving: false,
+                isSwipe: false,
+                movedY: 0,
+                startPosition: 0,
+                swipeTolerance: 300,
+                totalMovded: 0,
+            },
+            contents: {
+                scrollShadow: 0
+            },
+            showHeader: _headerTitleUse()
+        }
+    },
+    computed: {
+        // styleBackdropFilter(){
+        //     return {
+        //         backdropFilter: "blur("+this.backdrop.Blur+"px) brightness("+this.backdrop.Bright+"%)"
+        //     }
+        // },
+    },
+    methods:{
+        setClose(){
+            if(!this.touchEvent.isMoving) this.$emit('update:display',false)
+        },
+        topHandlerPointingStart(e){
+            console.log("Pointing Start => ", e)
+
+            /**
+             * 터치 시작시 피드백
+             */
+            Velocity(this.$refs.handler,{
+                scaleX: [1, 1.2, 0.8],
+                scaleY: [1, 1.5, 0.8],
+                backgroundColor: '#4d4d4d',
+            },{
+                duration: 500,
+                easing: 'spring'
+            })
+
+        },
+        topHandlerMoving(e){
+            this.position.translateY = this.position.translateY + e.detail.movedY
+        },
+        topHandlerSwipe(e){
+            console.log("Swipe => ", e)
+            if(e.detail.swipe === "bottom"){
+                this.setClose()
+            }
+        },
+        topHandlerPointingEnd(e){
+            console.log("Pointing End => ", e)
+
+            /**
+             * 터치 시작시 피드백
+             */
+            Velocity(this.$refs.handler,{
+                backgroundColor: '#a6a6a6',
+            },{
+                duration: 500,
+            })
+
+            let scrollDowned = this.$el.clientTop + this.position.translateY,
+                limit = ( window.outerHeight * ( 1 - 0.70) )
+            if(scrollDowned > limit){
+                this.setClose()
+            } else {
+                // 70% 이하가 아닐 경우 바운스
+                Velocity(this.$refs['popup'], {
+                    translateY: [ 0, this.position.translateY ]
+                },{
+                    duration: this.transitionDuring,
+                    easing: 'spring',
+                    complete: () => {
+                        this.position.translateY = 0
+                    },
+                })
+            }
+
+        },
+        touchStart($touchEvent){
+            // $touchEvent.preventDefault()
+            this.touchEvent.isMoving = true
+            this.touchEvent.movedY = $touchEvent.touches[0].clientY
+            this.touchEvent.totalMovded = 0
+
+            /**
+             * 터치 시작시 피드백
+             */
+            Velocity(this.$refs.handler,{
+                scaleX: [1, 1.2, 0.8],
+                scaleY: [1, 1.5, 0.8],
+                backgroundColor: '#4d4d4d',
+            },{
+                duration: 500,
+                easing: 'spring'
+            })
+
+            /**
+             * 일정 시간 동안 스와이프 판정
+             */
+            this.touchEvent.isSwipe = true,
+            setTimeout(() => {
+                this.touchEvent.isSwipe = false
+            },this.touchEvent.swipeTolerance)
+
+            let touchMove = ($touchMoveEvent) => {
+                let moved = this.touchEvent.movedY - $touchMoveEvent.touches[0].clientY
+                this.position.translateY = this.position.translateY - moved
+                this.touchEvent.totalMovded = this.touchEvent.totalMovded + moved
+
+                this.touchEvent.movedY = $touchMoveEvent.touches[0].clientY
+                this.touchEvent.startPosition = 0
+            }
+            /** finish touchMove **/
+
+            let touchEnd = () => {
+                document.body.removeEventListener("touchmove", touchMove)
+
+                /**
+                 * 터치 시작시 피드백
+                 */
+                Velocity(this.$refs.handler,{
+                    backgroundColor: '#a6a6a6',
+                },{
+                    duration: 500,
+                })
+
+                /**
+                 * 스와이프 감지 시간동안, 음의 방향으로 움직였다면 닫기로 감지
+                 */
+                if(this.touchEvent.isSwipe && this.touchEvent.totalMovded < 0){
+                    this.touchEvent.isMoving = false
+                    this.setClose()
+                } else {
+                    /**
+                     * body Height의 70% 이하로 내려가면 창을 닫는다.
+                     */
+                    let scrollDowned = this.$el.clientTop + this.position.translateY,
+                        limit = ( window.outerHeight * ( 1 - 0.70) )
+                    if(scrollDowned > limit){
+                        this.touchEvent.isMoving = false
+                        this.setClose()
+                    } else {
+                        // 70% 이하가 아닐 경우 바운스
+                        Velocity(this.$refs['popup'], {
+                            translateY: [ 0, this.position.translateY ]
+                        },{
+                            duration: this.transitionDuring,
+                            easing: 'spring',
+                            complete: () => {
+                                this.position.translateY = 0
+                                this.touchEvent.isMoving = false
+                                this.touchEvent.movedY = 0
+                            },
+                        })
+                    }
+                }
+            }
+            /** finish touchEnd **/
+
+            document.body.addEventListener('touchmove',touchMove,false)
+            document.body.addEventListener('touchend',touchEnd,{once: true})
+        },
+        open(){
+            if(!this.touchEvent.isMoving && this.displayModal === false){
+                this.displayModal = true
+
+                let during = this.transitionDuring
+                    // interval = during / 50,
+                    // conunt = during / interval
+
+                // let mounted = setInterval(() => {
+                //     this.backdrop.Blur = this.backdrop.Blur + ( this.backdropBlur / conunt )
+                //     this.backdrop.Bright = this.backdrop.Bright - ( (100 - this.backdropBright) / conunt )
+                // }, interval);
+
+
+                Velocity(this.$refs['popup'], {
+                    translateY: [ this.position.translateY, 1000 ]
+                },{
+                    duration: during,
+                    easing: 'ease',
+                    before: () => {
+                        this.touchEvent.isMoving = true
+                    },
+                    complete: () => {
+                        this.touchEvent.isMoving = false
+                    }
+                })
+
+                setTimeout(() => {
+                    this.backdropOn = true
+                }, 100)
+
+                setTimeout(() => {
+                    // clearInterval(mounted)
+                    // this.backdrop.Blur = this.backdropBlur
+                    // this.backdrop.Bright = this.backdropBright
+
+                    disableBodyScroll(this.$refs.contents)
+
+                }, during);
+            }
+            this.$refs['contents'].scrollTop = 0
+            return false
+        },
+        close(){
+            if(!this.touchEvent.isMoving && this.displayModal === true){
+
+                this.backdropOn = false
+
+                let during = this.transitionDuring
+                    // interval = during / 50,
+                    // conunt = during / interval
+
+                // let mounted = setInterval(() => {
+                //     this.backdrop.Blur = this.backdrop.Blur - ( this.backdropBlur / conunt )
+                //     this.backdrop.Bright = this.backdrop.Bright + ( (100 - this.backdropBright) / conunt )
+                // }, interval);
+
+                Velocity(this.$refs['popup'], {
+                    translateY: [ 1000, this.position.translateY ]
+                },{
+                    duration: during,
+                    easing: 'ease-in-out',
+                    before: () => {
+                        this.touchEvent.isMoving = true
+                    },
+                    complete: () => {
+                        this.position.translateY = 0
+                        this.touchEvent.isMoving = false
+                    }
+                })
+
+                setTimeout(() => {
+                    // clearInterval(mounted)
+                    // this.backdrop.Blur = 0
+                    // this.backdrop.Bright = 100
+
+                    enableBodyScroll(this.$refs.contents)
+                    this.displayModal = false
+
+                    if(this.returnTo) this.$router.push(this.returnTo)
+                }, during);
+            }
+            return false
+        },
+        handleScroll($event){
+            if($event.target.scrollTop >= 120) {
+                this.contents.scrollShadow = 0.60
+            } else {
+                this.contents.scrollShadow = $event.target.scrollTop*0.005
+            }
+            return
+        }
+    },
+    watch: {
+        display(_newDisplay){
+            if(_newDisplay === true ){
+                console.log("popup Open")
+                this.open()
+            } else {
+                console.log("popup Close")
+                this.close()
+            }
+        },
+    },
+    mounted(){
+        this.topHandler = new elementTouchControl(this.$refs.topHandler,{
+            'swipeAndPrevent': true,
+            'swipeDetectDirection': 'bottom'
+        })
+
+        if(this.display) {
+            this.open()
+        }
+        this.$emit('mounted',this)
+    },
+    destroyed(){
+        clearAllBodyScrollLocks()
+    }
+}
+</script>
+
+<style lang="stylus" scoped>
+.lumi-popup-backdrop
+    position fixed
+    overflow hidden
+    z-index 500
+    top 0
+    right 0
+    bottom 0
+    left 0
+    height 100%
+    width 100%
+    text-align center
+    box-sizing content-box
+    // background-color rgba(0,0,0, 0.6)
+    background-color rgba(0,0,0,0)
+    transition background-color 1s linear
+    &.backdrop-on
+        transition background-color 1s linear
+        background-color rgba(0,0,0, 0.7)
+    .lumi-popop-wrapper
+        position absolute
+        bottom 0
+        width 100%
+        height 95%
+        .lumi-popup
+            // overflow hidden
+            display flex
+            flex-direction column
+            margin 0 auto
+            z-index 510
+            bottom 0
+            height 100%
+            width 100%
+            padding-bottom 50%
+            background-color white
+            border-radius 0.6em 0.6em 0 0
+            box-shadow 0px -2px 12px 4px rgba(0,0,0,0.4)
+            .lumi-popup-pannel-handler
+                flex 1 1 auto
+                .handler
+                    background-color #a6a6a6
+                    height 8px
+                    width 30%
+                    max-width 300px
+                    margin 0 auto
+                    margin-bottom 10px
+                    margin-top 5px
+                    border-radius 4px
+            .lumi-popup-pannel-header
+                flex 1 1 auto
+                .header-default
+                    margin 3px 0px 3px 0px
+            .popup_contents
+                flex 1 1 auto
+                width 100%
+                overflow auto
+                overflow-y scroll
+                height 100%
+                -webkit-overflow-scrolling touch
+</style>

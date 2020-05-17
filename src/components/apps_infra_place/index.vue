@@ -152,53 +152,54 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../assets/variable.styl'
-@import '../../assets/luminus.styl'
-.thumbs-up.active
-    color red
 
-.place-data
-    width 100%
-    overflow-x hidden
-    text-align left
-    .place-title
-        text-align center
-    .place-img-wrapper
-        height 180px
-        overflow hidden
-        background-color grey
-        align-content center
-        text-align center
-        img
-            margin 0 auto
-            height 100%
-    .tag-mini-list
-        line-height 2rem
-        .tag-item
-            margin-top 0.5rem
-            &:not(:last-child)
-                margin-right 0.5rem
-    .section
-        padding 0.5rem 1rem 0.5rem 1rem
-    @media (min-width: $container_width)
-        .place-contents
-            display flex
-            .place-contents-block
-                flex 1 1 50%
+    @import '../../../luminus/styl/variable'
+
+    .thumbs-up.active
+        color red
+
+    .place-data
+        width 100%
+        overflow-x hidden
+        text-align left
+        .place-title
+            text-align center
         .place-img-wrapper
-            height 200px
-            margin 0.5rem 0 0.5rem 1rem
+            height 180px
+            overflow hidden
+            background-color grey
+            align-content center
+            text-align center
+            img
+                margin 0 auto
+                height 100%
+        .tag-mini-list
+            line-height 2rem
+            .tag-item
+                margin-top 0.5rem
+                &:not(:last-child)
+                    margin-right 0.5rem
+        .section
+            padding 0.5rem 1rem 0.5rem 1rem
+        @media (min-width: $container_width)
+            .place-contents
+                display flex
+                .place-contents-block
+                    flex 1 1 50%
+            .place-img-wrapper
+                height 200px
+                margin 0.5rem 0 0.5rem 1rem
 
-.lumi-devider
-    border-bottom 0.5px solid #d9d9d9
+    .lumi-devider
+        border-bottom 0.5px solid #d9d9d9
 
-// tab transition Style
-.tab-fade-enter-active
-,.tab-fade-leave-active
-    transition: opacity .3s ease;
+    // tab transition Style
+    .tab-fade-enter-active
+    ,.tab-fade-leave-active
+        transition: opacity .3s ease;
 
-.tab-fade-enter
-,.tab-fade-leave-to
-    opacity 0
+    .tab-fade-enter
+    ,.tab-fade-leave-to
+        opacity 0
 
 </style>

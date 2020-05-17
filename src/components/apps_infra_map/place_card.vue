@@ -64,67 +64,68 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "../../assets/luminus.styl"
 
-.infra-place
-    position relative
-    text-align left
-    width 360px
-    height auto
-    overflow hidden
-    // pointer-events auto
-    @media (max-width: $mobile_viewport_width)
-        width 60vw
-        min-width 240px
-    .infra-place-section-1
-        display flex
-        .infra-place-thumbnail
-            flex-grow 100px
-            overflow hidden
-            display inline-block
-            width auto
-        .infra-place-contents
-            flex 1
-            display inline-block
-            overflow hidden
-            .infra-place-contents-blocks
+    @import "../../../luminus/styl/variable.styl"
+
+    .infra-place
+        position relative
+        text-align left
+        width 360px
+        height auto
+        overflow hidden
+        // pointer-events auto
+        @media (max-width: $mobile_viewport_width)
+            width 60vw
+            min-width 240px
+        .infra-place-section-1
+            display flex
+            .infra-place-thumbnail
+                flex-grow 100px
                 overflow hidden
-                margin-left 0.5rem
-                margin-right 0.5rem
-            .infra-place-title
-                font-size 1.2rem
-                font-weight 500
-                word-break break-all
-            .infra-detail
-                padding-top 0.2rem
-                padding-bottom 0.2rem
-                text-align right
-    .infra-place-section-2
-        display flex
-        margin-top 1rem
-        max-height 0px
-        overflow hidden
-        transition max-height 0.5s 0.25s
-        &.toggled
-            max-height 500px
+                display inline-block
+                width auto
+            .infra-place-contents
+                flex 1
+                display inline-block
+                overflow hidden
+                .infra-place-contents-blocks
+                    overflow hidden
+                    margin-left 0.5rem
+                    margin-right 0.5rem
+                .infra-place-title
+                    font-size 1.2rem
+                    font-weight 500
+                    word-break break-all
+                .infra-detail
+                    padding-top 0.2rem
+                    padding-bottom 0.2rem
+                    text-align right
+        .infra-place-section-2
+            display flex
+            margin-top 1rem
+            max-height 0px
+            overflow hidden
             transition max-height 0.5s 0.25s
-        button 
-            margin-left auto
+            &.toggled
+                max-height 500px
+                transition max-height 0.5s 0.25s
+            button
+                margin-left auto
 
-.thumbnail-wrapper
-    background-color $light_grey
-    &.thumbnail-border-radius
-        // border 0.5px solid $light_grey
-        border-radius 0.5rem
-    .thumbnail
-        overflow hidden
-        display flex
-        align-items center 
-        justify-content center
-        width 100px
-        height 100px
-        img
-            width auto
-            height 100%
+    .thumbnail-wrapper
+        background-color $light_grey
+        &.thumbnail-border-radius
+            // border 0.5px solid $light_grey
+            border-radius 0.5rem
+        .thumbnail
+            overflow hidden
+            display flex
+            align-items center
+            justify-content center
+            width 100px
+            height 100px
+            img
+                width auto
+                height 100%
 
 </style>

@@ -55,11 +55,6 @@
 </script>
 
 <style lang="stylus" scoped>
-    /*.place-card-list-right*/
-    /*    flex-basis 6rem*/
-
-    /*.place-card-list-left*/
-    /*    flex-shrink 0*/
 
     .place-card-list-detail
         max-height 0px
