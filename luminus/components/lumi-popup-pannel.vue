@@ -329,7 +329,9 @@ export default {
         },
     },
     mounted(){
-        setTimeout(() => this.wrapperHeight = this.$el.offsetHeight,1)
+        setTimeout(() => {
+            this.wrapperHeight = this.$el.offsetHeight
+        },100)
 
         this.topHandler = new elementTouchControl(this.$refs.topHandler,{
             'swipeDetectDirection': 'bottom'
