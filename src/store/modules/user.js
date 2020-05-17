@@ -1,9 +1,9 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-let email_login_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/user/login/email?'
-let token_login_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/user/login/token?'
-let strava_signup_address = '//'+process.env.VUE_APP_AUTH_HOST+'/strava/signup?'
+let email_login_ajax_address = '/v1/user/login/email?'
+let token_login_ajax_address = '/v1/user/login/token?'
+let strava_signup_address = '/strava/signup?'
 
 const user = {
     namespaced: true,

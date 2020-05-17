@@ -6,12 +6,12 @@
                 <transition name="tab-fade" mode="out-in">
 
                     <!-- 글 로딩 중 -->
-                    <div v-if="showStatus == 'loading'" key="loading">
+                    <div v-if="showStatus === 'loading'" key="loading">
                         사용자의 글을 가져오고 있습니다.
                     </div>
 
                     <!-- 등록된 글이 없거나, 글 등록 폼을 보여주는 상태가 아님 -->
-                    <div v-if="showStatus == 'ready'" key="ready">
+                    <div v-if="showStatus === 'ready'" key="ready">
                         이곳에 대해 알고계신가요?
                         <div class="lumi-button-full">
                             <button class="lumi-button lumi-button-black"
@@ -20,7 +20,7 @@
                     </div>
 
                     <!-- 등록된 글이 있음 -->
-                    <div v-if="showStatus == 'posted'" key="posted">
+                    <div v-if="showStatus === 'posted'" key="posted">
                         <b>내가 작성한 추천글</b>
                         <recommend-comment :boxing="false" :recommend="post_comment.user_posted" />
                         <div>
@@ -34,7 +34,7 @@
                     </div>
 
                     <!-- 글 등록 폼을 표시함 -->
-                    <div v-if="showStatus == 'posting'" key="posting">
+                    <div v-if="showStatus === 'posting'" key="posting">
                         <form action="submit" @submit.prevent="postRecommentPost">
                             <label for="post_recomment_comment">새로운 추천글을 등록합니다.</label>
                             <div class="lumi-text-area-wrapper">
@@ -45,7 +45,7 @@
                                 <button class="lumi-button lumi-button-flat-dark"
                                     @click.prevent="toggle_showNewCommentForm(false)">취소</button>
                                 <button type="submit" class="lumi-button lumi-button-black"
-                                    :disabled="(this.post_comment.ajax_status != 'ready')">작성</button>
+                                    :disabled="(this.post_comment.ajax_status !== 'ready')">작성</button>
                                 </div>
                             <div>
                                 <span v-show="post_comment.ajax_fail_message" class="warning"
@@ -87,11 +87,11 @@ export default {
     },
     data()
     {
-        let post_comment_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/places/'
+        let post_comment_ajax_address = '/v1/places/'
             +this.place.id
             +'/recommends';
 
-        let user_comment_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/user/places/'
+        let user_comment_ajax_address = '/v1/user/places/'
             +this.place.id
             +'/recommends';
 
@@ -117,17 +117,17 @@ export default {
         showStatus(){
             if(this.userData){
                 if(this.post_comment.user_posted == null){
-                    if(this.post_comment.status == 'loading'){
+                    if(this.post_comment.status === 'loading'){
                         return 'loading'
                     } else {
-                        if(this.post_comment.show_input_form == false){
+                        if(this.post_comment.show_input_form === false){
                             return 'ready'
                         } else {
                             return 'posting'
                         }
                     }
                 } else {
-                    if(this.post_comment.show_input_form == false){
+                    if(this.post_comment.show_input_form === false){
                         return 'posted'
                     } else {
                         return 'posting'
@@ -157,7 +157,7 @@ export default {
 
             axios.get(this.user_comment_ajax_address)
                 .then(res => {
-                    let userPost = res.data.data.find(item => item.hidden == false)
+                    let userPost = res.data.data.find(item => item.hidden === false)
                     
                     if(userPost){
                         this.post_comment.user_posted = userPost
@@ -210,7 +210,6 @@ export default {
     },
     mounted()
     {
-        // this.$store.dispatch('user/checkOrAfterLogin',this.getUserPost())
         this.$store.dispatch('user/checkOrAfterLogin', () => this.getUserPost() )
     }
 }

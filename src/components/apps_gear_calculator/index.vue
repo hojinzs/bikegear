@@ -59,11 +59,15 @@
 import Gear from './components/Gear'
 import Chart from './components/Chart'
 import Bike from './components/Bike'
-// import FlexBox from '../../components/interface/flex-card-list'
 
 // import Classes
 import Calc from '@/plugins/calc'
 import axios from 'axios'
+
+const jsonbin = axios.create({
+    baseURL: '//api.jsonbin.io/'
+})
+jsonbin.defaults.withCredentials = false
 
 class GearSetting extends Calc {
     constructor(_props = {
@@ -196,9 +200,7 @@ export default {
     mounted(){
         // Get Component Database JSON
         let preset = this.Preset
-        axios({
-            method: 'GET',
-            url: process.env.VUE_APP_COMPDB_ALL_URL,
+        jsonbin.get(process.env.VUE_APP_COMPDB_ALL_URL,{
             headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
         })
             .then(function(res){

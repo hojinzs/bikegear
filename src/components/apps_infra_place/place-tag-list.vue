@@ -45,7 +45,7 @@ export default {
     },
     props: ['place','placeId','TagList'],
     data(){
-        let apiPlaceTagsIndex = `//${process.env.VUE_APP_API_HOST}/v1/places/${this.placeId}/tags`
+        let apiPlaceTagsIndex = `v1/places/${this.placeId}/tags`
         return {
             placeTags: new apiResourceManager(apiPlaceTagsIndex)
         }

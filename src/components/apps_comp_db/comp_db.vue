@@ -110,11 +110,16 @@ export default {
     },
     created(){
 
+        let jsonbin = axios.create({
+            baseURL: '//api.jsonbin.io/'
+        })
+        jsonbin.defaults.withCredentials = false
+
         // Get Component Database JSON
-        axios({
-            method: 'GET',
-            url: process.env.VUE_APP_COMPDB_ALL_URL,
-            headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
+        jsonbin.get(process.env.VUE_APP_COMPDB_ALL_URL,{
+            headers: {
+                'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY)
+            }
         })
             .then((res) => {
                 console.log('RESPONSE =>',res.data)

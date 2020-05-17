@@ -128,7 +128,7 @@ export default {
             this.tab_component = _component
         },
         togglePlaceLike(){
-            axios.post('//'+process.env.VUE_APP_API_HOST+'/v1/places/'+this.placeData.id+'/like')
+            axios.post('v1/places/'+this.placeData.id+'/like')
                 .then(res => {
                     switch (res.data) {
                         case 'stored':

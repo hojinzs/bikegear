@@ -86,15 +86,10 @@ export default {
         },
     },
     data(){
-        let ajax_url = '//'+process.env.VUE_APP_API_HOST+'/v1/places/'
-            +this.place_id
-            +'/tags/'
-            +this.tag.id
-            +'/comments'
-
+        let indexPlaceTagComment = `v1/places/${this.place_id}/tags/${this.tag.id}/comments`
         return {
             show_comments : false,
-            tagComments: new apiResourceManager(ajax_url),
+            tagComments: new apiResourceManager(indexPlaceTagComment),
         }
     },
     methods: {

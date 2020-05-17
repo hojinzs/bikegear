@@ -144,10 +144,10 @@ export default {
     },
     data()
     {
-        let user_tags_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/user/places/'
+        let user_tags_ajax_address = '/v1/user/places/'
             +this.place.id+'/tags/comments'
 
-        let post_tags_ajax_address = '//'+process.env.VUE_APP_API_HOST+'/v1/places/'
+        let post_tags_ajax_address = '/v1/places/'
             +this.place.id+'/tags/'
 
 
