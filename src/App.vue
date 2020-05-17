@@ -97,7 +97,7 @@ export default {
     $menu_height = ($global_inline_height * 2) + ($global_font_text / 2)
 
     html, body
-        font-size 14px
+        font-size 13px
 
     #app
         font-family: 'Avenir', Helvetica, Arial, sans-serif

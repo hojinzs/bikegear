@@ -15,9 +15,9 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video
-  margin 0
-  padding 0
-	border 0
+  	margin 0px
+  	padding 0px
+	border 0px
 	font-size 100%
 	font inherit
 	vertical-align baseline
@@ -39,6 +39,15 @@ ol, ul, li
 blockquote, q
 	quotes none
 
+a
+	color inherit
+	text-decoration none
+	outline none
+	&:hover
+	&:active
+		text-decoration none
+		background none
+
 blockquotebefore, blockquoteafter,
 qbefore, qafter
 	content ''
@@ -51,30 +60,51 @@ table
 /**
 * defalut style clear
 */
-
 input, button, select
-    -webkit-appearance: none; -moz-appearance: none; appearance: none;
-    vertical-align baseline;
+    vertical-align baseline
     border none
-    outline: none;
-    font-size: 100%;
-    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    outline none
 	padding 0
+	margin 0
+	background-color transparent
+	appearance none
+	box-sizing border-box
+	//-webkit-appearance none; -moz-appearance none; appearance none;
+	//-webkit-box-sizing border-box; -moz-box-sizing border-box; box-sizing border-box;
 
-input, textarea, button, select
-    -webkit-border-radius:0; -moz-border-radius:0; -o-border-radius:0; border-radius:0;
-
-select::-ms-expand
-    display: none;
+input
+	padding 0
+	margin 0
+	border-radius 0
+	appearance none
+	background-color transparent
 
 button
-    -webkit-appearance: none;
-    background-color: white;
+	padding 0
+	margin 0
+	border-radius 0
+	appearance none
+	background-color transparent
 
+select
+	padding 0
+	margin 0
+	appearance none
+	border-radius 0
+	background-color transparent
+
+input, textarea, button, select
+	border-radius 0
+    //-webkit-border-radius 0; -moz-border-radius 0; -o-border-radius 0; border-radius 0;
+
+select::-ms-expand
+    display none
 
 /**
 * import
 */
-@import 'styl/variable'
-@import 'styl/components'
-@import 'styl/grid'
+@import 'styl/*'
+//@import 'styl/variable.styl'
+//@import 'styl/components.styl'
+//@import 'styl/transition.styl'
+//@import 'styl/grid.styl'

@@ -34,7 +34,7 @@ import axios from 'axios'
 axios.defaults.baseURL = '//'+process.env.VUE_APP_API_HOST
 axios.defaults.withCredentials = true
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-axios.get('//'+process.env.VUE_APP_API_HOST+'/sanctum/csrf-cookie')
+axios.get('/sanctum/csrf-cookie')
 
 /**
  * Set Auto Login
@@ -47,8 +47,6 @@ if(Cookies.get('Authorization')){
 if(window.localStorage.getItem('Authorization')){
     axios.defaults.headers.common['Authorization'] = `Bearer ${window.localStorage.getItem('Authorization')}`
 }
-
-// import './assets/css/tailwind.css'
 
 new Vue({
     router,

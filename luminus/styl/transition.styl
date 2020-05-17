@@ -1,0 +1,13 @@
+/**
+Transition CSS classes
+ */
+@import "variable.styl"
+
+.trans-w-full
+	max-width 100%
+	overflow-x hidden
+	transition max-width $lumi_faster linear
+	&.trans-w-close
+		max-width 0%
+		padding 0
+		transition max-width $lumi_faster linear

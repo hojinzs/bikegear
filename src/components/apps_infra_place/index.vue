@@ -15,7 +15,7 @@
                 </div>
                 <div class="section">
                     <div>
-                        <b>Top5 Tags</b>
+                        Top5 Tags
                         <div class="tag-mini-list">
                             <tagMini class="tag-item"
                                 v-for="(tag,index) in TagList"
@@ -164,6 +164,7 @@ export default {
         text-align left
         .place-title
             text-align center
+            margin 0.4rem
         .place-img-wrapper
             height 180px
             overflow hidden

@@ -10,7 +10,7 @@
                 <div class="left-section-box-top">
 
                     <div id="setPlaceFilter">
-                        <div class="left-section-flex-wrapper">
+                        <div class="left-section-wrapper left-section-flex-wrapper">
                             <button class="left-section-list-button left-section-button-tab"
                                     :class="{'activate lumi-button-liner':leftMenuMode === 'places'}"
                                     @click.prevent="toggleLeftMenuMode('places')"
@@ -22,12 +22,15 @@
                                     {{ placeList.data.length }}
                                 </span>
                             </button>
-                            <input class="left-section-search-input lumi-input-liner liner-full"
-                                   :class="{ 'liner-close': leftMenuMode !== 'search' }"
-                                   :disabled="leftMenuMode !== 'search'"
-                                   v-model="placeFilter.name"
-                                   placeholder="이름"
-                            />
+                            <div class="left-section-search-input trans-w-full w-full"
+                                 :class="{ 'trans-w-close': leftMenuMode !== 'search' }"
+                            >
+                                <input class="lumi-input-liner"
+                                       :disabled="leftMenuMode !== 'search'"
+                                       v-model="placeFilter.name"
+                                       placeholder="이름"
+                                />
+                            </div>
                             <button class="left-section-search-button left-section-button-tab lumi-button-liner"
                                     v-if="leftMenuMode === 'search'"
                                     @click.prevent="getPlaceData()"
@@ -53,7 +56,7 @@
                             >
                                 태그 목록에서 태그 선택
                             </div>
-                            <a class="selected-tag"
+                            <a class="selected-tag lumi-click-el"
                                v-for="tag in placeFilter.tags"
                                :key="tag.id"
                                @click="addTagInPlaceFilter(tag, true)"
@@ -158,12 +161,23 @@
                             >
                                 <span class="place-filter-indicator">
                                     <font-awesome-icon class="left-slider-indicator"
-                                                       :class="{ 'menuOpened' : showLeftMenu}"
+                                                       :class="{ 'menuOpened' : showLeftMenu }"
                                                        icon="chevron-right"
                                     />
                                     <font-awesome-icon class="place-filter-icon icon"
+                                                       v-if="!showLeftMenu"
                                                        icon="search"
                                     />
+
+                                    <span class="seperator-y" />
+
+
+                                    <!-- Ready -->
+                                    <template v-if="(placeList.status === 'ready' && placeList.data.length === 0)" >
+                                        <span class="place-count-number">
+                                            0
+                                        </span>
+                                    </template>
 
                                     <!-- Loading -->
                                     <template v-if="(placeList.status === 'loading' && placeList.data.length === 0)" >
@@ -833,7 +847,7 @@ export default {
                 width 30%
                 min-width 200px
                 max-width: 350px
-                box-shadow inset rgba(0,0,0,0.7) 40px -40px 20px 0px
+                box-shadow inset rgba(0,0,0,0.7) 40px 0px 30px 0px
                 transition-property width min-width
                 transition-duration 0.25s
                 transition-timing-function linear
@@ -843,8 +857,6 @@ export default {
                     transition-property width min-width
                     transition-duration 0.25s
                     transition-timing-function linear
-                .left-section-close
-                    display none
             #mapRightSection
                 flex 1 1 auto
                 overflow hidden
@@ -902,6 +914,9 @@ export default {
             border-radius 8px
             box-shadow rgba(0,0,0,0.5) 1px 2px 7px 1px
             overflow hidden
+            .left-section-wrapper
+                margin-left 0.5rem
+                margin-right 0.5rem
             .left-section-box-top
                 flex 1 1 auto
             .left-section-box-bottom
@@ -909,30 +924,27 @@ export default {
                 overflow-y scroll
             .left-section-flex-wrapper
                 display flex
-                padding-left 0.7rem
-                padding-right 0.7rem
-                .left-section-button-tab
-                    flex-shrink 0
-                    flex-basis 40px
                 .left-section-list-button
                     width 40px
-                    margin-left 0px
-                    margin-right 0.5em
+                    flex-shrink 0
+                    flex-basis 40px
                     position relative
                     .list-bubble
+                        line-height 1.1rem
                         position absolute
                         background-color dodgerblue
                         color white
-                        font-size 4px
+                        font-size 0.5rem
                         right 0px
                         top 0px
                         border-radius 6px
                 .left-section-search-input
-                    flex-basis 100%
-                /*.left-section-search-button*/
-                /*    min-width 90px*/
-                .left-section-close
-                    margin-left auto
+                    flex-shrink 1
+                    input
+                        height 100%
+                        width 100%
+                .left-section-button-tab
+                    margin 0px
             .selected-tag-list
                 white-space nowrap
                 overflow-x scroll
@@ -968,10 +980,7 @@ export default {
                 transition-duration 0.5s
                 transition-timing-function ease-in-out
         .place-filter-icon
-            margin-right 0.5rem
             padding-left 0.5rem
-            padding-right 0.5rem
-            border-right lightgray 1px solid
         .place-count-number
             color dodgerblue
             .more

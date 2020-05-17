@@ -94,7 +94,6 @@ export default {
                     margin-right 0.5rem
                 .infra-place-title
                     font-size 1.2rem
-                    font-weight 500
                     word-break break-all
                 .infra-detail
                     padding-top 0.2rem
@@ -105,10 +104,10 @@ export default {
             margin-top 1rem
             max-height 0px
             overflow hidden
-            transition max-height 0.5s 0.25s
+            transition max-height 0.5s
             &.toggled
                 max-height 500px
-                transition max-height 0.5s 0.25s
+                transition max-height 0.5s 0.5s
             button
                 margin-left auto
 

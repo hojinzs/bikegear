@@ -1,5 +1,5 @@
 <template>
-        <div class="place-card-list bg-white border rounded-lg overflow-hidden border-solid border-gray-300 m-2"
+        <div class="place-card-list bg-white border rounded-lg overflow-hidden border-solid border-gray-300 m-2 lumi-click-el"
              :class="{ 'border-blue-500 border-2': focused }"
              @click="doClick"
         >
@@ -21,12 +21,12 @@
                     </div>
                 </div>
             </div>
-            <div class="place-card-list-detail flex border-t border-gray-300" :class="{'focused': focused}">
-                <button
+            <div class="place-card-list-detail flex flex-row border-t border-gray-300 text-sm px-2"
+                 :class="{'focused': focused}"
+            >
+                <button class="text-sm lumi-sticky-right"
                         @click.prevent="$router.push({ name: 'place', params: { id: tagObject.id } } )"
-                >
-                    정보 보기
-                </button>
+                >정보 보기</button>
             </div>
         </div>
 </template>

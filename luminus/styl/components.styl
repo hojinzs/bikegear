@@ -3,21 +3,19 @@
 */
 @import "variable.styl"
 
-html, body
-    font-size $global_font_text
-    line-height $global_inline_height
-
 /**
 * input, textarea, button, select Common Style
 */
 input, textarea, select
     &.lumi-input-liner
+        box-sizing border-box
         background-color: rgba(255,255,255,.32)
-        font-size: $global_font_text
-        line-height: $global_inline_height
+        font-size $global_font_text
+        line-height $global_inline_height
         // animation style
-        border-bottom: 3px solid $light_grey
-        padding-bottom: 3px
+        padding-top 3px
+        border-bottom 3px solid $light_grey
+        padding-bottom 3px
         transition-property: border-bottom padding-bottom
         transition-duration: 0.2s
         &:hover
@@ -48,19 +46,19 @@ input, textarea, select
 * Button Style
 */
 button
-    font-weight 600
-    text-align center
-    padding-left ($global_font_text * 0.7)
-    padding-right ($global_font_text * 0.7)
     font-size $global_font_text
     line-height $global_inline_height
     height $global_component_height
+    min-width $global_component_height
     white-space pre
     cursor pointer
     overflow hidden
     user-select none
     &.lumi-button
+        text-align center
         border-radius ( ($global_font_text / 2) + ($global_font_text / 4) )
+        padding-left ($global_font_text * 0.7)
+        padding-right ($global_font_text * 0.7)
         padding-top ($global_font_text / 2)
         padding-bottom ($global_font_text / 2)
         background rgba(255,255,255,0.45)
@@ -315,3 +313,16 @@ table.lumi-table
         margin-top t
         padding-left ps = ( $global_font_text / 2)
         padding-right ps
+
+
+/**
+Seperators
+ */
+
+
+.seperator-y
+    height 100%
+    width 0.5px
+    margin-left 0.5rem
+    margin-right 0.5rem
+    border-left solid 1px $light_grey

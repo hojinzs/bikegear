@@ -1,5 +1,6 @@
 <template>
-    <div class="lumi-popup-backdrop"
+    <div ref="backdrop"
+         class="lumi-popup-backdrop"
          :class="{
              'backdrop-on': backdropOn
          }"
@@ -7,8 +8,9 @@
          @click.self="setClose()"
     >
 
-        <div class="lumi-popop-wrapper"
-             :style="{height: maxHeight+'%'}"
+        <div ref="wrapper"
+             class="lumi-popop-wrapper"
+             :style="[styleWrapperHeight]"
              @click.self="setClose()"
         >
 
@@ -21,6 +23,7 @@
 
                 <div ref="topHandler"
                      class="lumi-popup-pannel-handler"
+                     :style="`box-shadow: rgba(0,0,0,${contents.scrollShadow}) 0px 9px 11px 0px`"
                      @pointingStart="topHandlerPointingStart"
                      @pointerMove="topHandlerMoving"
                      @swipe="topHandlerSwipe"
@@ -41,10 +44,11 @@
                     </slot>
                 </div>
 
-                <div class="popup_contents" ref="contents"
-                     :style="'box-shadow: inset 1px 6px 9px -6px rgba(0,0,0,'+contents.scrollShadow+')'"
+                <div ref="contents"
+                     class="popup_contents"
                      @scroll="handleScroll"
                 >
+<!--                    :style="'box-shadow: inset 1px 6px 9px -6px rgba(0,0,0,'+contents.scrollShadow+')'"-->
                     <div class="popup_contents_wrapper" >
                         <slot></slot>
                     </div>
@@ -106,6 +110,9 @@ export default {
             return !(typeof this.headerTitle == 'undefined') || this.useHeader
         }
         return {
+            wrapperHeight: 0,
+            scrolled: 0,
+            HeightExtend: 0,
             displayModal: false,
             backdropOn: false,
             position: {
@@ -132,6 +139,25 @@ export default {
         }
     },
     computed: {
+        styleWrapperHeight(){
+
+            let maxHeight = this.wrapperHeight,
+                minHeight = maxHeight * (0.01 * this.maxHeight),
+                mixedHeight = minHeight + this.scrolled,
+                height
+
+            if(mixedHeight < minHeight){
+                height = minHeight
+            } else if(mixedHeight > maxHeight){
+                height = maxHeight
+            } else {
+                height = mixedHeight
+            }
+
+            return {
+                'height': height+'px'
+            }
+        }
         // styleBackdropFilter(){
         //     return {
         //         backdropFilter: "blur("+this.backdrop.Blur+"px) brightness("+this.backdrop.Bright+"%)"
@@ -291,21 +317,20 @@ export default {
             } else {
                 this.contents.scrollShadow = $event.target.scrollTop*0.005
             }
-            return
         }
     },
     watch: {
         display(_newDisplay){
             if(_newDisplay === true ){
-                console.log("popup Open")
                 this.open()
             } else {
-                console.log("popup Close")
                 this.close()
             }
         },
     },
     mounted(){
+        setTimeout(() => this.wrapperHeight = this.$el.offsetHeight,1)
+
         this.topHandler = new elementTouchControl(this.$refs.topHandler,{
             'swipeDetectDirection': 'bottom'
         })
@@ -360,6 +385,7 @@ export default {
             box-shadow 0px -2px 12px 4px rgba(0,0,0,0.4)
             .lumi-popup-pannel-handler
                 flex 1 1 auto
+                z-index 1
                 .handler
                     background-color #a6a6a6
                     height 8px
@@ -376,7 +402,6 @@ export default {
             .popup_contents
                 flex 1 1 auto
                 width 100%
-                overflow auto
                 overflow-y scroll
                 height 100%
                 -webkit-overflow-scrolling touch

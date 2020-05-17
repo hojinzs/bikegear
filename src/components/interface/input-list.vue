@@ -1,26 +1,31 @@
 <template>
-    <div class="input-list">
+    <div>
 
         <div class="input-list">
 
             <div class="input-group"
-                v-for="(item, index) in list"
-                v-bind:key="index">
+                 v-for="(item, index) in list"
+                 v-bind:key="index"
+            >
 
                 <input class="lumi-input-liner input-item"
-                    v-if="type == 'number'"
-                    v-model.lazy.number="list[index]"
-                    :name="'item_'+index"
-                    :placeholder="placeholder">
-                <input class="lumi-input-liner"
-                    v-else
-                    v-model.lazy="list[index]"
-                    :name="'item_'+index"
-                    :placeholder="placeholder">
+                       v-if="type == 'number'"
+                       v-model.lazy.number="list[index]"
+                       :name="'item_'+index"
+                       :placeholder="placeholder"
+                />
 
-                <button class="lumi-button lumi-button-black"
+                <input class="lumi-input-liner"
+                       v-else
+                       v-model.lazy="list[index]"
+                       :name="'item_'+index"
+                       :placeholder="placeholder"
+                />
+
+                <button class="btn-remove lumi-button lumi-button-black"
                     :disabled="!DelStatus" 
-                    v-on:click="itemDelete(index)"> - </button>
+                    v-on:click="itemDelete(index)"
+                > - </button>
 
             </div>
         </div>
@@ -41,6 +46,7 @@
 
 <script>
 export default {
+    name: 'input-list',
     model: {
         prop: 'list',
         event: 'change',
@@ -63,14 +69,33 @@ export default {
         }
     },
     computed: {
-        DelStatus(){ return this.list.length > this.min },
-        AddStatus(){ return this.list.length < this.max },
+        DelStatus(){
+            return this.list.length > this.min
+        },
+        AddStatus(){
+            return this.list.length < this.max
+        },
     },
     methods:{
-        itemDelete(_index){ if(this.DelStatus) this.list.splice(_index,1) },
-        itemInsert(_item = null){ if(this.AddStatus) this.list.push(_item) },
-        sorting(_data,_sort = this.sort){ 
-
+        /**
+         * 배열에서 아이템 삭제
+         * @param index 삭제할 아이템 배열 번호
+         */
+        itemDelete(index){
+            if(this.DelStatus) {
+                this.list.splice(index,1)
+            }
+        },
+        /**
+         * 배열에 아이템 추가
+         * @param item 추가할 아이템
+         */
+        itemInsert(item){
+            if(this.AddStatus) {
+                this.list.push(item)
+            }
+        },
+        sorting(_data,_sort = this.sort){
             // _data를 복제한 새로운 배열을 만듬
             let mapped = _data.filter(x => x);
 
@@ -102,33 +127,36 @@ export default {
 
 <style lang="stylus" scoped>
 
-.input-list
-    padding-top 0.5em
-    .input-group
-        width 100%
-        display flex
+    .input-list
         padding-top 0.5em
-        padding-bottom 0.5em
-        input
-            flex 1 1 auto
-            text-align center
-            margin-right 0.5em
-            margin-top auto
-        button
-            flex-basis 10px
-            text-align center
-            margin-top auto
-            padding-left 0
-            padding-right 0
+        .input-group
+            width 100%
+            display flex
+            padding-top 0.5em
+            padding-bottom 0.5em
+            input
+                flex 1 1 auto
+                text-align center
+                margin-right 0.5em
+                margin-top auto
+            button
+                flex-basis 10px
+                text-align center
+                margin-top auto
+                padding-left 0
+                padding-right 0
 
-.button-group
-    display flex
-    button
-        flex 1
-        margin 0.5em
-        &:first-child
-            margin-left 0
-        &:last-child
-            margin-right 0
+    .button-group
+        display flex
+        button
+            flex 1
+            margin 0.5em
+            &:first-child
+                margin-left 0
+            &:last-child
+                margin-right 0
+
+    .btn-remove
+        min-width 2rem
 
 </style>

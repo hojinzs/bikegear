@@ -8,18 +8,16 @@
 
         <h2>DATA INPUT</h2>
         <div class="lumi-box lumi-box-block-white lumi-box-border section">
-            <SetBike
-                :wheelset="wheelset"
-                :cadence="cadence">
-            </SetBike>
+            <SetBike :wheelset="wheelset"
+                     :cadence="cadence"
+            />
         </div>
 
         <div class="section">
             <button class="lumi-button lumi-button-black"
-                :disabled="!settingAddStatus"
-                v-on:click="newGearSetting()">
-                New Setting
-            </button>
+                    :disabled="!settingAddStatus"
+                    v-on:click="newGearSetting()"
+            >New Setting</button>
             <br>
             {{colors.length - GearSettings.length}} settings remain
 
@@ -39,15 +37,15 @@
 
         <div class="gear_settings section">
             <div class="set_gear boxing lumi-box lumi-box-block-white lumi-box-border"
-            v-for="(Setting, index) in GearSettings"
-            :key='index'>
-                <SetGear
-                    :setting_number="index"
-                    :settings.sync="Setting"
-                    :preset="Preset"
-                    :settingDelStatus="settingdelStatus"
-                    @remove="delGearSetting(index)">
-                </SetGear>
+                 v-for="(Setting, index) in GearSettings"
+                 :key='index'
+            >
+                <SetGear :setting_number="index"
+                         :settings.sync="Setting"
+                         :preset="Preset"
+                         :settingDelStatus="settingdelStatus"
+                         @remove="delGearSetting(index)"
+                />
             </div>
         </div>
     </div>
@@ -60,14 +58,8 @@ import Gear from './components/Gear'
 import Chart from './components/Chart'
 import Bike from './components/Bike'
 
-// import Classes
+import jsonBin from "../../plugins/jsonbin";
 import Calc from '@/plugins/calc'
-import axios from 'axios'
-
-const jsonbin = axios.create({
-    baseURL: '//api.jsonbin.io/'
-})
-jsonbin.defaults.withCredentials = false
 
 class GearSetting extends Calc {
     constructor(_props = {
@@ -200,9 +192,7 @@ export default {
     mounted(){
         // Get Component Database JSON
         let preset = this.Preset
-        jsonbin.get(process.env.VUE_APP_COMPDB_ALL_URL,{
-            headers: { 'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY) }
-        })
+        jsonBin.get(process.env.VUE_APP_COMPDB_ALL_URL)
             .then(function(res){
                 console.log('RESPONSE =>',res.data)
 

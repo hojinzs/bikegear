@@ -82,61 +82,52 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { vueWindowSizeMixin } from 'vue-window-size';
-import StyleVariable from '@/../luminus/styl/variable.styl'
+    import { vueWindowSizeMixin } from 'vue-window-size';
+    import StyleVariable from '@/../luminus/styl/variable.styl'
+    import jsonBin from "../../plugins/jsonbin";
 
-export default {
-    mixins: [vueWindowSizeMixin],
-    data(){
-        return {
-            StyleVariable,
-            datas: {},
-            component_list: [],
-            item_selected: {
-                name: '',
-                items: []
-            },
-        }
-    },
-    computed:{
-        isMobile() {return this.windowWidth < Number(this.StyleVariable.containerWidth.replace("px",""))}
-    },
-    methods:{
-        comp_select(_key){
-            this.item_selected.name = _key
-            this.item_selected.items = this.datas[_key];
-        },
-    },
-    created(){
-
-        let jsonbin = axios.create({
-            baseURL: '//api.jsonbin.io/'
-        })
-        jsonbin.defaults.withCredentials = false
-
-        // Get Component Database JSON
-        jsonbin.get(process.env.VUE_APP_COMPDB_ALL_URL,{
-            headers: {
-                'secret-key': atob(process.env.VUE_APP_COMPDB_API_KEY)
+    export default {
+        mixins: [vueWindowSizeMixin],
+        data(){
+            return {
+                StyleVariable,
+                datas: {},
+                component_list: [],
+                item_selected: {
+                    name: '',
+                    items: []
+                },
             }
-        })
-            .then((res) => {
-                console.log('RESPONSE =>',res.data)
+        },
+        computed:{
+            isMobile() {return this.windowWidth < Number(this.StyleVariable.containerWidth.replace("px",""))}
+        },
+        methods:{
+            comp_select(_key){
+                this.item_selected.name = _key
+                this.item_selected.items = this.datas[_key];
+            },
+            loadComponent(){
+                jsonBin.get(process.env.VUE_APP_COMPDB_ALL_URL)
+                    .then((res) => {
+                        console.log('RESPONSE =>',res.data)
 
-                // update sprocket preset
-                this.datas = res.data;
-                this.component_list = Object.keys(res.data);
-            })
-            .catch((error) => {
-                console.log('ERROR => ',error,'preset data');
-            })
+                        // update sprocket preset
+                        this.datas = res.data;
+                        this.component_list = Object.keys(res.data);
+                    })
+                    .catch((error) => {
+                        console.log('ERROR => ',error,'preset data');
+                    })
+            }
+        },
+        created(){
+            this.loadComponent()
+        },
+        mounted(){
 
-    },
-    mounted(){
-
+        }
     }
-}
 </script>
 
 <style lang="stylus" scoped>
