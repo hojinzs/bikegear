@@ -336,6 +336,9 @@ export default {
         }
         this.$emit('mounted',this)
     },
+    beforeDestroy() {
+        this.$refs.popup.style.display = 'hidden'
+    },
     destroyed(){
         clearAllBodyScrollLocks()
     }

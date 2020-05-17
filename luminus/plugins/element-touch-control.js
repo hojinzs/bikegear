@@ -1,7 +1,7 @@
 /******************************
  * Element Touch Control
- * version: 0.0.2
- * last upldate: 2020. 05. 17
+ * version: 0.0.3
+ * last upldate: 2020. 05. 18
  * @type {elementTouchControl}
  *****************************/
 const elementTouchControl = class {
@@ -64,6 +64,19 @@ const elementTouchControl = class {
             // 일정 시간동안 스와이프 판정
             this._swipeStart()
 
+
+            // 텍스트 드래그 방지 On
+            let pauseEvent = e => {
+                if(e.stopPropagation) e.stopPropagation();
+                if(e.preventDefault) e.preventDefault();
+                e.cancelBubble=true;
+                e.returnValue=false;
+                return false;
+            }
+            document.addEventListener('dragstart', pauseEvent)
+            document.addEventListener('selectstart', pauseEvent)
+
+
             // 시작 콜백 실행
             this._callbackFn.start(startEvent);
 
@@ -112,6 +125,23 @@ const elementTouchControl = class {
             document.body.addEventListener('touchmove', pointMoveHandler, false)
             document.body.addEventListener('mousemove', pointMoveHandler, false)
 
+
+            let touchCancel = () => {
+                console.log("touchOUT!!")
+                this._isSwipe = false
+                let touchCancelEvent = new TouchEvent('touchend')
+                document.body.dispatchEvent(touchCancelEvent)
+            }
+            document.addEventListener('touchcancel', touchCancel)
+
+            let mouseOut = () => {
+                console.log("mouse OUT!!")
+                this._isSwipe = false
+                let mouseOutEvent = new MouseEvent('mouseup')
+                document.body.dispatchEvent(mouseOutEvent)
+            }
+            document.addEventListener('mouseleave', mouseOut)
+
             /**
              * 포인터 이동 종료 이벤트
              * @param {Event} endEvent
@@ -119,6 +149,10 @@ const elementTouchControl = class {
             let pointingEndHandler = endEvent => {
                 document.body.removeEventListener("touchmove", pointMoveHandler, false)
                 document.body.removeEventListener("mousemove", pointMoveHandler, false)
+                document.removeEventListener('dragstart', pauseEvent)
+                document.removeEventListener('selectstart', pauseEvent)
+                document.removeEventListener('mouseleave', mouseOut)
+                document.removeEventListener('touchcancel', touchCancel)
 
                 let point       = this._getPoint(endEvent),
                     totalMovedX = point.x - this._startPointX,
