@@ -51,8 +51,10 @@
                             </div>
                         </ul>
 
-                        <ul v-for="(First,i1) in MenuRight"
-                            v-bind:key="i1">
+                        <ul class="menu-right-submenus"
+                            v-for="(First,i1) in MenuRight"
+                            v-bind:key="i1"
+                        >
 
                             <template v-if="First.use">
                                 <router-link :to="First.route">
@@ -317,8 +319,9 @@ export default {
                     ul
                         flex 1
                         li.item
-                            margin-top 1em
-                            margin-bottom 1em
+                            max-height 2rem
+                            margin-top 1.4rem
+                            margin-bottom 1.4rem
                             display block
                             font-size 90%
                             overflow hidden

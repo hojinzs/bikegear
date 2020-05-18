@@ -48,13 +48,16 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- TODO:: 디자인 다듬기 -->
-                <button
-                    v-if="tagComments.nextPage"
-                    @click="getTagComments(true)"
+                <button class="w-full"
+                        v-if="tagComments.nextPage"
+                        @click="getTagComments(true)"
                 >
-                    더 보기
+                    <lumi-loading v-show="tagComments.status === 'loading'"
+                                  :loading="tagComments.status === 'loading'"
+                    />
+                    <span v-show="tagComments.status !== 'loading'"
+                    >더 보기</span>
                 </button>
             </div>
         </div>
@@ -69,10 +72,12 @@ import apiResourceManager from "../../plugins/apiResourceManager";
 import placeTagMini from './place-tag-mini'
 
 import axios from 'axios'
+import LumiLoading from "../interface/lumi-loading";
 
 export default {
     name: 'place-tag-card',
     components:{
+        LumiLoading,
         FontAwesomeIcon,
         placeTagMini,
     },

@@ -43,7 +43,7 @@
                             태깅한 장소를 마이페이지에서 모아볼 수 있습니다.
                         </div>
                         <div class="lumi-button-full">
-                            <button class="lumi-button lumi-button-black"
+                            <button class="lumi-button lumi-button-black w-full my-2"
                                     @click="toggle_newTaggingForm(true)"
                                     :disabled="!(tags)"
                             >
@@ -162,12 +162,6 @@ export default {
                 ajax_status: 'ready', // [ready, pending, success, fail]
             },
             userTags: new apiResourceManager(user_tags_ajax_address),
-            user_tags: {
-                ajax_address: user_tags_ajax_address,
-                ajax_status: 'ready', // [ready, loading, success, fail]
-                ajax_fail_message: null,
-                data: []
-            }
         }
     },
     computed:
@@ -184,7 +178,7 @@ export default {
         unTaggedList(){
             let unTagged = []
             this.tags.forEach(tag => {
-                let duplicated = this.user_tags.data.filter(compare => compare.tag.name === tag.name)
+                let duplicated = this.userTags.data.filter(compare => compare.tag.name === tag.name)
                 if(duplicated.length === 0){
                     unTagged.push({
                         'key': tag.name,

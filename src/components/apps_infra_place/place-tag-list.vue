@@ -12,12 +12,15 @@
 
         </div>
         <div class="tag-list">
-            <div class="section">
-                <!-- TODO:: 디자인 다듬기 -->
-                <button @click="getTagData"
-                >
-                    새로고침
-                </button>
+            <div class="section flex">
+                <div>
+                    <button @click="getTagData"
+                            :disabled="placeTags.status === 'loading'"
+                    >새로고침</button>
+                    <lumi-loading class="ml-2"
+                                  :loading="placeTags.status === 'loading'"
+                    />
+                </div>
             </div>
             <div class="section"
                 v-for="(tag,index) in placeTags.data"
@@ -36,10 +39,12 @@ import axios from 'axios'
 import placeTagCard from './place-tag-card'
 import placeTagWrite from './place-tag-write'
 import apiResourceManager from "../../plugins/apiResourceManager";
+import LumiLoading from "../interface/lumi-loading";
 
 export default {
     name: 'place-tag-list',
     components: {
+        LumiLoading,
         'place-tag-card': placeTagCard,
         'place-tag-write': placeTagWrite,
     },
@@ -57,6 +62,7 @@ export default {
                     this.placeTags.data = res.data.data
                     console.log(this.placeTags.data.data)
                 })
+            this.placeTags.setLoading()
         }
     },
     created() {
@@ -68,7 +74,7 @@ export default {
 <style lang="stylus" scoped>
 
     .section
-        padding 0.5em 1em 0.5em 1em
+        margin 0.5em 1em 0.5em 1em
 
     .lumi-button-full
         .lumi-button

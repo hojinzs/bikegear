@@ -13,10 +13,9 @@
                     <!-- 등록된 글이 없거나, 글 등록 폼을 보여주는 상태가 아님 -->
                     <div v-if="showStatus === 'ready'" key="ready">
                         이곳에 대해 알고계신가요?
-                        <div class="lumi-button-full">
-                            <button class="lumi-button lumi-button-black"
-                                @click="toggle_showNewCommentForm(true)">추천글 쓰기</button>
-                        </div>
+                        <button class="lumi-button lumi-button-black w-full my-2"
+                            @click="toggle_showNewCommentForm(true)"
+                        >추천글 쓰기</button>
                     </div>
 
                     <!-- 등록된 글이 있음 -->
