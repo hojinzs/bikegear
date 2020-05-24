@@ -21,19 +21,27 @@
                     </div>
                 </div>
             </div>
-            <div class="place-card-list-detail flex flex-row border-t border-gray-300 text-sm px-2"
+            <div class="place-card-list-detail flex flex-row border-t border-gray-300 text-sm px-2 pb-2"
                  :class="{'focused': focused}"
             >
-                <button class="text-sm lumi-sticky-right"
+                <button class="btn hover:bg-gray-300 px-2 rounded text-sm lumi-sticky-right"
                         @click.prevent="$router.push({ name: 'place', params: { id: tagObject.id } } )"
-                >정보 보기</button>
+                >
+                    정보 보기
+                    <font-awesome-icon :icon="['far','window-restore']" />
+                </button>
             </div>
         </div>
 </template>
 
 <script>
+    import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+
     export default {
         name: 'place_card_list',
+        components: {
+            FontAwesomeIcon,
+        },
         props: {
             tagObject: {
                 type: Object,

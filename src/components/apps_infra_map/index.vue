@@ -338,9 +338,22 @@
                         v-for="(item, index) in DisplayItems"
                         :key="index" :lat="item.geoPoint.latitude"
                         :lng="item.geoPoint.longitude"
+                        :html-icon="{
+                            size: {width: 30, height: 34},
+                            anchor: {x: 15, y: 34}
+                        }"
                         @click="getFocused(index)"
                     >
-                        <!-- todo :: slot 내의 html 마크업을 icon.content 로 불러올 수 있도록 기여 -->
+                        <div class="place-marker"
+                             :class="{
+                                'selected': DisplayItems_toggled === index
+                             }"
+
+                        >
+                            <img class="place-marker-pin" src="/assets/marker/marker.png"/>
+                            <font-awesome-icon class="place-marker-icon" icon="anchor"/>
+                        </div>
+
                     </naver-marker>
 
                 </naver-maps>
@@ -382,10 +395,8 @@ Vue.use(naver,{
 
 export default {
     components:{
-        PlaceTagMini,
         FontAwesomeIcon,
-        // lumiCaroucel,
-        // lumiCaroucelSlide,
+        PlaceTagMini,
         PlaceCard,
         PlaceCardList,
     },
@@ -449,7 +460,8 @@ export default {
                 last_page: 1,
                 per_page: 10,
                 total: 0,
-            }
+            },
+            test: 'test'
         }
     },
     computed: {
@@ -755,6 +767,13 @@ export default {
 
             this.distance = option.distance
         },
+        loadMarker($marker, index){
+
+            let el = this.$refs['marker_'+index][0]
+            // console.log("NODE => ", el)
+
+            $marker.setIcon({ content: el })
+        }
     },
     created(){
     },
@@ -1039,5 +1058,27 @@ export default {
 
     .text-dodgerblue
         color dodgerblue
+
+    .place-marker
+        position relative
+        width 30px
+        height 34px
+        transform scale(1) translateY(0)
+        transition transform linear 0.25s
+        .place-marker-pin
+            width 100%
+            height 100%
+            position absolute
+        .place-marker-icon
+            position absolute
+            width 24px
+            left 3px
+            top 6px
+        &.selected
+            transform scale(1.5) translateY(-24%)
+            transition transform linear 0.1s
+            .place-marker-icon
+                color dodgerblue
+
 
 </style>

@@ -19,18 +19,24 @@
             class="infra-place-section-2"
             :class="{'toggled': focused}"
         >
-            <button
-                @click.prevent="$router.push({ name: 'place', params: { id: placeObject.id } } )"
+            <button class="btn hover:bg-gray-300 px-2 rounded"
+                    @click.prevent="$router.push({ name: 'place', params: { id: placeObject.id } } )"
             >
                 정보 보기
+                <font-awesome-icon :icon="['far','window-restore']" />
             </button>
         </div>
     </div>
 </template>
 
 <script>
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+
 export default {
     name: 'place_card',
+    components: {
+        FontAwesomeIcon,
+    },
     props: {
         placeObject: {
             type: Object,
