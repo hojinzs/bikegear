@@ -19,7 +19,7 @@
     "core-js": "^3.6.5",
     "jimp": "^0.9.8",
     "js-cookie": "^2.2.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "tailwindcss": "^1.4.6",
     "validate.js": "^0.13.1",
